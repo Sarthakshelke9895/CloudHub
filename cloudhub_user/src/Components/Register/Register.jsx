@@ -1,62 +1,87 @@
-import React, { useState} from "react";
+import React, {  useState } from "react";
 import axios from "axios";
-import AlertBox from "../../Components/Alertbox/Alertbox"
-import { useNavigate } from 'react-router-dom';
+import "./Register.css";
+import { useNavigate } from "react-router-dom";
 
-
-
-
-export default function Register() {
-  const [data, setData] = useState({
+function Register() {
+  const [form, setForm] = useState({
     name: "",
     email: "",
-    mobile: "",
-    password: "",
-    mpin: "",
+    contact: "",
+    mpin: ""
   });
 
-  const [alert, setAlert] = useState({ message: "", type: "" });
-  const navigate = useNavigate();
-
-  const showAlert = (msg, type) => {
-    setAlert({ message: msg, type });
-    setTimeout(() => setAlert({ message: "", type: "" }), 3000);
+  const handleChange = (e) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
   };
 
+   const navigate = useNavigate();
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    if (!data.name || !data.email || !data.password || !data.mpin)
-      return showAlert("All fields required", "error");
-
-    if (data.password.length < 6)
-      return showAlert("Password must be 6+ chars", "error");
-
-    if (/^([0-9])\1{3}$/.test(data.mpin))
-      return showAlert("MPIN cannot be same repeated digits", "error");
-
     try {
-      const res = await axios.post("http://localhost:5000/api/register", data);
-      showAlert(res.data.msg, "success");
+      await axios.post("http://localhost:5000/api/register", form);
+      alert("Registered Successfully");
       navigate('/login')
-    } catch (err) {
-      showAlert(err.response?.data?.msg || "Error", "error");
+    } catch (error) {
+      alert("User Exists. Please Login");
     }
   };
 
   return (
-    <div>
-      <h2>Register</h2>
-      <AlertBox message={alert.message} type={alert.type} />
-      
-      <form onSubmit={handleSubmit}>
-        <input placeholder="Name" onChange={e => setData({...data, name: e.target.value})} />
-        <input placeholder="Email" onChange={e => setData({...data, email: e.target.value})} />
-        <input placeholder="Mobile" onChange={e => setData({...data, mobile: e.target.value})} />
-        <input placeholder="Password" type="password" onChange={e => setData({...data, password: e.target.value})} />
-        <input placeholder="MPIN" type="password" onChange={e => setData({...data, mpin: e.target.value})} />
-        <button type="submit">Register</button>
-      </form>
+    <div className="auth-page">
+      {/* Header */}
+      <header className="auth-header">
+        <h1>
+          Cloud<span>hub</span>
+        </h1>
+      </header>
+
+      {/* Register Card */}
+      <div className="auth-card">
+        <h2>Create Account</h2>
+        <p>Register to get started with CloudHub</p>
+
+        <form onSubmit={handleSubmit}>
+          <input
+            name="name"
+            placeholder="Full Name"
+            onChange={handleChange}
+            required
+          />
+
+          <input
+            name="email"
+            type="email"
+            placeholder="Email Address"
+            onChange={handleChange}
+            required
+          />
+
+          <input
+            name="contact"
+            placeholder="Contact Number"
+            onChange={handleChange}
+            required
+          />
+
+          <input
+            name="mpin"
+            type="password"
+            placeholder="Create MPIN"
+            onChange={handleChange}
+            required
+          />
+
+          <button type="submit">Register</button>
+        </form>
+      </div>
+
+      {/* Footer */}
+      <footer className="auth-footer">
+        © 2025 Cloudhub. All rights reserved
+      </footer>
     </div>
   );
 }
+
+export default Register;

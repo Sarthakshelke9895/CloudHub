@@ -1,45 +1,72 @@
 import React, { useState } from "react";
-import axios from "axios";
-import AlertBox from "../../Components/Alertbox/Alertbox"
-import { useNavigate } from 'react-router-dom';
+import api from "../../api";
+import { useNavigate } from "react-router-dom";
+import "./Login.css";
 
-
-export default function Login() {
-  const [data, setData] = useState({ email: "", password: "", mpin: "" });
-  const [alert, setAlert] = useState({ message: "", type: "" });
+const Login = () => {
+  const [form, setForm] = useState({ email: "", mpin: "" });
   const navigate = useNavigate();
 
-  const showAlert = (msg, type) => {
-    setAlert({ message: msg, type });
-    setTimeout(() => setAlert({ message: "", type: "" }), 2500);
+  const handleChange = (e) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const loginUser = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post("http://localhost:5000/api/login", data);
+      const res = await api.post("/api/login", form);
       localStorage.setItem("token", res.data.token);
-      showAlert("Login Successful", "success");
-      console.log(res.data.token);
-      navigate('/dashboard')
-      console.log(data)
+      navigate("/dashboard");
     } catch (err) {
-      showAlert("Invalid credentials", "error");
+      alert("Invalid credentials");
     }
   };
 
   return (
-    <div>
-      <h2>Login</h2>
+    <div className="auth-page">
+      {/* Header */}
+      <header className="auth-header">
+        <h1>
+          Cloud<span>hub</span>
+        </h1>
+      </header>
 
-      <AlertBox message={alert.message} type={alert.type} />
+      {/* Login Card */}
+      <div className="login-wrapper">
+        <div className="login-card">
+          <h2>Welcome Back</h2>
+          <p>Login to continue to CloudHub</p>
 
-      <form onSubmit={loginUser}>
-        <input placeholder="Email" onChange={e => setData({...data, email: e.target.value})} />
-        <input placeholder="Password" type="password" onChange={e => setData({...data, password: e.target.value})} />
-        <input placeholder="MPIN" type="password" onChange={e => setData({...data, mpin: e.target.value})} />
-        <button>Login</button>
-      </form>
+          <form onSubmit={handleSubmit}>
+            <input
+              name="email"
+              type="email"
+              placeholder="Email"
+              value={form.email}
+              onChange={handleChange}
+              required
+            />
+
+            <input
+              name="mpin"
+              type="password"
+              placeholder="MPIN"
+              value={form.mpin}
+              onChange={handleChange}
+              required
+            />
+
+            <button type="submit">Login</button>
+          </form>
+        </div>
+      </div>
+
+      {/* Footer */}
+      <footer className="auth-footer">
+        © 2025 Cloudhub. All rights reserved
+      </footer>
     </div>
   );
-}
+};
+
+export default Login;

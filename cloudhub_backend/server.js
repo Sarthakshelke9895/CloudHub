@@ -1,127 +1,124 @@
 import express from "express";
 import mongoose from "mongoose";
-import dotenv from "dotenv";
-import bcrypt from "bcryptjs";
+import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import cookieParser from "cookie-parser";
 import cors from "cors";
+import dotenv from "dotenv";
 
 dotenv.config();
-
 const app = express();
+
 app.use(express.json());
-app.use(cors());
 
-// ----- MongoDB Connection -----
-const connectDB = async () => {
-  try {
-    await mongoose.connect(process.env.MONGO_URL);
-    console.log("MongoDB connected!");
-  } catch (err) {
-    console.error("DB Connection Error:", err.message);
-    process.exit(1);
-  }
-};
-connectDB();
+// ✅ Important CORS config for cookies
+app.use(cors({
+  origin: process.env.CLIENT_ORIGIN,
+  credentials: true
+}));
 
-// ----- User Schema -----
+app.use(cookieParser());
+
+// MongoDB
+mongoose.connect(process.env.MONGO_URL)
+  .then(() => console.log("MongoDB connected ✅"))
+  .catch(err => console.log(err));
+
+// User Schema
 const userSchema = new mongoose.Schema({
-  name: { type: String, required: true },
-  mobile: { type: String, required: true },
-  email: { type: String, required: true, unique: true },
-  password: { type: String, required: true },
-  mpin: { type: String, required: true, unique: true },
+  name: String,
+  email: { type: String, unique: true },
+  contact: String,
+  mpin: String
 });
 
 const User = mongoose.model("User", userSchema);
 
-// ----- Middleware to protect routes -----
-const protect = async (req, res, next) => {
-  try {
-    const token = req.headers.authorization?.split(" ")[1];
-    if (!token) return res.status(401).json({ message: "Not authorized" });
+const JWT_SECRET = process.env.JWT_SECRET;
 
-    jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
-      if (err) return res.status(401).json({ message: "Session expired" });
-      req.user = decoded;
-      next();
+// ========== AUTH ROUTES ==========
+
+// ✅ Register
+app.post("/api/register", async (req, res) => {
+  try {
+    const { name, email, contact, mpin } = req.body;
+
+    // check existing user (email or contact)
+    const existingUser = await User.findOne({ 
+      $or: [{ email }, { contact }] 
     });
+
+    if (existingUser) {
+      return res.status(409).json({ message: "User already exists" });
+    }
+
+    const hashedPin = await bcrypt.hash(mpin, 10);
+
+    const user = new User({
+      name,
+      email,
+      contact,
+      mpin: hashedPin
+    });
+
+    await user.save();
+    res.status(201).json({ message: "Registered successfully" });
+
   } catch (err) {
     res.status(500).json({ message: "Server error" });
+  }
+});
+
+
+// ✅ Login (Sets cookie)
+app.post("/api/login", async (req, res) => {
+  const { email, mpin } = req.body;
+
+  const user = await User.findOne({ email });
+  if (!user) return res.status(401).json({ message: "User not found" });
+
+  const match = await bcrypt.compare(mpin, user.mpin);
+  if (!match) return res.status(401).json({ message: "Wrong MPIN" });
+
+  const token = jwt.sign({ id: user._id }, JWT_SECRET, { expiresIn: "1d" });
+
+  res.cookie("token", token, {
+    httpOnly: true,
+    secure: false,         // true only in HTTPS production
+    sameSite: "lax",
+    maxAge: 24 * 60 * 60 * 1000
+  });
+
+  res.json({ message: "Login successful" });
+});
+
+// ✅ Middleware - check cookie token
+const authMiddleware = (req, res, next) => {
+  const token = req.cookies.token;
+
+  if (!token) return res.status(401).json({ message: "Not authenticated" });
+
+  try {
+    jwt.verify(token, JWT_SECRET);
+    next();
+  } catch {
+    return res.status(401).json({ message: "Invalid token" });
   }
 };
 
-// ----- Routes -----
-
-// Registration
-app.post("/api/register", async (req, res) => {
-  const { name, mobile, email, password, mpin } = req.body;
-
-  if (!name || !mobile || !email || !password || !mpin) {
-    return res.status(400).json({ message: "All fields are required" });
-  }
-
-  if (password.length < 6) {
-    return res.status(400).json({ message: "Password must be at least 6 characters" });
-  }
-
-  if (/^(\d)\1+$/.test(mpin)) {
-    return res.status(400).json({ message: "MPIN cannot be same digits" });
-  }
-
-  try {
-    const existingUser = await User.findOne({ $or: [{ email }, { mpin }] });
-    if (existingUser) {
-      return res.status(400).json({ message: "Email or MPIN already exists" });
-    }
-
-    const hashedPassword = await bcrypt.hash(password, 10);
-
-    const newUser = await User.create({
-      name,
-      mobile,
-      email,
-      password: hashedPassword,
-      mpin,
-    });
-
-    const token = jwt.sign({ userId: newUser._id }, process.env.JWT_SECRET, {
-      expiresIn: "5s", // short expiry for testing
-    });
-
-    res.status(201).json({ message: "Registered successfully", token });
-  } catch (err) {
-    res.status(500).json({ message: "Server error" });
-  }
+// ✅ Protected Route
+app.get("/api/dashboard", authMiddleware, (req, res) => {
+  res.json({ message: "Welcome to Secure Dashboard 🔐" });
 });
 
-// Login
-app.post("/api/login", async (req, res) => {
-  const { email, password } = req.body;
-  if (!email || !password)
-    return res.status(400).json({ message: "Email and password required" });
-
-  try {
-    const user = await User.findOne({ email });
-    if (!user) return res.status(400).json({ message: "Invalid credentials" });
-
-    const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) return res.status(400).json({ message: "Invalid credentials" });
-
-    const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, {
-      expiresIn: "5s",
-    });
-
-    res.json({ message: "Login successful", token });
-  } catch (err) {
-    res.status(500).json({ message: "Server error" });
-  }
+// ✅ Logout (clear cookie)
+app.post("/api/logout", (req, res) => {
+  res.clearCookie("token");
+  res.json({ message: "Logged out" });
 });
 
-// Protected dashboard
-app.get("/api/dashboard", protect, (req, res) => {
-  res.json({ message: `Welcome to dashboard, userId: ${req.user.userId}` });
-});
-
-// ----- Start server -----
+// Start server
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+app.listen(PORT, () => {
+  console.log(`Server running on http://localhost:${PORT}`);
+});

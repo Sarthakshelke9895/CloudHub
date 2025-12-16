@@ -1,10 +1,14 @@
 import './App.css';
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route,Navigate } from "react-router-dom";
 import Login from '../src/Components/Login/Login';
 import Landingpage from "../src/Components/Landingpage/Landingpage"
 import Register from "../src/Components/Register/Register"
 import Dashboard from './Components/Dashboard/Dashboard';
-import Files from '../src/Components/Files/Hero'
+import { isAuthenticated } from "./auth";
+
+function PrivateRoute({ children }) {
+  return isAuthenticated() ? children : <Navigate to="/login" />;
+}
 
 function App() {
   return (
@@ -13,8 +17,15 @@ function App() {
       <Route path="/" element={<Landingpage/>} />
       <Route path="/login" element={<Login/>} />
       <Route path="/register" element={<Register/>} />
-      <Route path="/dashboard" element={<Dashboard/>} />
-      <Route path="/files" element={<Files/>} />
+         <Route
+          path="/dashboard"
+          element={
+            <PrivateRoute>
+              <Dashboard />
+            </PrivateRoute>
+          }
+        />
+    
 
     </Routes>
   </Router>

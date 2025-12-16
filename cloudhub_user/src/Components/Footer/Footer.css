@@ -1,0 +1,34 @@
+.foooter{
+    margin: 10px auto;
+    display: flex;
+    align-items: center;
+    justify-content:space-between;
+    padding: 30px 20px 30px 20px;
+    width: 100%;
+    font-size: 18px;
+
+}
+.foooter ul li{
+    list-style: none;
+    display: inline-block;
+    margin-left: 20px;
+    font-size: 16px;
+    transition: 0.3s;
+}
+.foooter ul li:hover{
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+@media (max-width:480px){
+    .foooter{
+        width: 80vh;
+        display: block;
+        text-align: center;
+        margin: 0;
+    }
+    .foooter ul li{
+       margin-top: 10px;
+       list-style:georgian;
+    }
+}
