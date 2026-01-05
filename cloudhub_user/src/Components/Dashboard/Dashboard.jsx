@@ -28,16 +28,16 @@ const Dashboard = () => {
   return (
     <div className="parent">
       <div className="navbar">
-        <div className="cloudhub_logo">
-          <h1>Cloud</h1>
-          <div className="hub">
-            <h1>hub</h1>
-          </div>
-        </div>
+      <div className="auth-header">
+        <h1>
+          Cloud<span>hub</span>
+        </h1>
       </div>
-      <div className="child">
+           <button className="Button" onClick={logout}>Logout</button>
+      </div>
+      <div className="child_dashboard">
       <h2>{message}</h2>
-      <button onClick={logout}>Logout</button>
+ 
       </div>
     </div>
   );

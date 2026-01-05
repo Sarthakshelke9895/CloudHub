@@ -92,23 +92,26 @@ app.post("/api/login", async (req, res) => {
   res.json({ message: "Login successful" });
 });
 
-// ✅ Middleware - check cookie token
-const authMiddleware = (req, res, next) => {
-  const token = req.cookies.token;
-
-  if (!token) return res.status(401).json({ message: "Not authenticated" });
-
+const authMiddleware = async (req, res, next) => {
   try {
-    jwt.verify(token, JWT_SECRET);
+    const token = req.cookies.token;
+    if (!token) return res.status(401).json({ message: "Not authenticated" });
+
+    const decoded = jwt.verify(token, JWT_SECRET);
+    const user = await User.findById(decoded.id); // ✅ now valid
+    if (!user) return res.status(401).json({ message: "User not found" });
+
+    req.user = user;
     next();
-  } catch {
+  } catch (err) {
+    console.error(err);
     return res.status(401).json({ message: "Invalid token" });
   }
 };
 
 // ✅ Protected Route
 app.get("/api/dashboard", authMiddleware, (req, res) => {
-  res.json({ message: "Welcome to Secure Dashboard 🔐" });
+  res.json({ message: `Welcome , ${req.user.name}!` });
 });
 
 // ✅ Logout (clear cookie)

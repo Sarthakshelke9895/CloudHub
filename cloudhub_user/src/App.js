@@ -5,6 +5,7 @@ import Landingpage from "../src/Components/Landingpage/Landingpage"
 import Register from "../src/Components/Register/Register"
 import Dashboard from './Components/Dashboard/Dashboard';
 import { isAuthenticated } from "./auth";
+import { AlertProvider } from './Components/Alertbox/Alertcontext';
 
 function PrivateRoute({ children }) {
   return isAuthenticated() ? children : <Navigate to="/login" />;
@@ -12,6 +13,7 @@ function PrivateRoute({ children }) {
 
 function App() {
   return (
+    <AlertProvider>
     <Router>
     <Routes>
       <Route path="/" element={<Landingpage/>} />
@@ -29,6 +31,7 @@ function App() {
 
     </Routes>
   </Router>
+  </AlertProvider>
   );
 }
 

@@ -6,24 +6,7 @@
   color: #fff;
 }
 
-/* Header */
-.auth-header {
-  padding: 20px 40px;
-  border-bottom: 1px solid #222;
-}
 
-.auth-header h1 {
-  font-size: 24px;
-  font-weight: 700;
-}
-
-.auth-header span {
-  background: #f5a200;
-  color: #000;
-  padding: 2px 6px;
-  margin-left: 4px;
-  border-radius: 4px;
-}
 
 /* Center wrapper */
 .login-wrapper {
@@ -59,7 +42,7 @@
   width: 100%;
   padding: 12px 14px;
   margin-bottom: 14px;
-  border-radius: 10px;
+  border-radius: 4px;
   border: none;
   outline: none;
   background: #000;
@@ -96,4 +79,40 @@
   text-align: center;
   font-size: 13px;
   color: #777;
+}
+
+.mpin-box-login {
+  display: flex;
+  align-items: center;
+  justify-content:space-between;
+  padding: 10px 5px;
+
+  
+}
+#enter_mpin_text_login{
+   text-align: left;
+  background-color: #151515;
+  margin: 0;
+  margin-left: 5px;
+  font-size: 14px;
+}
+.mpin-box-login input {
+  width: 45px;
+  height: 55px;
+  text-align: center;
+  font-size: 14px;
+  margin: 0;
+  border-radius: 4px;
+}
+
+.show {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0;
+}
+
+.show p {
+  margin: 0;
+  
 }

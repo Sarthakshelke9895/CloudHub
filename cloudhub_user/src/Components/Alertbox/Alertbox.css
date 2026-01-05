@@ -1,16 +1,61 @@
 .alert {
-    padding: 12px;
-    margin: 10px 0;
-    border-radius: 6px;
-    font-weight: 600;
-    animation: fade 0.3s ease-in-out;
-  }
-  
-  .success { background: #d4ffd4; color: green; }
-  .error { background: #ffd4d4; color: red; }
-  
-  @keyframes fade {
-    from { opacity: 0; transform: translateY(-5px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-  
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  min-width: 300px;
+  max-width: 350px;
+  padding: 15px;
+  margin: 10px;
+  border-radius: 5px;
+  color: white;
+  font-weight: bold;
+  z-index: 1000;
+  background-color: #2196f3;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  overflow: hidden;
+  opacity: 0;
+  transform: translateX(100%); /* start off-screen to the right */
+  transition: transform 0.5s ease, opacity 0.5s ease;
+}
+
+.alert.success { background-color: #4caf50; }
+.alert.error { background-color: #f44336; }
+.alert.info { background-color: #2196f3; }
+
+.alert.slide-in {
+  opacity: 1;
+  transform: translateX(0); /* slide into view */
+}
+
+.alert.slide-out {
+  opacity: 0;
+  transform: translateX(100%); /* slide back out */
+}
+
+.close-btn {
+  position: absolute;
+  top: 5px;
+  right: 10px;
+  background: none;
+  border: none;
+  color: white;
+  font-size: 30px;
+  cursor: pointer;
+}
+
+.progress-bar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 4px;
+  background-color: rgba(255,255,255,0.7);
+  width: 0%;
+  animation-name: progress;
+  animation-timing-function: linear;
+  animation-fill-mode: forwards;
+}
+
+@keyframes progress {
+  from { width: 0%; }
+  to { width: 100%; }
+}

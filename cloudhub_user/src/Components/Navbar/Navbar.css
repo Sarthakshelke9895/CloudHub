@@ -17,35 +17,30 @@
     border-bottom: 1px solid rgba(255, 255, 255, 0.31);
     z-index: 1000;
 }
+/* Header */
+.auth-header {
+  width: 100%;
+  padding: 20px 40px;
+}
+
+.auth-header h1 {
+  font-size: 24px;
+  font-weight: 700;
+}
+
+.auth-header span {
+  background: #f5a200;
+  color: black;
+  padding: 2px 6px;
+  margin-left: 4px;
+  border-radius: 4px;
+}
+
 
 .child{
     padding-top: 100px;
 }
-.cloudhub_logo{
-    display: flex;
-    align-items: center;
-}
-.cloudhub_logo h1{
-    color: white;
-    font-weight: 600;
-    font-style: normal;
-    line-height: normal;
-    font-size: 2rem;
 
-}
-.hub{
-    background-color:var(--buttonback);
-    border-radius: 4px;
-    margin-left: 4px;
-    padding: 0px 2px 0px 2px;
-}
-.hub h1{
-    color: black;
-    font-weight: 600;
-    font-style: normal;
-    line-height: normal;
-
-}
 .nav-links{
     margin-right: 20px;
 }

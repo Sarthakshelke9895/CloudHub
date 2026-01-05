@@ -17,28 +17,12 @@
   border-radius: 16px;
   box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7);
   text-align: center;
-  margin-top: 100px;
+  margin-top: 50px;
+  height: 550px;
 }
 
 
-/* Header */
-.auth-header {
-  width: 100%;
-  padding: 20px 40px;
-}
 
-.auth-header h1 {
-  font-size: 24px;
-  font-weight: 700;
-}
-
-.auth-header span {
-  background: #f5a200;
-  color: black;
-  padding: 2px 6px;
-  margin-left: 4px;
-  border-radius: 4px;
-}
 
 
 
@@ -58,7 +42,7 @@
   width: 100%;
   padding: 12px 14px;
   margin-bottom: 14px;
-  border-radius: 10px;
+  border-radius: 4px;
   border: none;
   outline: none;
   background: #000;
@@ -75,7 +59,7 @@
   width: 100%;
   padding: 12px;
   margin-top: 10px;
-  border-radius: 10px;
+  border-radius: 4px;
   border: none;
   font-size: 15px;
   font-weight: 600;
@@ -95,4 +79,53 @@
   padding: 20px;
   font-size: 13px;
   color: #777;
+}
+.already_registered{
+  background-color: transparent;
+  margin-top: 10px;
+  margin-bottom: 0;
+}
+
+.mpin-box {
+  display: flex;
+  align-items: center;
+  justify-content:space-between;
+  padding: 10px 0px;
+  
+  
+}
+
+.mpin-box input {
+  width: 45px;
+  height: 55px;
+  text-align: center;
+  font-size: 14px;
+  margin: 0;
+  border-radius: 4px;
+}
+#enter_mpin_text{
+  text-align: left;
+  background-color: #151515;
+  margin: 0;
+  margin-left: 1px;
+  font-size: 14px;
+}
+
+.show{
+  display: flex;
+  align-items: center;
+  justify-content: left;
+}
+.show p{
+  width: 100%;
+  margin: 0;
+  text-align: left;
+  font-size: 14px;
+}
+
+.show input{
+  width: 40px;
+  height: 15px;
+  margin: 0;
+  border-radius: 10px;
 }
