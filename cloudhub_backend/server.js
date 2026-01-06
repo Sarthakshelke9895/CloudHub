@@ -13,9 +13,13 @@ app.use(express.json());
 
 // ✅ Important CORS config for cookies
 app.use(cors({
-  origin: process.env.CLIENT_ORIGIN,
+    origin: process.env.NODE_ENV === "production"
+    ? process.env.CLIENT_ORIGIN
+    : "http://localhost:3000",
   credentials: true
 }));
+console.log("CLIENT_ORIGIN =", process.env.CLIENT_ORIGIN);
+
 
 app.use(cookieParser());
 
@@ -84,8 +88,8 @@ app.post("/api/login", async (req, res) => {
 
   res.cookie("token", token, {
     httpOnly: true,
-    secure: true,         // true only in HTTPS production
-    sameSite: "none",
+    secure: process.env.NODE_ENV === "production" ? true : false,         // true only in HTTPS production
+    sameSite: none,
     maxAge: 24 * 60 * 60 * 1000
   });
 
