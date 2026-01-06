@@ -24,8 +24,14 @@ const Dashboard = () => {
   }, [navigate]);
 
 const logout = async () => {
-  await api.post("/api/logout", {}, { withCredentials: true }); // ✅ add withCredentials
-  navigate("/login");
+  await api.post("/api/logout", {}, { withCredentials: true });
+
+  // clear client state
+  localStorage.clear();
+  sessionStorage.clear();
+
+  // hard redirect → clears history stack
+  window.location.replace("/"); // ✅ base URL, no back navigation
 };
 
      const [user, setUser] = useState(null);
@@ -47,7 +53,7 @@ const logout = async () => {
         </h1>
       </div>
     <div className="avatar-container">
-    <div className="avatar-circle"><p id="username_profile">{user?.name?.[0] || "?"}</p></div>
+    <div className="avatar-circle"><p id="username_pro">{user?.name?.[0] || "?"}</p></div>
       <div className="avatar-tooltip">
         <div className="tooltip_row">
         <img src={User} alt="Profile Logo" className="tooltip_logo" />  {user?.name} <br />

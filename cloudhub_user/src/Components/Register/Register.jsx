@@ -57,16 +57,25 @@ function Register() {
         ...form,
         mpin: finalMpin
       });
-      showAlert("Registered Successfully....!")
+      showAlert("Registered Successfully!","success",2000)
       navigate("/login");
     } catch (error) {
           showAlert("User Exists","info",2000);
     }
   };
+  
+  const handlelogoclick = () => {
+    // Navigate to home
+   
+    // Scroll to top
+    window.scrollTo({ top: 0, behavior: "smooth" });
+    // Optional: force refresh if needed
+     window.location.reload();
+  };
 
   return (
     <div className="auth-page">
-      <header className="auth-header-register">
+      <header className="auth-header-register" onClick={handlelogoclick} >
         <h1>
           Cloud<span>hub</span>
         </h1>

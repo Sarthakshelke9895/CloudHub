@@ -5,6 +5,8 @@ import "./Login.css";
 import { useAlert } from "../Alertbox/Alertcontext";
 
 
+
+
 const Login = () => {
   const [form, setForm] = useState({ email: "", mpin: "" });
   const [mpin, setMpin] = useState(["", "", "", ""]);
@@ -13,9 +15,13 @@ const Login = () => {
   const navigate = useNavigate();
   const { showAlert } = useAlert();
 
+
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
+
+
+
 
   // MPIN logic
   const handleMpinChange = (e, index) => {
@@ -58,9 +64,17 @@ const Login = () => {
     }
   };
 
+    const handlelogoclick = () => {
+    // Navigate to home
+   
+    // Scroll to top
+    window.scrollTo({ top: 0, behavior: "smooth" });
+    // Optional: force refresh if needed
+     window.location.reload();
+  };
   return (
     <div className="auth-page">
-      <header className="auth-header-login">
+      <header className="auth-header-login" onClick={ handlelogoclick}>
         <h1>
           Cloud<span>hub</span>
         </h1>

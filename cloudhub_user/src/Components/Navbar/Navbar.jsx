@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState ,} from "react";
+import { useNavigate } from "react-router-dom";
 import { Link } from "react-scroll";
 import "./Navbar.css";
 
@@ -12,11 +13,20 @@ const Navbar = () => {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+   const navigate = useNavigate();
 
+    const handlelogoclick = () => {
+    // Navigate to home
+    navigate("/", { replace: true }); // replace removes from history stack
+    // Scroll to top
+    window.scrollTo({ top: 0, behavior: "smooth" });
+    // Optional: force refresh if needed
+    // window.location.reload();
+  };
   return (
     <nav className={`navbar ${sticky ? "dark_nav" : ""}`}>
       {/* LOGO */}
-      <div className="auth-header"  onClick={() => window.location.reload()}>
+      <div className="auth-header"  onClick={handlelogoclick}>
         <h1>
           Cloud<span>hub</span>
         </h1>
