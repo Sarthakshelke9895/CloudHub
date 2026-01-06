@@ -60,7 +60,7 @@ const Login = () => {
 
   return (
     <div className="auth-page">
-      <header className="auth-header">
+      <header className="auth-header-login">
         <h1>
           Cloud<span>hub</span>
         </h1>

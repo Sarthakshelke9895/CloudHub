@@ -14,18 +14,22 @@
     backdrop-filter: blur(14px);
     -webkit-backdrop-filter: blur(14px);
 
-    border-bottom: 1px solid rgba(255, 255, 255, 0.31);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.252) ;
     z-index: 1000;
 }
 /* Header */
 .auth-header {
   width: 100%;
   padding: 20px 40px;
+  
+
 }
 
 .auth-header h1 {
   font-size: 24px;
   font-weight: 700;
+  width: fit-content;
+  cursor: pointer;
 }
 
 .auth-header span {

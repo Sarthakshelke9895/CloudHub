@@ -5,7 +5,7 @@
 }
 
 .dashboard_navbar{
-  border-bottom: 1px solid #ffffff9a;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.252) ;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -49,12 +49,18 @@
  background: #333;
   
 }
+/* ✅ IMPORTANT: Tooltip parent */
+.avatar-container {
+  position: relative;
+  display: inline-block;
+}
 
+/* Avatar circle (unchanged style, cleaned) */
 .avatar-circle {
   width: 50px;
   height: 50px;
   border-radius: 50%;
-  background: #000000;
+  background: #000;
   color: #fff;
   display: flex;
   align-items: center;
@@ -65,34 +71,40 @@
   border: 1px solid #ffffff9a;
 }
 
-
+/* ✅ FIXED TOOLTIP */
 .avatar-tooltip {
   position: absolute;
-  top: -9px;
-  left: 78%;
-  transform: translateX(10%) translateY(100%);
+  top: calc(100% + 14px);   /* below avatar */
+  left: 50%;
+  transform: translateX(-50%);
   background: #333;
   color: #fff;
-  padding: 8px;
-  border-radius: 4px;
+  padding: 10px 12px;
+  border-radius: 6px;
   white-space: nowrap;
-  display: none;
   font-size: 14px;
-  z-index: 10;
-  
+  z-index: 1000;
+
+  /* Hover behavior */
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.2s ease;
 }
 
+/* Show tooltip on hover */
 .avatar-container:hover .avatar-tooltip {
-  display: block;
-
+  opacity: 1;
+  visibility: visible;
 }
 
-.tooltip_logo{
-  height: 15px;
-}
-.tooltip_row{
+/* Tooltip rows */
+.tooltip_row {
   display: flex;
   align-items: center;
   gap: 6px;
-  margin-bottom: 2px;
+  margin-bottom: 4px;
+}
+
+.tooltip_logo {
+  height: 15px;
 }

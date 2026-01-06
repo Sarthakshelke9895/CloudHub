@@ -16,7 +16,7 @@ const Navbar = () => {
   return (
     <nav className={`navbar ${sticky ? "dark_nav" : ""}`}>
       {/* LOGO */}
-      <div className="auth-header">
+      <div className="auth-header"  onClick={() => window.location.reload()}>
         <h1>
           Cloud<span>hub</span>
         </h1>

@@ -60,13 +60,13 @@ function Register() {
       showAlert("Registered Successfully....!")
       navigate("/login");
     } catch (error) {
-          showAlert("User Exists");
+          showAlert("User Exists","info",2000);
     }
   };
 
   return (
     <div className="auth-page">
-      <header className="auth-header">
+      <header className="auth-header-register">
         <h1>
           Cloud<span>hub</span>
         </h1>

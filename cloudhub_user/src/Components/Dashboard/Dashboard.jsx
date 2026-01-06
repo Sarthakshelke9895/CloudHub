@@ -47,7 +47,7 @@ const Dashboard = () => {
         </h1>
       </div>
     <div className="avatar-container">
-    <div className="avatar-circle"><p id="username_pro">{user?.name?.[0] || "?"}</p></div>
+    <div className="avatar-circle"><p id="username_profile">{user?.name?.[0] || "?"}</p></div>
       <div className="avatar-tooltip">
         <div className="tooltip_row">
         <img src={User} alt="Profile Logo" className="tooltip_logo" />  {user?.name} <br />

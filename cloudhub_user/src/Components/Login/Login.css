@@ -116,3 +116,26 @@
   margin: 0;
   
 }
+
+
+
+.auth-header-login {
+  width: 100%;
+  padding: 20px 40px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.252) ;
+}
+
+.auth-header-login h1 {
+  font-size: 24px;
+  font-weight: 700;
+  width: fit-content;
+  cursor: pointer;
+}
+
+.auth-header-login span {
+  background: #f5a200;
+  color: black;
+  padding: 2px 6px;
+  margin-left: 4px;
+  border-radius: 4px;
+}

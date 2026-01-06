@@ -1,6 +1,6 @@
 .alert {
   position: fixed;
-  top: 20px;
+  top: 0px;
   right: 20px;
   min-width: 300px;
   max-width: 350px;
@@ -8,7 +8,7 @@
   margin: 10px;
   border-radius: 5px;
   color: white;
-  font-weight: bold;
+  font-weight:400;
   z-index: 1000;
   background-color: #2196f3;
   box-shadow: 0 4px 8px rgba(0,0,0,0.2);
@@ -16,6 +16,7 @@
   opacity: 0;
   transform: translateX(100%); /* start off-screen to the right */
   transition: transform 0.5s ease, opacity 0.5s ease;
+  letter-spacing: 1px;
 }
 
 .alert.success { background-color: #4caf50; }
