@@ -89,7 +89,7 @@ app.post("/api/login", async (req, res) => {
     maxAge: 24 * 60 * 60 * 1000
   });
 
-  res.json({ message: "Login successful" });
+  res.json({ message: "Login successful", token });
 });
 
 const authMiddleware = async (req, res, next) => {
