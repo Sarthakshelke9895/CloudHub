@@ -23,10 +23,10 @@ const Dashboard = () => {
     load();
   }, [navigate]);
 
-  const logout = async () => {
-    await api.post("/api/logout");
-    navigate("/login");
-  };
+const logout = async () => {
+  await api.post("/api/logout", {}, { withCredentials: true }); // ✅ add withCredentials
+  navigate("/login");
+};
 
      const [user, setUser] = useState(null);
 

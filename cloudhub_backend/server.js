@@ -98,8 +98,8 @@ app.post("/api/login", async (req, res) => {
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: "1d" });
     res.cookie("token", token, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+      secure: true,
+      sameSite: "none",
       maxAge: 24 * 60 * 60 * 1000
     });
 
@@ -137,7 +137,12 @@ app.get("/api/dashboard", authMiddleware, (req, res) => {
 
 // ✅ Logout (clear cookie)
 app.post("/api/logout", (req, res) => {
-  res.clearCookie("token");
+  res.clearCookie("token", {
+    httpOnly: true,
+    secure: true,       // match your login cookie
+    sameSite: "none",   // match your login cookie
+    path: "/",          // default is "/", match login
+  });
   res.json({ message: "Logged out" });
 });
 
