@@ -1,8 +1,8 @@
 import React, { useRef, useState } from "react";
-import axios from "axios";
 import "./Register.css";
 import { useNavigate } from "react-router-dom";
 import { useAlert } from "../Alertbox/Alertcontext";
+import api from "../../api";
 
 function Register() {
   const [form, setForm] = useState({
@@ -53,7 +53,7 @@ function Register() {
     }
 
     try {
-      await axios.post("http://localhost:5000/api/register", {
+      await api.post("/api/register", {
         ...form,
         mpin: finalMpin
       });

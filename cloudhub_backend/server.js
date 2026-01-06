@@ -95,24 +95,26 @@ app.post("/api/login", async (req, res) => {
 const authMiddleware = async (req, res, next) => {
   try {
     const token = req.cookies.token;
-    if (!token) return res.status(401).json({ message: "Not authenticated" });
+    if (!token) return res.status(401).json({ message: "Not authenticated" }); // <-- add return
 
     const decoded = jwt.verify(token, JWT_SECRET);
-    const user = await User.findById(decoded.id); // ✅ now valid
-    if (!user) return res.status(401).json({ message: "User not found" });
+    const user = await User.findById(decoded.id);
+    if (!user) return res.status(401).json({ message: "User not found" }); // <-- add return
 
     req.user = user;
     next();
   } catch (err) {
     console.error(err);
-    return res.status(401).json({ message: "Invalid token" });
+    return res.status(401).json({ message: "Invalid token" }); // <-- add return
   }
 };
 
-// ✅ Protected Route
+
 app.get("/api/dashboard", authMiddleware, (req, res) => {
-  res.json({ message: `Welcome , ${req.user.name}!` });
+  const { name, email, contact } = req.user; // use actual fields
+  return res.json({ name, email, contact }); // send data your frontend can use
 });
+
 
 // ✅ Logout (clear cookie)
 app.post("/api/logout", (req, res) => {

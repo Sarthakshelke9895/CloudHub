@@ -1,13 +1,18 @@
 .child_dashboard{
-    background-color: blue;
-    margin-top: 100px;
+    
+    margin-top: 10px;
     padding: 10px 30px;
 }
 
-
+.dashboard_navbar{
+  border-bottom: 1px solid #ffffff9a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-right: 20px;
+}
  .Button {
   padding: 5px 12px;
-  margin-top: 10px;
   border-radius: 4px;
   border: none;
   font-size: 16px;
@@ -17,8 +22,77 @@
   color: black;
   transition: 0.3s;
   letter-spacing: 1px;
+  margin-right: 10px;
+  margin-left: 10px;
 }
 
 .Button:hover {
   background: #ffb733;
+}
+
+
+#username_profile{
+  
+   width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 25px;
+  transition: 0.2s;
+  border: 1px solid #ffffff9a;
+
+}
+#username_profile:hover{
+  cursor: pointer;
+ background: #333;
+  
+}
+
+.avatar-circle {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: #000000;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 22px;
+  border: 1px solid #ffffff9a;
+}
+
+
+.avatar-tooltip {
+  position: absolute;
+  top: -9px;
+  left: 78%;
+  transform: translateX(10%) translateY(100%);
+  background: #333;
+  color: #fff;
+  padding: 8px;
+  border-radius: 4px;
+  white-space: nowrap;
+  display: none;
+  font-size: 14px;
+  z-index: 10;
+  
+}
+
+.avatar-container:hover .avatar-tooltip {
+  display: block;
+
+}
+
+.tooltip_logo{
+  height: 15px;
+}
+.tooltip_row{
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 2px;
 }

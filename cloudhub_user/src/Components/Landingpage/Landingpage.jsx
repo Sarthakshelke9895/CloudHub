@@ -177,7 +177,7 @@ const LandingPage = () => {
         <ul>
           <li><img src={Email} alt="" />cloudhub.org@gmail.com  </li>
           <li> <img src={Telephone} alt="" />+91 9123456789</li>
-          <li><img   src={Location} alt="" />CloudHUb Technologies Pvt. Ltd., 5th Floor, Tech Park One, Hinjawadi Phase-1, Pune, Maharashtra – 411057</li>
+          <li><img   src={Location} alt="" />CloudHub Technologies Pvt. Ltd., 5th Floor, Tech Park One, Hinjawadi Phase-1, Pune, Maharashtra – 411057</li>
         </ul>
       </div>
 
