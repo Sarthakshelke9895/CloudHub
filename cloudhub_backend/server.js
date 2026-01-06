@@ -11,14 +11,25 @@ const app = express();
 
 app.use(express.json());
 
-// ✅ Important CORS config for cookies
+const allowedOrigins = [
+  process.env.CLIENT_ORIGIN, // production
+  "http://localhost:3000"    // development
+];
+
 app.use(cors({
-    origin: process.env.NODE_ENV === "production"
-    ? process.env.CLIENT_ORIGIN
-    : "http://localhost:3000",
+  origin: function (origin, callback) {
+    // allow requests with no origin (like Postman)
+    if (!origin) return callback(null, true);
+
+    if (allowedOrigins.includes(origin)) {
+      callback(null, true); // origin allowed
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
   credentials: true
 }));
-console.log("CLIENT_ORIGIN =", process.env.CLIENT_ORIGIN);
+
 
 
 app.use(cookieParser());
@@ -76,25 +87,29 @@ app.post("/api/register", async (req, res) => {
 
 // ✅ Login (Sets cookie)
 app.post("/api/login", async (req, res) => {
-  const { email, mpin } = req.body;
+  try {
+    const { email, mpin } = req.body;
+    const user = await User.findOne({ email });
+    if (!user) return res.status(401).json({ message: "User not found" });
 
-  const user = await User.findOne({ email });
-  if (!user) return res.status(401).json({ message: "User not found" });
+    const match = await bcrypt.compare(mpin, user.mpin);
+    if (!match) return res.status(401).json({ message: "Wrong MPIN" });
 
-  const match = await bcrypt.compare(mpin, user.mpin);
-  if (!match) return res.status(401).json({ message: "Wrong MPIN" });
+    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: "1d" });
+    res.cookie("token", token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+      maxAge: 24 * 60 * 60 * 1000
+    });
 
-  const token = jwt.sign({ id: user._id }, JWT_SECRET, { expiresIn: "1d" });
-
-  res.cookie("token", token, {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "production" ? true : false,         // true only in HTTPS production
-    sameSite: none,
-    maxAge: 24 * 60 * 60 * 1000
-  });
-
-  res.json({ message: "Login successful", token });
+    return res.json({ message: "Login successful" });
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ message: "Internal server error" });
+  }
 });
+
 
 const authMiddleware = async (req, res, next) => {
   try {
