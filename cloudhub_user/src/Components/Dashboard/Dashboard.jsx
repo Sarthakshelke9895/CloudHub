@@ -64,7 +64,7 @@ const Dashboard = () => {
            <button className="Button" onClick={logout}>Logout</button>
       </div>
       <div className="child_dashboard">
-      <h2>{message}</h2>
+      <h2>{message} Welcome , {user?.name}</h2>
         
 
       </div>
