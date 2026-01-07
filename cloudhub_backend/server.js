@@ -5,7 +5,7 @@ import jwt from "jsonwebtoken";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 import dotenv from "dotenv";
-
+import nodemailer from "nodemailer";
 import compression from "compression";
 dotenv.config();
 const app = express();
@@ -32,6 +32,80 @@ app.use(cors({
   },
   credentials: true
 }));
+
+
+
+
+// create reusable transporter object
+const transporter = nodemailer.createTransport({
+  host: "smtp.gmail.com",      // for Gmail
+  port: 465,                   // SSL port
+  secure: true,
+  auth: {
+    user: process.env.MAIL_USER,  // your email
+    pass: process.env.MAIL_PASS,  // app password or your email password
+  },
+});
+
+// Use a Map to store OTPs temporarily
+const otpStore = new Map(); // key: email, value: { otp, expires }
+
+
+
+
+
+
+app.post("/api/send-otp", async (req, res) => {
+  const { email } = req.body;
+
+  if (!email) return res.status(400).json({ message: "Email is required" });
+
+  // Generate 4-digit OTP
+  const otp = Math.floor(1000 + Math.random() * 9000).toString();
+
+  // Set expiry: 5 mins from now
+  const expires = Date.now() + 5 * 60 * 1000;
+  otpStore.set(email, { otp, expires });
+
+  // Send email
+  try {
+    await transporter.sendMail({
+      from: `"Cloudhub" <${process.env.EMAIL_USER}>`,
+      to: email,
+      subject: "Your OTP for Cloudhub Registration",
+      text: `Your OTP is ${otp}. It will expire in 5 minutes.`,
+    });
+
+    res.json({ message: "OTP sent successfully" });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Error sending OTP" });
+  }
+});
+
+
+
+
+app.post("/api/verify-otp", (req, res) => {
+  const { email, otp } = req.body;
+
+  if (!email || !otp)
+    return res.status(400).json({ message: "Email and OTP required" });
+
+  const record = otpStore.get(email);
+
+  if (!record) return res.status(400).json({ message: "No OTP found" });
+
+  if (record.expires < Date.now()) {
+    otpStore.delete(email);
+    return res.status(400).json({ message: "OTP expired" });
+  }
+
+  if (record.otp !== otp) return res.status(400).json({ message: "Invalid OTP" });
+
+  otpStore.delete(email); // OTP used, remove it
+  res.json({ message: "OTP verified successfully" });
+});
 
 
 
