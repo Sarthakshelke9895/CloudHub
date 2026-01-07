@@ -19,6 +19,9 @@
     cursor: pointer;
     text-decoration: underline;
 }
+.foooter ul li ::before{
+    content: "";
+}
 
 /* Mobile styles */
 @media (max-width: 480px) {
@@ -27,6 +30,7 @@
         text-align: center;
         padding: 5px 10px;
     }
+  
 
     .foooter p{
         font-size: 16px;
@@ -40,8 +44,14 @@
 
     .foooter ul li {
         margin: 0;
-        list-style: none;
+       
         font-size: 14px;
         color: rgba(255, 255, 255, 0.7);
+    }
+      .foooter ul li ::before{
+     content: "• ";
+    margin-right: 6px;
+    color: #f5a200;
+    font-size: 20px;
     }
 }

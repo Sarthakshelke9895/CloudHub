@@ -11,10 +11,11 @@ function Register() {
     contact: "",
     mpin: ""
   });
-   const { showAlert } = useAlert();
+  const { showAlert } = useAlert();
 
   const [mpin, setMpin] = useState(["", "", "", ""]);
   const [showMpin, setShowMpin] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false); // NEW
 
   const inputsRef = useRef([]);
   const navigate = useNavigate();
@@ -23,7 +24,6 @@ function Register() {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  // MPIN logic
   const handleMpinChange = (e, index) => {
     const value = e.target.value;
     if (!/^\d?$/.test(value)) return;
@@ -52,35 +52,34 @@ function Register() {
       return;
     }
 
+    setIsSubmitting(true); // DISABLE BUTTON
+
     try {
       await api.post("/api/register", {
         ...form,
         mpin: finalMpin
       });
-      showAlert("Registered Successfully!","success",2000)
+      showAlert("Registered Successfully!", "success", 2000);
       navigate("/login");
     } catch (error) {
-          showAlert("User Exists","info",2000);
+      showAlert("User Exists", "info", 2000);
+    } finally {
+      setIsSubmitting(false); // ENABLE BUTTON if needed
     }
   };
-  
+
   const handlelogoclick = () => {
-    // Navigate to home
-   
-    // Scroll to top
     window.scrollTo({ top: 0, behavior: "smooth" });
-    // Optional: force refresh if needed
-     window.location.reload();
+    window.location.reload();
   };
 
   return (
     <div className="auth-page">
-      <header className="auth-header-register" onClick={handlelogoclick} >
+      <header className="auth-header-register" onClick={handlelogoclick}>
         <h1>
           Cloud<span>hub</span>
         </h1>
       </header>
-
 
       <div className="auth-card">
         <h2>Create Account</h2>
@@ -93,7 +92,6 @@ function Register() {
             onChange={handleChange}
             required
           />
-
           <input
             name="email"
             type="email"
@@ -101,17 +99,16 @@ function Register() {
             onChange={handleChange}
             required
           />
-
           <input
-             inputmode="numeric"
-             maxlength="10"
+            inputMode="numeric"
+            maxLength="10"
             name="contact"
             placeholder="Contact Number"
             onChange={handleChange}
             required
           />
+
           <p id="enter_mpin_text">Enter M-Pin</p>
-          {/* MPIN BOXES */}
           <div className="mpin-box">
             {mpin.map((digit, index) => (
               <input
@@ -120,7 +117,6 @@ function Register() {
                 type={showMpin ? "text" : "password"}
                 maxLength={1}
                 inputMode="numeric"
-                
                 value={digit}
                 onChange={(e) => handleMpinChange(e, index)}
                 onKeyDown={(e) => handleKeyDown(e, index)}
@@ -128,17 +124,20 @@ function Register() {
               />
             ))}
           </div>
-          <div className="show">
-          <input
-            type="checkbox"
-            id="showMpin"
-            onChange={() => setShowMpin(!showMpin)}
-          />
-          <p id="show_mpin_text">Show M-Pin</p>
-        </div>
 
+          <div className="show_mpin">
+            <input
+              type="checkbox"
+              id="showMpin"
+              onChange={() => setShowMpin(!showMpin)}
+            />
+            <p id="show_mpin_text">Show M-Pin</p>
+          </div>
 
-          <button type="submit">Register</button>
+          {/* BUTTON with dynamic text */}
+          <button type="submit" disabled={isSubmitting}>
+            {isSubmitting ? "Processing" : "Register"}
+          </button>
 
           <p className="already_registered">
             Already registered?{" "}
@@ -152,10 +151,7 @@ function Register() {
         </form>
       </div>
 
-
-
- 
-        <footer className="auth-footer">
+      <footer className="auth-footer">
         © 2025 Cloudhub. All rights reserved
       </footer>
     </div>

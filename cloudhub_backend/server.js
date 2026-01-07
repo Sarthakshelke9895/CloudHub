@@ -6,10 +6,13 @@ import cookieParser from "cookie-parser";
 import cors from "cors";
 import dotenv from "dotenv";
 
+import compression from "compression";
 dotenv.config();
 const app = express();
 
+
 app.use(express.json());
+app.use(compression());
 
 const allowedOrigins = [
   process.env.CLIENT_ORIGIN, // production

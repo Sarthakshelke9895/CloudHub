@@ -203,7 +203,7 @@ const LandingPage = () => {
           <input type="tel" name='phone' maxlength="10" pattern="\d{5,10}"  placeholder='Enter your Mobile No.' required/>
 
           <label>Write your messages here</label>
-          <textarea name="message" rows="6" placeholder='Enter your Message Here' readOnly required></textarea>
+          <textarea name="message" rows="6" placeholder='Enter your Message Here'  required></textarea>
 
           <button type='submit' className='btn'>Submit <img  alt="" /></button>
           

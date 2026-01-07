@@ -35,23 +35,29 @@
   margin-bottom: 25px;
 }
 
-/* Inputs */
 .auth-card input {
   width: 100%;
   padding: 12px 14px;
   margin-bottom: 14px;
   border-radius: 4px;
-  border: none;
+  border: 1px solid rgba(255, 255, 255, 0.15); /* set a default border */
   outline: none;
   background: #000;
   color: white;
   font-size: 14px;
-   border: 1px solid rgba(255, 255, 255, 0.15);
+  transition: border 0.3s;
 }
+
+.auth-card input:focus {
+  border: 1px solid var(--buttonback); /* now it will show on focus */
+}
+
 
 .auth-card input::placeholder {
   color: #777;
 }
+
+
 
 /* Button */
 .auth-card button {
@@ -88,7 +94,7 @@
 .mpin-box {
   display: flex;
   align-items: center;
-  justify-content:space-around;
+  justify-content:space-between;
   padding: 10px 0px;
   
   
@@ -110,25 +116,29 @@
   font-size: 14px;
 }
 
-.show{
+.show_mpin{
   display: flex;
   align-items: center;
-  justify-content:flex-start;
-  gap: 1px;
+  gap: 5px;
+ 
 }
-.show p{
+.show_mpin p{
   width: 100%;
-  margin: 0;
-  text-align: left;
   font-size: 14px;
+  margin: 0px;
+  display: flex;
+  align-items: flex-start;
+
+  
+ 
   
 }
 
-.show input{
-  width: 40px;
-  height: 15px;
+.show_mpin input{
+  width: 30px;
+  height: 20px;
   margin: 0;
-  border-radius: 10px;
+  
 }
 
 .auth-header-register {
@@ -202,7 +212,7 @@
 
   /* MPIN */
   .mpin-box {
-    justify-content: space-around;
+    justify-content: space-between;
     padding: 6px 0;
   }
 
@@ -216,14 +226,24 @@
     font-size: 13px;
   }
 
-  /* Show MPIN */
-  .show p {
-    font-size: 13px;
+  .show_mpin{
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    padding: 10px 0px ;
+    
   }
 
-  .show input {
-    width: 34px;
-    height: 14px;
+  .show_mpin p{
+    font-size: 13px;
+    margin: 0;
+  }
+  
+  
+
+  .show_mpin input {
+    width: 30px;
+    height: 18px;
   }
 
   /* Header */
