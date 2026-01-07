@@ -64,8 +64,8 @@ const LandingPage = () => {
       <Navbar/>
       
       <div id="home" className="childl">
-      <h1>Welcome to CloudHub </h1>
-      <h3>Upload files • Sync contacts • Manage notes • Stay connected</h3>
+      <h1 id="greeting_landingpage" >Welcome to CloudHub </h1>
+      <h3>• Upload files • Sync contacts • Manage notes • Stay connected</h3>
       <button className="ph-btn" onClick={() => navigate("/register")}>
         Get Started
       </button>
@@ -82,26 +82,39 @@ const LandingPage = () => {
 
   <div className="features-grid">
     <div className="feature-card">
+      <div className="logo_and_heading">
       <img src={cloudstorage} alt="" className="feature-logo" />
       <h3>Secure Storage</h3>
+      </div>
+      
+      
       <p>Your files are encrypted and safely stored in the cloud.</p>
     </div>
 
     <div className="feature-card">
+      <div className="logo_and_heading">
       <img src={contactsync} alt=""   className="feature-logo"/>
       <h3>Contacts</h3>
+      </div>
+      
       <p>Access your contacts anytime across devices.</p>
     </div>
 
     <div className="feature-card">
-      <img src={cloudsync} alt=""  className="feature-logo" />
+      <div className="logo_and_heading">
+         <img src={cloudsync} alt=""  className="feature-logo" />
       <h3>Automatic Backup </h3>
+      </div>
+     
       <p>Automatic Data backup of phone, to enjoy free space</p>
     </div>
 
     <div className="feature-card">
-      <img src={notess} alt=""  className="feature-logo" />
+       <div className="logo_and_heading">
+       <img src={notess} alt=""  className="feature-logo" />
       <h3>Cloud Notes</h3>
+      </div>
+     
       <p>Create and access notes anywhere, anytime.</p>
     </div>
   </div>
@@ -175,9 +188,9 @@ const LandingPage = () => {
          to us as we strive to provide exceptional service to our university community
         </p>
         <ul>
-          <li><img src={Email} alt="" />cloudhub.org@gmail.com  </li>
-          <li> <img src={Telephone} alt="" />+91 9123456789</li>
-          <li><img   src={Location} alt="" />CloudHub Technologies Pvt. Ltd., 5th Floor, Tech Park One, Hinjawadi Phase-1, Pune, Maharashtra – 411057</li>
+          <li><img src={Email} alt=""  className="contact_icons"/>cloudhub.org@gmail.com  </li>
+          <li> <img src={Telephone} alt=""className="contact_icons" />+91 9123456789</li>
+          <li><img   src={Location} alt="" />CloudHub Technologies Pvt. Ltd.</li>
         </ul>
       </div>
 

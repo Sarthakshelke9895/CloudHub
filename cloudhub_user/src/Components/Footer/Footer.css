@@ -20,15 +20,28 @@
     text-decoration: underline;
 }
 
-@media (max-width:480px){
-    .foooter{
-        width: 80vh;
-        display: block;
+/* Mobile styles */
+@media (max-width: 480px) {
+    .foooter {
+        flex-direction: column;
         text-align: center;
-        margin: 0;
+        padding: 5px 10px;
     }
-    .foooter ul li{
-       margin-top: 10px;
-       list-style:georgian;
+
+    .foooter p{
+        font-size: 16px;
+    }
+    .foooter ul {
+      display:flex;
+      align-items: center;
+      justify-content: center;
+      gap: 20px;
+    }
+
+    .foooter ul li {
+        margin: 0;
+        list-style: none;
+        font-size: 14px;
+        color: rgba(255, 255, 255, 0.7);
     }
 }

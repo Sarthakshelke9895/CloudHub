@@ -10,10 +10,10 @@ const Footer = () => {
   };
   return (
  <div className='foooter '>
-      <p>@ 2025 Cloudhub. All rights reserved </p>
+      <p>@2026 Cloudhub. All rights reserved </p>
       <ul>
-        <li onClick={handleclick}> Terms of Services</li>
-        <li onClick={handleclick}>Privacy Policy</li>
+        <li onClick={handleclick}>• Terms of Services</li>
+        <li onClick={handleclick}>• Privacy Policy</li>
       </ul>
     </div>  )
 }

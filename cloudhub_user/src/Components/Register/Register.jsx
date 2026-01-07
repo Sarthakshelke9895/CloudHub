@@ -81,6 +81,7 @@ function Register() {
         </h1>
       </header>
 
+<div className="registerparent">
       <div className="auth-card">
         <h2>Create Account</h2>
         <p>Register to get started with CloudHub</p>
@@ -102,6 +103,8 @@ function Register() {
           />
 
           <input
+             inputmode="numeric"
+             maxlength="10"
             name="contact"
             placeholder="Contact Number"
             onChange={handleChange}
@@ -116,7 +119,8 @@ function Register() {
                 ref={(el) => (inputsRef.current[index] = el)}
                 type={showMpin ? "text" : "password"}
                 maxLength={1}
-                inputMode="number"
+                inputMode="numeric"
+                
                 value={digit}
                 onChange={(e) => handleMpinChange(e, index)}
                 onKeyDown={(e) => handleKeyDown(e, index)}
@@ -147,10 +151,13 @@ function Register() {
           </p>
         </form>
       </div>
-
-      <footer className="auth-footer">
+        <footer className="auth-footer">
         © 2025 Cloudhub. All rights reserved
       </footer>
+</div>
+
+
+    
     </div>
   );
 }
