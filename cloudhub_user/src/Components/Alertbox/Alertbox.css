@@ -60,3 +60,27 @@
   from { width: 0%; }
   to { width: 100%; }
 }
+
+@media (max-width: 480px) {
+  .alert {
+    left: 48%;
+    right: auto;
+    transform: translate(-50%, -20px);
+    width: calc(100% - 24px);
+    max-width: 90;
+    min-width: unset;
+    font-size: 14px;
+  }
+
+  .alert.slide-in {
+    transform: translate(-50%, 0);
+  }
+
+  .alert.slide-out {
+    transform: translate(-50%, -20px);
+  }
+
+  .close-btn {
+    font-size: 30px;
+  }
+}

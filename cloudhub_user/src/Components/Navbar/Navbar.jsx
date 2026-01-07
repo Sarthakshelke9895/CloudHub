@@ -48,7 +48,7 @@ const Navbar = () => {
     className="nav-link"
     onClick={() => setMenuOpen(false)}
   >
-    Home
+     Home
   </Link>
 
   <Link
@@ -59,7 +59,7 @@ const Navbar = () => {
     className="nav-link"
     onClick={() => setMenuOpen(false)}
   >
-    Features
+     Features
   </Link>
 
   <Link
@@ -70,7 +70,7 @@ const Navbar = () => {
     className="nav-link"
     onClick={() => setMenuOpen(false)}
   >
-    About
+     About
   </Link>
 
   <Link
@@ -81,7 +81,7 @@ const Navbar = () => {
     className="nav-link"
     onClick={() => setMenuOpen(false)}
   >
-    Contact
+     Contact
   </Link>
 </div>
 

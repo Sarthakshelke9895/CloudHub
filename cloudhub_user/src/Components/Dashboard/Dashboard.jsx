@@ -66,8 +66,9 @@ const logout = async () => {
           <img src={Telephone} alt="Telephone Logo" className="tooltip_logo" />  {user?.contact}
         </div>
       </div>
+      <button className="Button" onClick={logout}>Logout</button>
     </div>  
-           <button className="Button" onClick={logout}>Logout</button>
+           
       </div>
       <div className="child_dashboard">
       <h2>{message} Welcome , {user?.name}</h2>

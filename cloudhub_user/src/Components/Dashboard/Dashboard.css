@@ -8,8 +8,9 @@
   border-bottom: 1px solid rgba(255, 255, 255, 0.252) ;
   display: flex;
   align-items: center;
-  justify-content: center;
-  padding-right: 20px;
+  justify-content: space-between;
+  height: 70px;
+  padding: 0px 20px;
 }
  .Button {
   padding: 5px 12px;
@@ -51,8 +52,10 @@
 }
 /* ✅ IMPORTANT: Tooltip parent */
 .avatar-container {
-  position: relative;
-  display: inline-block;
+ display: flex;
+ align-items: center;
+ justify-content: center;
+ position: relative;
 }
 
 /* Avatar circle (unchanged style, cleaned) */
@@ -75,7 +78,7 @@
 .avatar-tooltip {
   position: absolute;
   top: calc(100% + 14px);   /* below avatar */
-  left: 50%;
+  left: 20%;
   transform: translateX(-50%);
   background: #333;
   color: #fff;
@@ -84,7 +87,7 @@
   white-space: nowrap;
   font-size: 14px;
   z-index: 1000;
-  width:250px;
+  width: auto;
 
   /* Hover behavior */
   opacity: 0;
@@ -108,4 +111,63 @@
 
 .tooltip_logo {
   height: 15px;
+}
+/* =========================
+   RESPONSIVE – DASHBOARD
+========================= */
+@media (max-width: 480px) {
+
+  /* Navbar */
+  .dashboard_navbar {
+    height: auto;
+    padding: 10px 14px;
+    flex-wrap: nowrap;
+  }
+
+  /* Dashboard content */
+  .child_dashboard {
+    margin-top: 6px;
+    padding: 10px 16px;
+  }
+
+  /* Button */
+  .Button {
+    font-size: 14px;
+    padding: 4px 10px;
+    margin: 0 6px;
+    letter-spacing: 0.5px;
+  }
+
+  /* Avatar container */
+  .avatar-container {
+    gap: 6px;
+  }
+
+  /* Avatar circle */
+  .avatar-circle {
+    width: 42px;
+    height: 42px;
+    font-size: 18px;
+  }
+
+  /* Tooltip positioning (mobile safe) */
+  .avatar-tooltip {
+    left: 50%;
+    transform: translateX(-50%);
+    top: calc(100% + 10px);
+    font-size: 13px;
+    padding: 8px 10px;
+    max-width: 90vw;
+    white-space: normal;
+  }
+
+  /* Tooltip rows */
+  .tooltip_row {
+    font-size: 13px;
+    gap: 5px;
+  }
+
+  .tooltip_logo {
+    height: 14px;
+  }
 }

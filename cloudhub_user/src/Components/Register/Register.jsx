@@ -81,7 +81,7 @@ function Register() {
         </h1>
       </header>
 
-<div className="registerparent">
+
       <div className="auth-card">
         <h2>Create Account</h2>
         <p>Register to get started with CloudHub</p>
@@ -151,13 +151,13 @@ function Register() {
           </p>
         </form>
       </div>
+
+
+
+ 
         <footer className="auth-footer">
         © 2025 Cloudhub. All rights reserved
       </footer>
-</div>
-
-
-    
     </div>
   );
 }
