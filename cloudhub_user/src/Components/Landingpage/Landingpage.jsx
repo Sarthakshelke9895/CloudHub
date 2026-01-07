@@ -188,7 +188,7 @@ const LandingPage = () => {
          to us as we strive to provide exceptional service to our university community
         </p>
         <ul>
-          <li><img src={Email} alt=""  className="contact_icons"/>cloudhub.org@gmail.com  </li>
+          <li><img src={Email} alt=""  className="contact_icons"/>cloudhubbb.org@gmail.com  </li>
           <li> <img src={Telephone} alt=""className="contact_icons" />+91 9123456789</li>
           <li><img   src={Location} alt="" />CloudHub Technologies Pvt. Ltd.</li>
         </ul>

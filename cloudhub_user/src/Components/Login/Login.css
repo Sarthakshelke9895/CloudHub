@@ -45,13 +45,17 @@
   padding: 12px 14px;
   margin-bottom: 14px;
   border-radius: 4px;
-  border: none;
+  border: 1px solid rgba(255, 255, 255, 0.15); /* set a default border */
   outline: none;
   background: #000;
-  color: #fff;
+  color: white;
   font-size: 14px;
+  transition: border 0.3s;
 }
 
+.login-card input:focus{
+  border: 1px solid var(--buttonback); /* now it will show on focus */
+}
 .login-card input::placeholder {
   color: #777;
 }
