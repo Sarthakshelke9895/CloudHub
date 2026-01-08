@@ -66,6 +66,8 @@ transporter.verify((err, success) => {
 
 
 
+
+// 2️⃣ Log the exact error in your /send-otp route
 app.post("/api/send-otp", async (req, res) => {
   const { email } = req.body;
   if (!email) return res.status(400).json({ message: "Email is required" });
@@ -75,16 +77,15 @@ app.post("/api/send-otp", async (req, res) => {
 
   try {
     await transporter.sendMail({
-      from: `"Cloudhub" <${process.env.MAIL_USER}>`, // ✅ FIXED
+      from: `"Cloudhub" <${process.env.MAIL_USER}>`,
       to: email,
       subject: "Your OTP for Cloudhub",
       text: `Your OTP is ${otp}. Valid for 5 minutes.`,
     });
-
     res.json({ message: "OTP sent successfully" });
   } catch (err) {
-    console.error("MAIL ERROR:", err);
-    res.status(500).json({ message: "Email failed" });
+    console.error("EMAIL ERROR:", err); // ✅ logs exact reason
+    res.status(500).json({ message: "Failed to send OTP", error: err.toString() });
   }
 });
 
