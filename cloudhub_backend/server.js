@@ -33,33 +33,39 @@ app.use(cors({
   credentials: true
 }));
 
-// ✅ ADD THIS AT TOP (before app.post routes)
-const otpStore = new Map(); // key: email, value: { otp, expires }
 
 
 
-
-// ✅ CREATE TRANSPORTER ONCE (TOP OF FILE)
+// create reusable transporter object
 const transporter = nodemailer.createTransport({
-  host: "smtp.gmail.com",
-  port: 587,          // STARTTLS
-  secure: false,      // must be false for 587
+  host: "smtp.gmail.com",      // for Gmail
+  port: 587,                   // SSL port
+  secure: false,
   auth: {
-    user: process.env.MAIL_USER,   // gmail
-    pass: process.env.MAIL_PASS,   // app password
+    user: process.env.MAIL_USER,  // your email
+    pass: process.env.MAIL_PASS,  // app password or your email password
   },
-  tls: {
-    rejectUnauthorized: false,
+    tls: {
+    rejectUnauthorized: false, // ✅ avoids Render TLS issues
   },
 });
 
-// ✅ VERIFY SMTP (VERY IMPORTANT ON RENDER)
-transporter.verify((err) => {
+console.log(process.env.MAIL_USER);
+
+console.log(process.env.MAIL_PASS);
+
+// Use a Map to store OTPs temporarily
+const otpStore = new Map(); // key: email, value: { otp, expires }
+
+
+transporter.verify((err, success) => {
   if (err) console.error("SMTP ERROR:", err);
   else console.log("SMTP READY");
 });
 
-// ================= SEND OTP =================
+
+
+
 app.post("/api/send-otp", async (req, res) => {
   const { email } = req.body;
   if (!email) return res.status(400).json({ message: "Email is required" });
@@ -69,7 +75,7 @@ app.post("/api/send-otp", async (req, res) => {
 
   try {
     await transporter.sendMail({
-      from: `"Cloudhub" <${process.env.MAIL_USER}>`, // ✅ SAME USER
+      from: `"Cloudhub" <${process.env.MAIL_USER}>`, // ✅ FIXED
       to: email,
       subject: "Your OTP for Cloudhub",
       text: `Your OTP is ${otp}. Valid for 5 minutes.`,
@@ -82,7 +88,8 @@ app.post("/api/send-otp", async (req, res) => {
   }
 });
 
-// ================= VERIFY OTP =================
+
+
 app.post("/api/verify-otp", (req, res) => {
   const { email, otp } = req.body;
 
@@ -90,6 +97,7 @@ app.post("/api/verify-otp", (req, res) => {
     return res.status(400).json({ message: "Email and OTP required" });
 
   const record = otpStore.get(email);
+
   if (!record) return res.status(400).json({ message: "No OTP found" });
 
   if (record.expires < Date.now()) {
@@ -97,10 +105,9 @@ app.post("/api/verify-otp", (req, res) => {
     return res.status(400).json({ message: "OTP expired" });
   }
 
-  if (record.otp !== otp)
-    return res.status(400).json({ message: "Invalid OTP" });
+  if (record.otp !== otp) return res.status(400).json({ message: "Invalid OTP" });
 
-  otpStore.delete(email);
+  otpStore.delete(email); // OTP used, remove it
   res.json({ message: "OTP verified successfully" });
 });
 
