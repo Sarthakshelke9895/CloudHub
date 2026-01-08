@@ -5,7 +5,7 @@ import jwt from "jsonwebtoken";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 import dotenv from "dotenv";
-import nodemailer from "nodemailer";
+
 import compression from "compression";
 dotenv.config();
 const app = express();
@@ -35,82 +35,48 @@ app.use(cors({
 
 
 
-
-// create reusable transporter object
-const transporter = nodemailer.createTransport({
-  host: "smtp.gmail.com",      // for Gmail
-  port: 587,                   // SSL port
-  secure: false,
-  auth: {
-    user: process.env.MAIL_USER,  // your email
-    pass: process.env.MAIL_PASS,  // app password or your email password
-  },
-    tls: {
-    rejectUnauthorized: false, // ✅ avoids Render TLS issues
-  },
-});
-
-console.log(process.env.MAIL_USER);
-
-console.log(process.env.MAIL_PASS);
-
 // Use a Map to store OTPs temporarily
-const otpStore = new Map(); // key: email, value: { otp, expires }
+const otpStore = new Map(); // key: phone, value: { otp, expires }
 
+// Send OTP via WhatsApp
+app.post("/api/send-otp-whatsapp", async (req, res) => {
+  const { phone } = req.body;
+  if (!phone) return res.status(400).json({ message: "Phone number required" });
 
-transporter.verify((err, success) => {
-  if (err) console.error("SMTP ERROR:", err);
-  else console.log("SMTP READY");
-});
-
-
-
-
-
-// 2️⃣ Log the exact error in your /send-otp route
-app.post("/api/send-otp", async (req, res) => {
-  const { email } = req.body;
-  if (!email) return res.status(400).json({ message: "Email is required" });
-
+  // Generate 4-digit OTP
   const otp = Math.floor(1000 + Math.random() * 9000).toString();
-  otpStore.set(email, { otp, expires: Date.now() + 5 * 60 * 1000 });
+  const expires = Date.now() + 5 * 60 * 1000; // 5 mins
+  otpStore.set(phone, { otp, expires });
 
-  try {
-    await transporter.sendMail({
-      from: `"Cloudhub" <${process.env.MAIL_USER}>`,
-      to: email,
-      subject: "Your OTP for Cloudhub",
-      text: `Your OTP is ${otp}. Valid for 5 minutes.`,
-    });
-    res.json({ message: "OTP sent successfully" });
-  } catch (err) {
-    console.error("EMAIL ERROR:", err); // ✅ logs exact reason
-    res.status(500).json({ message: "Failed to send OTP", error: err.toString() });
-  }
+  const whatsappLink = `https://api.whatsapp.com/send?phone=${phone}&text=${encodeURIComponent(
+  `Your OTP for Cloudhub Registration is:\n${otp}`
+)}`;
+
+  
+
+  res.json({ message: "OTP generated", whatsappLink });
 });
 
+// Verify OTP
+app.post("/api/verify-otp-whatsapp", (req, res) => {
+  const { phone, otp } = req.body;
 
+  if (!phone || !otp) return res.status(400).json({ message: "Phone and OTP required" });
 
-app.post("/api/verify-otp", (req, res) => {
-  const { email, otp } = req.body;
-
-  if (!email || !otp)
-    return res.status(400).json({ message: "Email and OTP required" });
-
-  const record = otpStore.get(email);
-
+  const record = otpStore.get(phone);
   if (!record) return res.status(400).json({ message: "No OTP found" });
 
   if (record.expires < Date.now()) {
-    otpStore.delete(email);
+    otpStore.delete(phone);
     return res.status(400).json({ message: "OTP expired" });
   }
 
   if (record.otp !== otp) return res.status(400).json({ message: "Invalid OTP" });
 
-  otpStore.delete(email); // OTP used, remove it
+  otpStore.delete(phone); // OTP used, remove it
   res.json({ message: "OTP verified successfully" });
 });
+
 
 
 
@@ -170,8 +136,11 @@ app.post("/api/register", async (req, res) => {
 // ✅ Login (Sets cookie)
 app.post("/api/login", async (req, res) => {
   try {
-    const { email, mpin } = req.body;
-    const user = await User.findOne({ email });
+    const { login, mpin } = req.body;
+    const user = await User.findOne({
+      $or: [{ email: login }, { contact: login }]
+    });
+    
     if (!user) return res.status(401).json({ message: "User not found" });
 
     const match = await bcrypt.compare(mpin, user.mpin);

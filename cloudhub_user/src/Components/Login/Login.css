@@ -129,6 +129,9 @@
   width: 100%;
   padding: 20px 40px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.252) ;
+    background-color: #00000088;
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
 }
 
 .auth-header-login h1 {
@@ -170,6 +173,9 @@
 
   /* Center wrapper */
   
+  .login-wrapper{
+    width: 80%;
+  }
 
   /* Card */
   .login-card {
@@ -178,7 +184,8 @@
     padding: 22px;
     border-radius: 14px;
     margin: 0;
-    margin-bottom: 200px;
+    margin-bottom: 100px;
+    
   }
   .auth-header-login h1{
     font-size: 24px;
@@ -206,7 +213,7 @@
 
   /* MPIN */
   .mpin-box-login {
-    padding: 6px 0;
+    padding: 6px 8px;
   }
 
   .mpin-box-login input {

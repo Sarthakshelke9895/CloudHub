@@ -71,7 +71,7 @@ const logout = async () => {
            
       </div>
       <div className="child_dashboard">
-      <h2>{message} Welcome , {user?.name}</h2>
+      <h2>{message}Hi,{user?.name}</h2>
         
 
       </div>

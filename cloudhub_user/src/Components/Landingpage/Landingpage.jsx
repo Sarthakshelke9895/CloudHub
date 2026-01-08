@@ -182,7 +182,7 @@ const LandingPage = () => {
 
 <div className="columns">
          <div className="contact_col1 ">
-        <h3>Send us a message <img  alt="" srcset="" /></h3>
+        <h3>Send us a message <img  alt="" srcSet="" /></h3>
         <p>Feel free to reach out through contact from or find our contact
           information below. Your feedback, questions,and suggestions,are important
          to us as we strive to provide exceptional service to our university community
@@ -200,7 +200,7 @@ const LandingPage = () => {
           <input type="text" name='name' placeholder='Enter your name' required/>
 
           <label>Phone Number</label>
-          <input type="tel" name='phone' maxlength="10" pattern="\d{5,10}"  placeholder='Enter your Mobile No.' required/>
+          <input type="tel" name='phone' maxLength="10" pattern="\d{5,10}"  placeholder='Enter your Mobile No.' required/>
 
           <label>Write your messages here</label>
           <textarea name="message" rows="6" placeholder='Enter your Message Here'  required></textarea>

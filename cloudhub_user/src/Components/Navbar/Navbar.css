@@ -14,7 +14,7 @@
     backdrop-filter: blur(14px);
     -webkit-backdrop-filter: blur(14px);
     border-bottom: 1px solid rgba(255, 255, 255, 0.252);
-    z-index: 1000;
+   z-index: 10;
 }
 
 /* LOGO */
@@ -37,8 +37,12 @@
 
 /* LINKS */
 .nav-links {
+   
     display: flex;
     margin-right: 20px;
+      background-color: #00000041;
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
 }
 
 .nav-links a {

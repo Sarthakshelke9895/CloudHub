@@ -19,7 +19,7 @@
   letter-spacing: 1px;
 }
 
-.alert.success { background-color: #4caf50; }
+.alert.success { background-color: #ff9100; }
 .alert.error { background-color: #f44336; }
 .alert.info { background-color: #2196f3; }
 

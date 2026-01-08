@@ -164,6 +164,9 @@
   border-bottom: 1px solid rgba(255, 255, 255, 0.25) ;
   position: fixed;
   top: 0;
+  background-color: #00000088;
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
  
 }
 

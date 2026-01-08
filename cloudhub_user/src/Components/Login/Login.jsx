@@ -5,7 +5,7 @@ import "./Login.css";
 import { useAlert } from "../Alertbox/Alertcontext";
 
 const Login = () => {
-  const [form, setForm] = useState({ email: "", mpin: "" });
+  const [form, setForm] = useState({ login: "", mpin: "" });
   const [mpin, setMpin] = useState(["", "", "", ""]);
   const [showMpin, setShowMpin] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false); // ✅ new state
@@ -14,9 +14,10 @@ const Login = () => {
   const navigate = useNavigate();
   const { showAlert } = useAlert();
 
-  const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
-  };
+ const handleChange = (e) => {
+  const { name, value } = e.target;
+  setForm({ ...form, [name]: value });
+};
 
   const handleMpinChange = (e, index) => {
     const value = e.target.value;
@@ -55,8 +56,11 @@ const Login = () => {
       });
       localStorage.setItem("token", res.data.token);
       navigate("/dashboard");
+      showAlert(res.data.message,"success",2000);
     } catch (err) {
-      showAlert("Invalid credentials", "error", 2000);
+       const message =
+        err.response?.data?.message || "Login failed"; // e.g., "User not found" or "Wrong MPIN"
+         showAlert(message, "error", 2000); // show in alert
     } finally {
       setIsSubmitting(false); // ✅ enable if needed
     }
@@ -83,10 +87,10 @@ const Login = () => {
 
             <form onSubmit={handleSubmit}>
               <input
-                name="email"
-                type="email"
-                placeholder="Email"
-                value={form.email}
+                name="login"
+                type="text"
+                placeholder="Email  or Phone "
+                value={form.login}
                 onChange={handleChange}
                 required
               />

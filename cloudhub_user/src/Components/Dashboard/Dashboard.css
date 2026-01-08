@@ -123,8 +123,14 @@
     padding: 10px 15px;
   }
 
-  .child_dashboard {
-    padding: 10px 15px;
+  .child_dashboard{
+    padding: 10px 0px;
+    margin: 0;
+    margin: 0px 15px;
+  }
+  .child_dashboard h2{
+    font-size: 18px;
+    font-weight: 400;
   }
 
 .avatar-container{

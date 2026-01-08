@@ -47,66 +47,72 @@ function Register() {
     if (e.key === "Backspace" && !mpin[index] && index > 0)
       mpinRefs.current[index - 1].focus();
   };
+  // SEND OTP via WhatsApp
+const sendOtpWhatsapp = async () => {
+  if (!form.contact) {
+    showAlert("Enter phone number to receive OTP via WhatsApp");
+    return;
+  }
 
-  // OTP logic
-  const handleOtpChange = (e, index) => {
-    const value = e.target.value;
-    if (!/^\d?$/.test(value)) return;
+  setOtpLoading(true);
+  try {
+    const res = await api.post("/api/send-otp-whatsapp", { phone: form.contact });
+    const { whatsappLink } = res.data;
 
-    const newOtp = [...otp];
-    newOtp[index] = value;
-    setOtp(newOtp);
+    // Open WhatsApp link in new tab
+    window.open(whatsappLink, "_blank");
 
-    if (value && index < 3) otpRefs.current[index + 1].focus();
-  };
+    showAlert("OTP link opened in WhatsApp. Enter OTP here.", "success", 2000);
+    setOtpSent(true);
+  } catch {
+    showAlert("Failed to send OTP via WhatsApp", "error", 2000);
+  } finally {
+    setOtpLoading(false);
+  }
+};
 
-  const handleOtpKeyDown = (e, index) => {
-    if (e.key === "Backspace" && !otp[index] && index > 0)
-      otpRefs.current[index - 1].focus();
-  };
+// VERIFY OTP
+const verifyOtpWhatsapp = async () => {
+  const finalOtp = otp.join("");
+  if (finalOtp.length !== 4) {
+    showAlert("Enter 4-digit OTP");
+    return;
+  }
 
-  // SEND OTP
-  const sendOtp = async () => {
-    if (!form.email) {
-      showAlert("Enter email to receive OTP");
-      return;
-    }
+  setVerifyLoading(true);
+  try {
+    await api.post("/api/verify-otp-whatsapp", {
+      phone: form.contact,
+      otp: finalOtp,
+    });
+    showAlert("OTP Verified! Click Register.", "success", 2000);
+    setOtpVerified(true);
+  } catch {
+    showAlert("Invalid OTP", "error", 2000);
+    setOtpVerified(false);
+  } finally {
+    setVerifyLoading(false);
+  }
+};
 
-    setOtpLoading(true);
-    try {
-      await api.post("/api/send-otp", { email: form.email });
-      showAlert("OTP Sent to your email", "success", 2000);
-      setOtpSent(true);
-    } catch {
-      showAlert("Failed to send OTP", "error", 2000);
-    } finally {
-      setOtpLoading(false);
-    }
-  };
 
-  // VERIFY OTP
-  const verifyOtp = async () => {
-    const finalOtp = otp.join("");
-    if (finalOtp.length !== 4) {
-      showAlert("Enter 4-digit OTP");
-      return;
-    }
+// OTP input logic
+const handleOtpChange = (e, index) => {
+  const value = e.target.value;
+  if (!/^\d?$/.test(value)) return;
 
-    setVerifyLoading(true);
-    try {
-      await api.post("/api/verify-otp", {
-        email: form.email,
-        otp: finalOtp,
-      });
-      showAlert("OTP Verified! Click Register.", "success", 2000);
-      setOtpVerified(true);
-    } catch {
-      showAlert("Invalid OTP", "error", 2000);
-      setOtpVerified(false);
-    } finally {
-      setVerifyLoading(false);
-    }
-  };
+  const newOtp = [...otp];
+  newOtp[index] = value;
+  setOtp(newOtp); // or updateOtp(newOtp)
+
+  if (value && index < 3) otpRefs.current[index + 1].focus();
+};
+
+const handleOtpKeyDown = (e, index) => {
+  if (e.key === "Backspace" && !otp[index] && index > 0)
+    otpRefs.current[index - 1].focus();
+};
+
 
   // REGISTER
   const handleSubmit = async (e) => {
@@ -175,37 +181,37 @@ function Register() {
           </div>
 
           {/* GET OTP */}
-          {otpVisible && !otpSent && (
-            <button type="button" onClick={sendOtp} disabled={otpLoading}>
-              {otpLoading ? "Sending OTP..." : "Get OTP"}
-            </button>
-          )}
-
-          {/* VERIFY OTP */}
-          {otpSent && !otpVerified && (
-            <>
-              <p id="enter_otp">Enter OTP</p>
-              <div className="mpin-box">
-                {otp.map((digit, i) => (
-                  <input
-                    key={i}
-                    ref={(el) => (otpRefs.current[i] = el)}
-                    type="text"
-                    maxLength={1}
-                    inputMode="numeric"
-                    value={digit}
-                    onChange={(e) => handleOtpChange(e, i)}
-                    onKeyDown={(e) => handleOtpKeyDown(e, i)}
-                    required
-                  />
-                ))}
-              </div>
-
-              <button type="button" onClick={verifyOtp} disabled={verifyLoading}>
-                {verifyLoading ? "Verifying..." : "Verify OTP"}
+            {otpVisible && !otpSent && (
+              <button type="button" onClick={sendOtpWhatsapp} disabled={otpLoading}>
+                {otpLoading ? "Sending OTP..." : "Get OTP via WhatsApp"}
               </button>
-            </>
-          )}
+            )}
+
+            {/* VERIFY OTP */}
+            {otpSent && !otpVerified && (
+              <>
+                <p id="enter_otp">Enter OTP</p>
+                <div className="mpin-box">
+                  {otp.map((digit, i) => (
+                    <input
+                      key={i}
+                      ref={(el) => (otpRefs.current[i] = el)}
+                      type="text"
+                      maxLength={1}
+                      inputMode="numeric"
+                      value={digit}
+                      onChange={(e) => handleOtpChange(e, i)}
+                      onKeyDown={(e) => handleOtpKeyDown(e, i)}
+                      required
+                    />
+                  ))}
+                </div>
+
+                <button type="button" onClick={verifyOtpWhatsapp} disabled={verifyLoading}>
+                  {verifyLoading ? "Verifying..." : "Verify OTP"}
+                </button>
+              </>
+            )}
 
           {/* REGISTER */}
           <button
@@ -224,6 +230,9 @@ function Register() {
           </p>
         </form>
       </div>
+        <footer className="auth-footer">
+        © 2025 Cloudhub. All rights reserved
+      </footer>
     </div>
   );
 }
