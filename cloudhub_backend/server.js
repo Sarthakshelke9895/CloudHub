@@ -1,0 +1,355 @@
+import express from "express";
+import mongoose from "mongoose";
+import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
+import cookieParser from "cookie-parser";
+import cors from "cors";
+import dotenv from "dotenv";
+import multer from "multer";
+import fs from "fs";
+import path from "path";
+
+
+
+import compression from "compression";
+dotenv.config();
+const app = express();
+
+
+app.use(express.json());
+app.use(compression());
+
+const allowedOrigins = [
+  process.env.CLIENT_ORIGIN, // production
+  "http://localhost:3000",
+  "http://192.168.0.168:3000" ,   // development
+];
+
+app.use(cors({
+  origin: function (origin, callback) {
+    // allow requests with no origin (like Postman)
+    if (!origin) return callback(null, true);
+
+    if (allowedOrigins.includes(origin)) {
+      callback(null, true); // origin allowed
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
+  credentials: true
+}));
+
+
+
+// Use a Map to store OTPs temporarily
+const otpStore = new Map(); // key: phone, value: { otp, expires }
+
+// Send OTP via WhatsApp
+app.post("/api/send-otp-whatsapp", async (req, res) => {
+  const { phone } = req.body;
+  if (!phone) return res.status(400).json({ message: "Phone number required" });
+
+  // Generate 4-digit OTP
+  const otp = Math.floor(1000 + Math.random() * 9000).toString();
+  const expires = Date.now() + 5 * 60 * 1000; // 5 mins
+  otpStore.set(phone, { otp, expires });
+
+  const whatsappLink = `https://api.whatsapp.com/send?phone=${phone}&text=${encodeURIComponent(
+  `Your OTP for Cloudhub Registration is:\n${otp}`
+)}`;
+
+  
+
+  res.json({ message: "OTP generated", whatsappLink });
+});
+
+// Verify OTP
+app.post("/api/verify-otp-whatsapp", (req, res) => {
+  const { phone, otp } = req.body;
+
+  if (!phone || !otp) return res.status(400).json({ message: "Phone and OTP required" });
+
+  const record = otpStore.get(phone);
+  if (!record) return res.status(400).json({ message: "No OTP found" });
+
+  if (record.expires < Date.now()) {
+    otpStore.delete(phone);
+    return res.status(400).json({ message: "OTP expired" });
+  }
+
+  if (record.otp !== otp) return res.status(400).json({ message: "Invalid OTP" });
+
+  otpStore.delete(phone); // OTP used, remove it
+  res.json({ message: "OTP verified successfully" });
+});
+
+
+
+
+app.use(cookieParser());
+
+// MongoDB
+mongoose.connect(process.env.MONGO_URL)
+  .then(() => console.log("MongoDB connected ✅"))
+  .catch(err => console.log(err));
+
+// User Schema
+const userSchema = new mongoose.Schema({
+  name: String,
+  email: { type: String, unique: true },
+  contact: String,
+  mpin: String
+});
+
+const User = mongoose.model("User", userSchema);
+
+const JWT_SECRET = process.env.JWT_SECRET;
+
+// ========== AUTH ROUTES ==========
+
+// ✅ Register
+app.post("/api/register", async (req, res) => {
+  try {
+    const { name, email, contact, mpin } = req.body;
+
+    // check existing user (email or contact)
+    const existingUser = await User.findOne({ 
+      $or: [{ email }, { contact }] 
+    });
+
+    if (existingUser) {
+      return res.status(409).json({ message: "User already exists" });
+    }
+
+    const hashedPin = await bcrypt.hash(mpin, 10);
+
+    const user = new User({
+      name,
+      email,
+      contact,
+      mpin: hashedPin
+    });
+
+    await user.save();
+    res.status(201).json({ message: "Registered successfully" });
+
+  } catch (err) {
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+
+// ✅ Login (Sets cookie)
+app.post("/api/login", async (req, res) => {
+  try {
+    const { login, mpin } = req.body;
+    const user = await User.findOne({
+      $or: [{ email: login }, { contact: login }]
+    });
+    
+    if (!user) return res.status(401).json({ message: "User not found" });
+
+    const match = await bcrypt.compare(mpin, user.mpin);
+    if (!match) return res.status(401).json({ message: "Wrong MPIN" });
+
+    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: "1d" });
+    res.cookie("token", token, {
+      httpOnly: true,
+      secure: true,
+      sameSite: "none",
+      maxAge: 24 * 60 * 60 * 1000
+    });
+
+    return res.json({ message: "Login successful" });
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+});
+
+
+const authMiddleware = async (req, res, next) => {
+  try {
+    const token = req.cookies.token;
+    if (!token) return res.status(401).json({ message: "Not authenticated" }); // <-- add return
+
+    const decoded = jwt.verify(token, JWT_SECRET);
+    const user = await User.findById(decoded.id);
+    if (!user) return res.status(401).json({ message: "User not found" }); // <-- add return
+
+    req.user = user;
+    next();
+  } catch (err) {
+    console.error(err);
+    return res.status(401).json({ message: "Invalid token" }); // <-- add return
+  }
+};
+
+
+app.get("/api/dashboard", authMiddleware, (req, res) => {
+  const { name, email, contact } = req.user; // use actual fields
+  return res.json({ name, email, contact }); // send data your frontend can use
+});
+
+
+// ✅ Logout (clear cookie)
+app.post("/api/logout", (req, res) => {
+  res.clearCookie("token", {
+    httpOnly: true,
+    secure: true,       // match your login cookie
+    sameSite: "none",   // match your login cookie
+    path: "/",          // default is "/", match login
+  });
+  res.json({ message: "Logged out" });
+});
+
+// Start server
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => {
+  console.log(`Server running on http://localhost:${PORT}`);
+});
+
+
+
+
+//file upload logic
+
+
+
+
+
+
+
+
+
+
+
+
+const Folder = mongoose.model(
+  "Folder",
+  new mongoose.Schema({
+    name: String,
+    parent: { type: mongoose.Schema.Types.ObjectId, ref: "Folder", default: null },
+    createdAt: { type: Date, default: Date.now },
+  })
+);
+
+const File = mongoose.model(
+  "File",
+  new mongoose.Schema({
+    filename: String,
+    originalname: String,
+    mimetype: String,
+    size: Number,
+    path: String,
+    folder: { type: mongoose.Schema.Types.ObjectId, ref: "Folder", default: null },
+    createdAt: { type: Date, default: Date.now },
+  })
+);
+
+if (!fs.existsSync("uploads")) fs.mkdirSync("uploads");
+
+const storage = multer.diskStorage({
+  destination: (_, __, cb) => cb(null, "uploads"),
+  filename: (_, file, cb) => cb(null, Date.now() + "-" + file.originalname),
+});
+const upload = multer({ storage });
+
+app.post("/folder", async (req, res) => {
+  const { name, parent } = req.body;
+  res.json(await Folder.create({ name, parent: parent || null }));
+});
+
+app.get("/folder/:id", async (req, res) => {
+  const parent = req.params.id === "root" ? null : req.params.id;
+  const folders = await Folder.find({ parent });
+  const files = await File.find({ folder: parent });
+  res.json({ folders, files });
+});
+
+app.post("/upload/:folderId", upload.single("file"), async (req, res) => {
+  const folder = req.params.folderId === "root" ? null : req.params.folderId;
+  const f = await File.create({
+    filename: req.file.filename,
+    originalname: req.file.originalname,
+    mimetype: req.file.mimetype,
+    size: req.file.size,
+    path: req.file.path,
+    folder,
+  });
+  res.json(f);
+});
+
+
+app.get("/folderinfo/:id", async (req,res)=>{
+  if(req.params.id==="root") return res.json({name:"Root"});
+  const f = await Folder.findById(req.params.id);
+  if(!f) return res.json({name:"Unknown"});
+  res.json({name:f.name});
+});
+
+app.get("/file/:id", async (req, res) => {
+  const f = await File.findById(req.params.id);
+  if (!f) return res.status(404).send("Not found");
+
+  if (req.query.download === "true") {
+    return res.download(path.resolve(f.path), f.originalname);
+  }
+  res.sendFile(path.resolve(f.path));
+});
+
+
+app.delete("/file/:id", async (req, res) => {
+  const f = await File.findById(req.params.id);
+  if (!f) return res.status(404).json({ message: "Not found" });
+
+  if (fs.existsSync(f.path)) fs.unlinkSync(f.path);
+  await f.deleteOne();
+  res.sendStatus(200);
+});
+
+
+app.delete("/folder/:id", async (req, res) => {
+  await File.deleteMany({ folder: req.params.id });
+  await Folder.deleteMany({ parent: req.params.id });
+  await Folder.findByIdAndDelete(req.params.id);
+  res.sendStatus(200);
+});
+
+app.put("/folder/:id/rename", async (req, res) => {
+  try {
+    const { name } = req.body;
+    if (!name || !name.trim()) return res.status(400).json({ error: "Name required" });
+
+    const folder = await Folder.findByIdAndUpdate(
+      req.params.id,
+      { name: name.trim() },
+      { new: true }
+    );
+
+    if (!folder) return res.status(404).json({ error: "Folder not found" });
+    res.json(folder);
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
+
+// GET /search?q=...
+app.get("/search", async (req, res) => {
+  try {
+    const q = req.query.q;
+    if (!q) return res.json({ files: [], folders: [] });
+
+    // Files search
+    const files = await File.find({ originalname: { $regex: q, $options: "i" } });
+
+    // Folders search
+    const folders = await Folder.find({ name: { $regex: q, $options: "i" } });
+
+    res.json({ files, folders });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ files: [], folders: [] });
+  }
+});

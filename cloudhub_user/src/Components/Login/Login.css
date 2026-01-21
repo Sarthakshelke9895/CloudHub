@@ -1,0 +1,239 @@
+/* Full page */
+.auth-page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  color: #fff;
+}
+
+
+
+/* Center wrapper */
+.login-wrapper {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Card */
+.login-card {
+  background: #141414;
+  width: 360px;
+  padding: 35px;
+  border-radius: 18px;
+  text-align: center;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8);
+  height: fit-content;
+  
+}
+
+.login-card h2 {
+  font-size: 26px;
+  margin-bottom: 8px;
+}
+
+.login-card p {
+  font-size: 14px;
+  color: #aaa;
+  margin-bottom: 24px;
+}
+
+/* Inputs */
+.login-card input {
+  width: 100%;
+  padding: 12px 14px;
+  margin-bottom: 14px;
+  border-radius: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.15); /* set a default border */
+  outline: none;
+  background: #000;
+  color: white;
+  font-size: 14px;
+  transition: border 0.3s;
+}
+
+.login-card input:focus{
+  border: 1px solid var(--buttonback); /* now it will show on focus */
+}
+.login-card input::placeholder {
+  color: #777;
+}
+
+/* Button */
+.login-card button {
+  width: 100%;
+  padding: 12px;
+  margin-top: 10px;
+  border-radius: 10px;
+  border: none;
+  background: #f5a200;
+  color: #000;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+.login-card button:hover {
+  background: #ffb733;
+}
+
+/* Footer */
+.auth-footer {
+  padding: 18px;
+  text-align: center;
+  font-size: 13px;
+  color: #777;
+}
+
+.mpin-box-login {
+  display: flex;
+  align-items: center;
+  justify-content:space-between;
+  padding: 10px 5px;
+
+  
+}
+#enter_mpin_text_login{
+   text-align: left;
+  background-color: #151515;
+  margin: 0;
+  margin-left: 5px;
+  font-size: 14px;
+}
+.mpin-box-login input {
+  width: 45px;
+  height: 55px;
+  text-align: center;
+  font-size: 14px;
+  margin: 0;
+  border-radius: 4px;
+}
+
+.show {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0;
+}
+
+.show p {
+  margin: 0;
+  
+}
+
+
+
+.auth-header-login {
+  width: 100%;
+  padding: 20px 40px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.252) ;
+    background-color: #00000088;
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+}
+
+.auth-header-login h1 {
+  font-size: 24px;
+  font-weight: 700;
+  width: fit-content;
+  cursor: pointer;
+}
+
+.auth-header-login span {
+  background: #f5a200;
+  color: black;
+  padding: 2px 6px;
+  margin-left: 4px;
+  border-radius: 4px;
+}
+
+/* =========================
+   RESPONSIVE – LOGIN PAGE
+========================= */
+@media (max-width: 768px) {
+
+ 
+
+  .auth-page {
+    min-height: 100vh;
+  }
+
+  /* Header */
+  .auth-header-login {
+    padding: 15px 20px;
+    text-align: center;
+  }
+
+  .auth-header-login h1 {
+    font-size: 20px;
+    margin: auto;
+  }
+
+  /* Center wrapper */
+  
+  .login-wrapper{
+    width: 80%;
+  }
+
+  /* Card */
+  .login-card {
+    width: 100%;
+    max-width: 320px;
+    padding: 22px;
+    border-radius: 14px;
+    margin: 0;
+    margin-bottom: 100px;
+    
+  }
+  .auth-header-login h1{
+    font-size: 24px;
+  }
+
+  .login-card h2 {
+    font-size: 22px;
+  }
+
+  .login-card p {
+    font-size: 13px;
+    margin-bottom: 18px;
+  }
+
+  .login-card input {
+    font-size: 13px;
+    padding: 10px 12px;
+  }
+
+  .login-card button {
+    font-size: 14px;
+    padding: 10px;
+    border-radius: 8px;
+  }
+
+  /* MPIN */
+  .mpin-box-login {
+    padding: 6px 8px;
+  }
+
+  .mpin-box-login input {
+    width: 38px;
+    height: 48px;
+    font-size: 13px;
+  }
+
+  #enter_mpin_text_login {
+    font-size: 13px;
+  }
+
+  /* Show MPIN */
+  .show p {
+    font-size: 13px;
+  }
+
+  /* Footer */
+  .auth-footer {
+    font-size: 12px;
+    padding: 14px;
+  }
+}

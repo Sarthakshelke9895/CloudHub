@@ -1,0 +1,289 @@
+/* Page background */
+/* Page background */
+.auth-page {
+  display: flex;
+  justify-content: center; /* centers vertically */
+  align-items: center;     /* centers horizontally */
+ 
+}
+
+/* Card */
+.auth-card {
+  background: #151515;
+  padding: 35px;
+  width: 360px;
+  border-radius: 16px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7);
+  text-align: center;
+  margin-top:120px;
+ 
+}
+
+
+
+
+
+
+.auth-card h2 {
+  font-size: 26px;
+  margin-bottom: 8px;
+}
+
+.auth-card p {
+  font-size: 14px;
+  color: #aaa;
+  margin-bottom: 25px;
+}
+
+.auth-card input {
+  width: 100%;
+  padding: 12px 14px;
+  margin-bottom: 14px;
+  border-radius: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.15); /* set a default border */
+  outline: none;
+  background: #000;
+  color: white;
+  font-size: 14px;
+  transition: border 0.3s;
+}
+
+.auth-card input:focus {
+  border: 1px solid var(--buttonback); /* now it will show on focus */
+}
+
+
+#enter_otp{
+  margin: 0;
+  padding-top: 15px;
+  padding-bottom: 10px;
+  text-align: left;
+}
+
+#register_button:disabled {
+  background: #777;        /* gray */
+  color: #222;
+  cursor: not-allowed;
+
+  opacity: 0.7;
+}
+
+
+
+.auth-card input::placeholder {
+  color: #777;
+}
+
+
+
+/* Button */
+.auth-card button {
+  width: 100%;
+  padding: 12px;
+  margin-top: 10px;
+  border-radius: 4px;
+  border: none;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  background: #f5a200;
+  color: black;
+  transition: 0.3s;
+}
+
+.auth-card button:hover {
+  background: #ffb733;
+}
+
+/* Footer */
+.auth-footer {
+  margin-top: auto;
+  padding: 20px;
+  font-size: 13px;
+  color: #777;
+}
+.already_registered{
+  background-color: transparent;
+  margin-top: 15px;
+  margin-bottom: 0;
+}
+
+.mpin-box {
+  display: flex;
+  align-items: center;
+  justify-content:space-between;
+  padding: 10px 0px;
+  
+  
+}
+
+.mpin-box input {
+  width: 45px;
+  height: 55px;
+  text-align: center;
+  font-size: 14px;
+  margin: 0;
+  border-radius: 4px;
+}
+#enter_mpin_text{
+  text-align: left;
+  background-color: #151515;
+  margin: 0;
+  margin-left: 1px;
+  font-size: 14px;
+}
+
+.show_mpin{
+  display: flex;
+  align-items: center;
+  gap: 5px;
+ 
+}
+.show_mpin p{
+  width: 100%;
+  font-size: 14px;
+  margin: 0px;
+  display: flex;
+  align-items: flex-start;
+
+  
+ 
+  
+}
+
+.show_mpin input{
+  width: 30px;
+  height: 20px;
+  margin: 0;
+  
+}
+
+.auth-header-register {
+  width: 100%;
+  padding: 20px 40px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.25) ;
+  position: fixed;
+  top: 0;
+  background-color: #00000088;
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+ 
+}
+
+.auth-header-register h1 {
+  font-size: 24px;
+  font-weight: 700;
+  width: fit-content;
+  cursor: pointer;
+}
+
+.auth-header-register span {
+  background: #f5a200;
+  color: black;
+  padding: 2px 6px;
+  margin-left: 4px;
+  border-radius: 4px;
+}
+
+/* =========================
+   RESPONSIVE – REGISTER
+========================= */
+@media (max-width: 768px) {
+
+ 
+
+  .auth-page {
+     display: flex;
+     align-items: center;    
+    justify-content: center;
+    margin: 0;
+    padding: 0;
+  }
+
+  .auth-card {
+    width: 100%;
+    max-width: 320px;
+               /* remove fixed height */
+    padding: 22px;
+    margin: 0;
+    border-radius: 14px;
+    
+  }
+
+  .auth-card h2 {
+    font-size: 22px;
+  }
+
+
+  .auth-card p {
+    font-size: 13px;
+    margin-bottom: 18px;
+  }
+
+  .auth-card input {
+    font-size: 13px;
+    padding: 10px 12px;
+  }
+
+  .auth-card button {
+    font-size: 14px;
+    padding: 10px;
+  }
+
+  /* MPIN */
+  .mpin-box {
+    justify-content: space-between;
+    padding: 6px 0;
+  }
+
+  .mpin-box input {
+    width: 38px;
+    height: 48px;
+    font-size: 13px;
+  }
+
+  #enter_mpin_text {
+    font-size: 13px;
+  }
+
+  .show_mpin{
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    padding: 10px 0px ;
+    
+  }
+
+  .show_mpin p{
+    font-size: 13px;
+    margin: 0;
+  }
+  
+  
+
+  .show_mpin input {
+    width: 30px;
+    height: 18px;
+  }
+
+  /* Header */
+  .auth-header-register {
+    padding: 15px 20px;
+    text-align: center;
+  }
+
+  .auth-header-register h1 {
+    font-size: 24px;
+    margin: auto;
+  }
+
+  /* Footer */
+  .auth-footer {
+    font-size: 12px;
+    padding: 14px;
+    margin: 0;
+   position: fixed;
+   bottom: 0;
+  }
+}
+
