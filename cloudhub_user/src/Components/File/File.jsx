@@ -164,18 +164,29 @@ useEffect(() => {
   // Search
   async function search(val) {
     setQ(val);
-    if (!val) return setSuggest({ files: [], folders: [] });
   
-    const r = await fetch(`${API}/search?q=${val}`, {
-      credentials: "include"   // 🔥 send auth cookie
+    if (!val.trim()) {
+      setSuggest({ files: [], folders: [] });
+      return;
+    }
+  
+    const res = await fetch(`${API}/search?q=${encodeURIComponent(val)}`, {
+      method: "GET",
+      credentials: "include", // ✅ REQUIRED
     });
   
-    const data = await r.json();
+    if (!res.ok) {
+      console.log("Search unauthorized");
+      return;
+    }
+  
+    const data = await res.json();
     setSuggest({
+      files: data.files || [],
       folders: data.folders || [],
-      files: data.files || []
     });
   }
+  
   
 
   function selectFromSearch(item) {
