@@ -266,13 +266,22 @@ app.post("/folder", authMiddleware,async (req, res) => {
   res.json(await Folder.create({ name, parent: parent || null , userId: req.user._id}));
 });
 
-app.get("/folder/:id",  authMiddleware,async (req, res) => {
-  console.log("USER:", req.user); 
+app.get("/folder/:id", authMiddleware, async (req, res) => {
   const parent = req.params.id === "root" ? null : req.params.id;
-  const folders = await Folder.find({ parent });
-  const files = await File.find({ folder: parent , userId: req.user._id});
+
+  const folders = await Folder.find({
+    parent,
+    userId: req.user._id
+  });
+
+  const files = await File.find({
+    folder: parent,
+    userId: req.user._id
+  });
+
   res.json({ folders, files });
 });
+
 
 app.post("/upload/:folderId",  authMiddleware,upload.single("file"), async (req, res) => {
   const folder = req.params.folderId === "root" ? null : req.params.folderId;
@@ -321,30 +330,32 @@ app.delete("/file/:id",  authMiddleware,async (req, res) => {
 });
 
 
-app.delete("/folder/:id",  authMiddleware,async (req, res) => {
-  await File.deleteMany({ folder: req.params.id },{userId: req.user._id});
-  await Folder.deleteMany({ parent: req.params.id },{userId: req.user._id});
-  await Folder.findByIdAndDelete(req.params.id);
-  res.sendStatus(200);
+app.delete("/folder/:id", authMiddleware, async (req, res) => {
+  const folder = await Folder.findOneAndDelete({
+    _id: req.params.id,
+    userId: req.user._id
+  });
+
+  if (!folder) {
+    return res.status(403).json({ message: "Access denied" });
+  }
+
+  res.json({ success: true });
 });
+
 
 app.put("/folder/:id/rename", authMiddleware, async (req, res) => {
-  try {
-    const { name } = req.body;
-    if (!name || !name.trim()) return res.status(400).json({ error: "Name required" });
+  const folder = await Folder.findOneAndUpdate(
+    { _id: req.params.id, userId: req.user._id },
+    { name: req.body.name },
+    { new: true }
+  );
 
-    const folder = await Folder.findByIdAndUpdate(
-      req.params.id,
-      { name: name.trim() },
-      { new: true }
-    );
+  if (!folder) return res.status(403).json({ message: "Access denied" });
 
-    if (!folder) return res.status(404).json({ error: "Folder not found" });
-    res.json(folder);
-  } catch (e) {
-    res.status(500).json({ error: e.message });
-  }
+  res.json(folder);
 });
+
 
 
 app.get("/search", authMiddleware, async (req, res) => {
