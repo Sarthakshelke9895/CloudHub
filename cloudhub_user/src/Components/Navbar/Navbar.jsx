@@ -55,7 +55,7 @@ const Navbar = () => {
     to="features"
     smooth
     duration={500}
-    offset={window.innerWidth > 768 ? -150 : -35}
+    offset={window.innerWidth > 768 ? -78 : -55}
     className="nav-link"
     onClick={() => setMenuOpen(false)}
   >
@@ -66,7 +66,7 @@ const Navbar = () => {
     to="about"
     smooth
     duration={500}
-    offset={window.innerWidth > 768 ? -75 : -20}
+    offset={window.innerWidth > 768 ? -73 : -60}
     className="nav-link"
     onClick={() => setMenuOpen(false)}
   >
@@ -77,7 +77,7 @@ const Navbar = () => {
     to="contact"
     smooth
     duration={500}
-    offset={window.innerWidth > 768 ? -70 : -10}
+    offset={window.innerWidth > 768 ? -70 : -65}
     className="nav-link"
     onClick={() => setMenuOpen(false)}
   >

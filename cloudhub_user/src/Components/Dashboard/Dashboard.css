@@ -186,6 +186,93 @@
 
 
 
+@media (max-width: 480px) {
+
+  /* Dashboard wrapper */
+  .child_dashboard {
+    margin: 0;
+    padding: 10px;
+  }
+
+  .child_dashboard h2 {
+    font-size: 16px;
+    font-weight: 400;
+  }
+
+  /* Navbar */
+  .dashboard_navbar {
+    height: auto;
+    padding: 10px;
+    gap: 10px;
+  }
+
+  /* Buttons */
+  .Button {
+    font-size: 14px;
+    padding: 6px 10px;
+    margin: 0;
+  }
+
+  /* Avatar */
+  .avatar-circle,
+  #username_profile {
+    width: 40px;
+    height: 40px;
+    font-size: 18px;
+  }
+
+  .avatar-container {
+    gap: 8px;
+  }
+
+  .avatar-tooltip {
+    left: 10%;
+    transform: translateX(-50%);
+    font-size: 12px;
+    width: fit-content;
+    white-space: normal;
+  }
+
+  /* Dashboard components */
+  .components_dashboard {
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 10px;
+  }
+
+  /* Cards wrapper */
+  /* Card dashboard as 2x2 grid */
+  .card_dashboard {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    padding: 10px 0px;
+    justify-content: center;
+    align-content: center;
+    margin: 0;
+   
+  }
+
+  .card {
+    margin: auto;  
+    width: 89%;
+    justify-content: center;
+  }
+
+  .card h2 {
+    font-size: 14px;
+  }
+
+  .dashboard_buttons_logo {
+    height: 18px;
+    width: 18px;
+    margin-right: 8px;
+  }
+
+  .dashboard_access_img {
+    height: 24px;
+  }
+}
 
 
 

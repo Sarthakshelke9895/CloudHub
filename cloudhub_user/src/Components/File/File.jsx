@@ -72,19 +72,32 @@ export default function File() {
   }
   
 
-  // Load folder name
-  useEffect(() => {
+// Load folder name
+useEffect(() => {
+  async function fetchFolderName() {
     if (current === "root") {
       setFolderName("Home");
     } else {
-      fetch(`${API}/folderinfo/${current}`)
-        .then(r => r.json())
-        .then(d => setFolderName(d.name));
+      const res = await fetch(`${API}/folderinfo/${current}`, {
+        method: "GET",
+        credentials: "include", // ✅ send cookies
+      });
+
+      if (!res.ok) {
+        console.log("Unauthorized or folder not found");
+        return;
+      }
+
+      const d = await res.json();
+      setFolderName(d.name);
     }
-  
+
     loadFolder(current);
-  }, [current]);
-  
+  }
+
+  fetchFolderName();
+}, [current]);
+
 
   // Folder actions
   async function createFolder() {
@@ -196,20 +209,22 @@ export default function File() {
     setMenuId(null); 
   }
 
-  // Folder navigation
-  function openFolder(folder) {
-    // Do nothing if user clicks the current folder
+  async function openFolder(folder) {
     if (folder._id === current) return;
   
+    const res = await fetch(`${API}/folderinfo/${folder._id}`, {
+      method: "GET",
+      credentials: "include", // ✅ REQUIRED
+    });
+  
+    if (!res.ok) return console.log("Unauthorized");
+  
+    const data = await res.json();
     setCurrent(folder._id);
-    setFolderName(folder.name);
-  
-    // Add to breadcrumbs
-    setBreadcrumbs(prev => [...prev, { id: folder._id, name: folder.name }]);
-  
-    // Clear search suggestions
-    setSuggest({ files: [], folders: [] });
+    setFolderName(data.name);
+    setBreadcrumbs(prev => [...prev, { id: folder._id, name: data.name }]);
   }
+  
   
   
 
@@ -326,21 +341,18 @@ async function renameFolder(id, newName) {
       </div>
     )}
   </div>
-  {/* Animated Progress Bar */}
-{/* Animated Progress Bar */}
+
 {percent > 0 && (
-  <div className="progress-wrap">
-    <div
-      className="progress-bar"
-      style={{ width: `${percent}%` }}
-    ></div>
-    <span className="progress-text">{percent}%</span>
+  <div className="progress-container">
+    <span className="progress-percent">{percent}%</span>
+    <div className="progress-bg">
+      <div
+        className="progress-fill"
+        style={{ width: `${percent}%` }}
+      ></div>
+    </div>
   </div>
 )}
-
-
-
-
 
 
 </div>
@@ -350,6 +362,7 @@ async function renameFolder(id, newName) {
     <div className="modal_box">
       <h3>Create Folder</h3>
       <input
+      autoFocus
         value={name}
         onChange={e => setName(e.target.value)}
         placeholder="Folder name"

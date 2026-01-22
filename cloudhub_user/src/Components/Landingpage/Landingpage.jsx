@@ -190,7 +190,7 @@ const LandingPage = () => {
         <ul>
           <li><img src={Email} alt=""  className="contact_icons"/>cloudhubbb.org@gmail.com  </li>
           <li> <img src={Telephone} alt=""className="contact_icons" />+91 9123456789</li>
-          <li><img   src={Location} alt="" />CloudHub Technologies Pvt. Ltd.</li>
+          <li><img   src={Location} alt="" className="contact_icons" />CloudHub Technologies Pvt. Ltd.</li>
         </ul>
       </div>
 

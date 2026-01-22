@@ -277,6 +277,7 @@
 .modal_box h3{
   letter-spacing: 1px;
   color: #ff9100;
+  font-weight: 500;
 }
 
 .modal_box input {
@@ -461,49 +462,166 @@
 
 
 
-
-
-
-
-
-/* Progress Bar Container */
-.progress-wrap {
+.progress-container {
   position: relative;
   width: 100%;
-  height: 18px;
-  background-color: #333333b9;
-  border-radius: 15px;
-  overflow: hidden;
-  margin: 10px 0;
 }
 
-/* Progress Fill with moving stripes */
-.progress-bar {
-  height: 100%;
-  width: 0%;
-  background:#ff9100;
-  background-size: 40px 40px; /* stripe size */
-  animation: moveStripes 1s linear infinite;
-  transition: width 0.2s ease-in-out;
-  border-radius: 15px 0 0 15px;
-}
-
-/* Stripe animation */
-@keyframes moveStripes {
-  0% { background-position: 0 0; }
-  100% { background-position: 40px 0; }
-}
-
-/* Progress Text */
-.progress-text {
+.progress-percent {
   position: absolute;
-  top: 50%;
-  left: 2%;
-  transform: translate(-50%, -50%);
-  font-weight: normal;
-  color: white;
-  font-size: 14px;
-  padding: 2px 0px;
-  pointer-events: none;
+  top: -10px;
+  left: 0;
+  font-size: 13px;
+  color:rgba(255, 255, 255, 0.8);
 }
+
+.progress-bg {
+  width: 100%;
+  height: 6px;
+  background: #333333b9 ;
+  border-radius: 4px;
+  margin-top: 10px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: #ff9100;
+  width: 0;
+  transition: width 0.4s ease;
+}
+
+
+@media (max-width: 480px) {
+
+  /* General */
+  .file-explorer {
+    padding: 10px;
+  }
+
+  /* Header */
+  .folder-header h2 {
+    font-size: 16px;
+  }
+
+ 
+
+  .folder_logo {
+    width: 20px;
+  }
+
+  #back_arrow {
+    height: 16px;
+  }
+
+  /* Breadcrumbs */
+  .breadcrumbs {
+    font-size: 12px;
+  }
+
+  /* New button + Search */
+  .new_button_and_search_bar {
+    gap: 10px;
+
+  }
+
+  .new_button_and_search_bar .new_div {
+    width: 20%;
+    justify-content: center;
+  }
+
+  .search-box {
+    width: 100%;
+  }
+
+  .search-input {
+    font-size: 14px;
+  }
+  .search-input::placeholder{
+    font-size: 14px;
+  }
+
+  .search-suggestions {
+    width: 100%;
+    right: 0;
+  }
+
+  /* Tooltip */
+  .new-tooltip {
+    position:relative;
+    top: 10px;
+    left: -15px;
+    width: 100%; 
+    flex-direction: row;
+    margin: 0;
+    padding: 0;
+    
+  }
+
+  .new-tooltip .tooltip_row {
+    width: 100%;
+    justify-content: flex-start;
+    
+  }
+
+  /* Folder & File Grid */
+  .folder-list,
+  .file-list {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .folder-row,
+  .file-row {
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 6px;
+    padding: 10px;
+  }
+
+  .name_and_logo {
+    justify-content: flex-start;
+    gap: 6px;
+  }
+
+  /* Menu */
+  .menu-box {
+    right: 0;
+    top: 32px;
+    min-width: 100px;
+  }
+
+  /* Modal */
+  .modal_box {
+    width: 90%;
+    padding: 15px;
+  }
+
+  .modal_box h3 {
+    font-size: 16px;
+  }
+
+  .modal-actions {
+    flex-direction: row;
+  }
+
+
+
+  /* Progress Bar */
+  .progress-percent {
+    font-size: 11px;
+    top: -14px;
+  }
+
+  .progress-bg {
+    height: 5px;
+  }
+
+  /* Text */
+  .files_and_folders {
+    font-size: 16px;
+  }
+
+}
+
 

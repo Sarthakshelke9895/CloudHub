@@ -18,6 +18,7 @@ const app = express();
 
 app.use(express.json());
 app.use(compression());
+app.use(cookieParser());
 
 const allowedOrigins = [
   process.env.CLIENT_ORIGIN, // production
@@ -288,11 +289,15 @@ app.post("/upload/:folderId",  authMiddleware,upload.single("file"), async (req,
 });
 
 
-app.get("/folderinfo/:id", authMiddleware, async (req,res)=>{
-  if(req.params.id==="root") return res.json({name:"Root"});
-  const f = await Folder.findById(req.params.id);
-  if(!f) return res.json({name:"Unknown"});
-  res.json({name:f.name});
+app.get("/folderinfo/:id", authMiddleware, async (req, res) => {
+  if (req.params.id === "root") return res.json({ name: "Root" });
+
+  // Find folder that belongs to logged-in user
+  const f = await Folder.findOne({ _id: req.params.id, userId: req.user._id });
+
+  if (!f) return res.status(404).json({ name: "Unknown" });
+
+  res.json({ name: f.name });
 });
 
 app.get("/file/:id",  authMiddleware,async (req, res) => {
@@ -343,6 +348,9 @@ app.put("/folder/:id/rename", authMiddleware, async (req, res) => {
 
 
 app.get("/search", authMiddleware, async (req, res) => {
+  console.log("req.user:", req.user);
+console.log("query:", q);
+
   const q = req.query.q;
   if (!q) return res.json({ files: [], folders: [] });
 
