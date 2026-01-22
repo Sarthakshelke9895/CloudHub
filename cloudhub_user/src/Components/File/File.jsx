@@ -10,7 +10,7 @@ import { useAlert } from "../Alertbox/Alertcontext";
 
 
 
-const API = "https://cloudhub-af47.onrender.com";
+const API = "http://localhost:5000";
 
 
 export default function File() {
@@ -20,7 +20,9 @@ export default function File() {
   const [q, setQ] = useState("");
   const [suggest, setSuggest] = useState({ files: [], folders: [] });
   const [highlightId, setHighlightId] = useState(null);
+  
   const [menuId, setMenuId] = useState(null);
+
   const [folderName, setFolderName] = useState("Home");
   const [breadcrumbs, setBreadcrumbs] = useState([{ id: "root", name: "My Drive" }]);
   
@@ -56,11 +58,19 @@ export default function File() {
       goRoot();
     }
   }
-  
+
   // Load folder content
   function loadFolder(id) {
-    fetch(`${API}/folder/${id}`).then(r => r.json()).then(setData);
+    fetch(`${API}/folder/${id}`, { credentials: "include" })
+      .then(r => r.json())
+      .then(res =>
+        setData({
+          folders: res.folders || [],
+          files: res.files || []
+        })
+      );
   }
+  
 
   // Load folder name
   useEffect(() => {
@@ -82,6 +92,7 @@ export default function File() {
     await fetch(`${API}/folder`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
+      credentials: "include",
       body: JSON.stringify({ name, parent: current === "root" ? null : current }),
     });
     setName("");
@@ -96,7 +107,8 @@ export default function File() {
   
     const xhr = new XMLHttpRequest();
     xhr.open("POST", `${API}/upload/${current}`);
-  
+    xhr.withCredentials = true;   // ← ADD THIS LINE
+
     xhr.upload.onprogress = e => {
       if (e.lengthComputable) {
         const p = Math.round((e.loaded / e.total) * 100);
@@ -114,27 +126,44 @@ export default function File() {
   }
   
   
-  
-
   async function delFile(id) {
-    const res = await fetch(`${API}/file/${id}`, { method: "DELETE" });
+    const res = await fetch(`${API}/file/${id}`, {
+      method: "DELETE",
+      credentials: "include"   // 🔥 send cookie for auth
+    });
+  
     if (res.ok) loadFolder(current);
-    else  showAlert("Delete Failed","error",2000);
-    setMenuId(null); 
+    else showAlert("Delete Failed", "error", 2000);
+  
+    setMenuId(null);
   }
-
+  
   async function delFolder(id) {
-    const res = await fetch(`${API}/folder/${id}`, { method: "DELETE" });
+    const res = await fetch(`${API}/folder/${id}`, {
+      method: "DELETE",
+      credentials: "include"   // 🔥 send cookie for auth
+    });
+  
     if (res.ok) loadFolder(current);
-    else showAlert("Delete Failed","error",2000);
+    else showAlert("Delete Failed", "error", 2000);
   }
+  
   // Search
   async function search(val) {
     setQ(val);
     if (!val) return setSuggest({ files: [], folders: [] });
-    const r = await fetch(`${API}/search?q=${val}`);
-    setSuggest(await r.json());
+  
+    const r = await fetch(`${API}/search?q=${val}`, {
+      credentials: "include"   // 🔥 send auth cookie
+    });
+  
+    const data = await r.json();
+    setSuggest({
+      folders: data.folders || [],
+      files: data.files || []
+    });
   }
+  
 
   function selectFromSearch(item) {
     setHighlightId(item._id);

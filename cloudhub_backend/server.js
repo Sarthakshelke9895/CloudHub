@@ -181,7 +181,8 @@ const authMiddleware = async (req, res, next) => {
     next();
   } catch (err) {
     console.error(err);
-    return res.status(401).json({ message: "Invalid token" }); // <-- add return
+    return res.status(401).json({ message: "Invalid token" });
+     // <-- add return
   }
 };
 
@@ -230,6 +231,8 @@ const Folder = mongoose.model(
   new mongoose.Schema({
     name: String,
     parent: { type: mongoose.Schema.Types.ObjectId, ref: "Folder", default: null },
+    userId: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
+
     createdAt: { type: Date, default: Date.now },
   })
 );
@@ -243,6 +246,8 @@ const File = mongoose.model(
     size: Number,
     path: String,
     folder: { type: mongoose.Schema.Types.ObjectId, ref: "Folder", default: null },
+    userId: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
+
     createdAt: { type: Date, default: Date.now },
   })
 );
@@ -255,19 +260,20 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage });
 
-app.post("/folder", async (req, res) => {
+app.post("/folder", authMiddleware,async (req, res) => {
   const { name, parent } = req.body;
-  res.json(await Folder.create({ name, parent: parent || null }));
+  res.json(await Folder.create({ name, parent: parent || null , userId: req.user._id}));
 });
 
-app.get("/folder/:id", async (req, res) => {
+app.get("/folder/:id",  authMiddleware,async (req, res) => {
+  console.log("USER:", req.user); 
   const parent = req.params.id === "root" ? null : req.params.id;
   const folders = await Folder.find({ parent });
-  const files = await File.find({ folder: parent });
+  const files = await File.find({ folder: parent , userId: req.user._id});
   res.json({ folders, files });
 });
 
-app.post("/upload/:folderId", upload.single("file"), async (req, res) => {
+app.post("/upload/:folderId",  authMiddleware,upload.single("file"), async (req, res) => {
   const folder = req.params.folderId === "root" ? null : req.params.folderId;
   const f = await File.create({
     filename: req.file.filename,
@@ -276,20 +282,21 @@ app.post("/upload/:folderId", upload.single("file"), async (req, res) => {
     size: req.file.size,
     path: req.file.path,
     folder,
+    userId: req.user._id
   });
   res.json(f);
 });
 
 
-app.get("/folderinfo/:id", async (req,res)=>{
+app.get("/folderinfo/:id", authMiddleware, async (req,res)=>{
   if(req.params.id==="root") return res.json({name:"Root"});
   const f = await Folder.findById(req.params.id);
   if(!f) return res.json({name:"Unknown"});
   res.json({name:f.name});
 });
 
-app.get("/file/:id", async (req, res) => {
-  const f = await File.findById(req.params.id);
+app.get("/file/:id",  authMiddleware,async (req, res) => {
+  const f = await File.findOne({ _id: req.params.id, userId: req.user._id });
   if (!f) return res.status(404).send("Not found");
 
   if (req.query.download === "true") {
@@ -299,7 +306,7 @@ app.get("/file/:id", async (req, res) => {
 });
 
 
-app.delete("/file/:id", async (req, res) => {
+app.delete("/file/:id",  authMiddleware,async (req, res) => {
   const f = await File.findById(req.params.id);
   if (!f) return res.status(404).json({ message: "Not found" });
 
@@ -309,14 +316,14 @@ app.delete("/file/:id", async (req, res) => {
 });
 
 
-app.delete("/folder/:id", async (req, res) => {
-  await File.deleteMany({ folder: req.params.id });
-  await Folder.deleteMany({ parent: req.params.id });
+app.delete("/folder/:id",  authMiddleware,async (req, res) => {
+  await File.deleteMany({ folder: req.params.id },{userId: req.user._id});
+  await Folder.deleteMany({ parent: req.params.id },{userId: req.user._id});
   await Folder.findByIdAndDelete(req.params.id);
   res.sendStatus(200);
 });
 
-app.put("/folder/:id/rename", async (req, res) => {
+app.put("/folder/:id/rename", authMiddleware, async (req, res) => {
   try {
     const { name } = req.body;
     if (!name || !name.trim()) return res.status(400).json({ error: "Name required" });
@@ -335,21 +342,22 @@ app.put("/folder/:id/rename", async (req, res) => {
 });
 
 
-// GET /search?q=...
-app.get("/search", async (req, res) => {
-  try {
-    const q = req.query.q;
-    if (!q) return res.json({ files: [], folders: [] });
+app.get("/search", authMiddleware, async (req, res) => {
+  const q = req.query.q;
+  if (!q) return res.json({ files: [], folders: [] });
 
-    // Files search
-    const files = await File.find({ originalname: { $regex: q, $options: "i" } });
+  const files = await File.find({
+    userId: req.user._id,
+    originalname: { $regex: q, $options: "i" }
+  });
 
-    // Folders search
-    const folders = await Folder.find({ name: { $regex: q, $options: "i" } });
+  const folders = await Folder.find({
+    userId: req.user._id,
+    
+    name: { $regex: q, $options: "i" }
+  });
 
-    res.json({ files, folders });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ files: [], folders: [] });
-  }
+  res.json({ files, folders });
+  
 });
+
