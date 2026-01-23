@@ -359,24 +359,28 @@ app.put("/folder/:id/rename", authMiddleware, async (req, res) => {
 
 
 app.get("/search", authMiddleware, async (req, res) => {
-  console.log("req.user:", req.user);
-console.log("query:", q);
+  try {
+    const q = req.query.q; // ✅ define FIRST
 
-  const q = req.query.q;
-  if (!q) return res.json({ files: [], folders: [] });
+    console.log("req.user:", req.user);
+    console.log("query:", q);
 
-  const files = await File.find({
-    userId: req.user._id,
-    originalname: { $regex: q, $options: "i" }
-  });
+    if (!q) return res.json({ files: [], folders: [] });
 
-  const folders = await Folder.find({
-    userId: req.user._id,
-    
-    name: { $regex: q, $options: "i" }
-  });
+    const files = await File.find({
+      userId: req.user._id,
+      originalname: { $regex: q, $options: "i" }
+    });
 
-  res.json({ files, folders });
-  
+    const folders = await Folder.find({
+      userId: req.user._id,
+      name: { $regex: q, $options: "i" }
+    });
+
+    res.json({ files, folders });
+  } catch (err) {
+    console.error("Search error:", err);
+    res.status(500).json({ message: "Search failed" });
+  }
 });
 
