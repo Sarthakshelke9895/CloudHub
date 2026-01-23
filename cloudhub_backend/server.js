@@ -367,6 +367,32 @@ app.put("/folder/:id/rename", authMiddleware, async (req, res) => {
   res.json(folder);
 });
 
+app.delete("/file/:id", authMiddleware, async (req, res) => {
+  try {
+    const file = await File.findOne({
+      _id: req.params.id,
+      userId: req.user._id
+    });
+
+    if (!file)
+      return res.status(404).json({ message: "File not found or access denied" });
+
+    // delete physical file
+    const fs = require("fs");
+    if (fs.existsSync(file.path)) {
+      fs.unlinkSync(file.path);
+    }
+
+    // delete db record
+    await File.deleteOne({ _id: file._id });
+
+    res.json({ success: true });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
 
 
 app.get("/search", authMiddleware, async (req, res) => {
