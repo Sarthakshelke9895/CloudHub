@@ -256,11 +256,14 @@ useEffect(() => {
 }, []);
 
 async function renameFolder(id, newName) {
-  await fetch(`${API}/folder/${id}/rename`, {   // add /rename at the end
+  const res = await fetch(`${API}/folder/${id}/rename`, {
     method: "PUT",
     headers: { "Content-Type": "application/json" },
+    credentials: "include", // ✅ REQUIRED
     body: JSON.stringify({ name: newName }),
   });
+
+  if (!res.ok) return console.log("Rename failed");
   loadFolder(current);
 }
 

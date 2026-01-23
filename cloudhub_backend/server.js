@@ -320,14 +320,25 @@ app.get("/file/:id",  authMiddleware,async (req, res) => {
 });
 
 
-app.delete("/file/:id",  authMiddleware,async (req, res) => {
-  const f = await File.findById(req.params.id);
-  if (!f) return res.status(404).json({ message: "Not found" });
+app.get("/file/:id", authMiddleware, async (req, res) => {
+  const file = await File.findOne({
+    _id: req.params.id,
+    userId: req.user._id
+  });
 
-  if (fs.existsSync(f.path)) fs.unlinkSync(f.path);
-  await f.deleteOne();
-  res.sendStatus(200);
+  if (!file) return res.status(404).json({ message: "File not found in DB" });
+
+  const filePath = path.join(__dirname, "uploads", file.filename);
+
+  if (!fs.existsSync(filePath)) {
+    console.log("Missing file:", filePath);
+    return res.status(404).json({ message: "File missing on server" });
+  }
+
+  res.sendFile(filePath);
 });
+
+
 
 
 app.delete("/folder/:id", authMiddleware, async (req, res) => {
