@@ -10,7 +10,7 @@ import { useAlert } from "../Alertbox/Alertcontext";
 
 
 
-const API = "http://localhost:5000/";
+const API = "https://cloudhub-af47.onrender.com";
 
 
 export default function File() {
@@ -206,20 +206,35 @@ useEffect(() => {
   async function shareFile(f) {
     const link = `${API}/file/${f._id}`;
     await navigator.clipboard.writeText(link);
-    showAlert("Link Copied","success",2000);
-    setMenuId(null); 
+    showAlert("Link Copied", "success", 2000);
+    setMenuId(null);
   }
-
-  function downloadFile(f) {
+  
+  async function downloadFile(f) {
+    const res = await fetch(`${API}/file/${f._id}?download=true`, {
+      method: "GET",
+      credentials: "include", // ✅ IMPORTANT
+    });
+  
+    if (!res.ok) {
+      showAlert("Download Failed", "error", 2000);
+      return;
+    }
+  
+    const blob = await res.blob();
+    const url = window.URL.createObjectURL(blob);
+  
     const a = document.createElement("a");
-    a.href = `${API}/file/${f._id}?download=true`;
+    a.href = url;
     a.download = f.originalname;
     document.body.appendChild(a);
     a.click();
     a.remove();
-    setMenuId(null); 
+    window.URL.revokeObjectURL(url);
+  
+    setMenuId(null);
   }
-
+  
   async function openFolder(folder) {
     if (folder._id === current) return;
   

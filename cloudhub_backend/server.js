@@ -309,34 +309,29 @@ app.get("/folderinfo/:id", authMiddleware, async (req, res) => {
   res.json({ name: f.name });
 });
 
-app.get("/file/:id",  authMiddleware,async (req, res) => {
-  const f = await File.findOne({ _id: req.params.id, userId: req.user._id });
-  if (!f) return res.status(404).send("Not found");
-
-  if (req.query.download === "true") {
-    return res.download(path.resolve(f.path), f.originalname);
-  }
-  res.sendFile(path.resolve(f.path));
-});
-
 
 app.get("/file/:id", authMiddleware, async (req, res) => {
-  const file = await File.findOne({
-    _id: req.params.id,
-    userId: req.user._id
-  });
-
+  const file = await File.findOne({ _id: req.params.id, userId: req.user._id });
   if (!file) return res.status(404).json({ message: "File not found in DB" });
 
-  const filePath = path.join(__dirname, "uploads", file.filename);
+  const filePath = path.join(__dirname, file.path);
 
   if (!fs.existsSync(filePath)) {
     console.log("Missing file:", filePath);
     return res.status(404).json({ message: "File missing on server" });
   }
 
+  if (req.query.download === "true") {
+    return res.download(filePath, file.originalname);
+  }
+
   res.sendFile(filePath);
 });
+
+
+
+
+
 
 
 
