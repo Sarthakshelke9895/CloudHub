@@ -234,8 +234,9 @@ const Folder = mongoose.model(
     name: String,
     parent: { type: mongoose.Schema.Types.ObjectId, ref: "Folder", default: null },
     userId: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
-
     createdAt: { type: Date, default: Date.now },
+    isDeleted: { type: Boolean, default: false },
+    deletedAt: { type: Date, default: null }
   })
 );
 
@@ -249,8 +250,9 @@ const File = mongoose.model(
     path: String,
     folder: { type: mongoose.Schema.Types.ObjectId, ref: "Folder", default: null },
     userId: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
-
     createdAt: { type: Date, default: Date.now },
+    isDeleted: { type: Boolean, default: false },
+    deletedAt: { type: Date, default: null }
   })
 );
 
@@ -397,25 +399,30 @@ app.delete("/file/:id", authMiddleware, async (req, res) => {
   }
 });
 
-
-
 app.get("/search", authMiddleware, async (req, res) => {
   try {
-    const q = req.query.q; // ✅ define FIRST
-
-    console.log("req.user:", req.user);
-    console.log("query:", q);
+    const q = req.query.q;
+    const folderId = req.query.folder;
 
     if (!q) return res.json({ files: [], folders: [] });
 
+    // Convert "root" to null for top-level folders/files
+    const parentFilter = folderId === "root" ? null : folderId;
+
+    // Search files in current folder
     const files = await File.find({
       userId: req.user._id,
-      originalname: { $regex: q, $options: "i" }
+      folder: parentFilter,         // ✅ use `folder` field
+      originalname: { $regex: q, $options: "i" },
+      isDeleted: false,             // optional: skip deleted files
     });
 
+    // Search folders in current folder
     const folders = await Folder.find({
       userId: req.user._id,
-      name: { $regex: q, $options: "i" }
+      parent: parentFilter,         // ✅ use `parent` field
+      name: { $regex: q, $options: "i" },
+      isDeleted: false,             // optional: skip deleted folders
     });
 
     res.json({ files, folders });
@@ -424,4 +431,6 @@ app.get("/search", authMiddleware, async (req, res) => {
     res.status(500).json({ message: "Search failed" });
   }
 });
+
+
 

@@ -10,7 +10,7 @@ import { useAlert } from "../Alertbox/Alertcontext";
 
 
 
-const API = "https://cloudhub-af47.onrender.com";
+const API = "http://localhost:5000";
 
 
 export default function File() {
@@ -161,7 +161,6 @@ useEffect(() => {
     else showAlert("Delete Failed", "error", 2000);
   }
   
-  // Search
   async function search(val) {
     setQ(val);
   
@@ -170,22 +169,24 @@ useEffect(() => {
       return;
     }
   
-    const res = await fetch(`${API}/search?q=${encodeURIComponent(val)}`, {
-      method: "GET",
-      credentials: "include", // ✅ REQUIRED
-    });
+    const res = await fetch(
+      `${API}/search?folder=${current}&q=${encodeURIComponent(val)}`,
+      { method: "GET", credentials: "include" }
+    );
   
-    if (!res.ok) {
-      console.log("Search unauthorized");
-      return;
-    }
+    if (!res.ok) return console.log("Search failed");
   
     const data = await res.json();
+    console.log("Search suggestions:", data); // ✅ check if data returned
+  
     setSuggest({
       files: data.files || [],
       folders: data.folders || [],
     });
   }
+  
+  
+  
   
   
 
