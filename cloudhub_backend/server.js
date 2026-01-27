@@ -28,6 +28,7 @@ const allowedOrigins = [
 
 app.use(cors({
   origin: function (origin, callback) {
+    console.log("REQUEST ORIGIN:", origin); 
     // allow requests with no origin (like Postman)
     if (!origin) return callback(null, true);
 
@@ -311,10 +312,16 @@ app.get("/folderinfo/:id", authMiddleware, async (req, res) => {
 
 
 app.get("/file/:id", authMiddleware, async (req, res) => {
-  const file = await File.findOne({ _id: req.params.id, userId: req.user._id });
-  if (!file) return res.status(404).json({ message: "File not found in DB" });
+  const file = await File.findOne({
+    _id: req.params.id,
+    userId: req.user._id
+  });
 
-  const filePath = path.join(__dirname, file.path);
+  if (!file) {
+    return res.status(404).json({ message: "File not found in DB" });
+  }
+
+  const filePath = path.resolve(file.path);
 
   if (!fs.existsSync(filePath)) {
     console.log("Missing file:", filePath);
@@ -327,6 +334,7 @@ app.get("/file/:id", authMiddleware, async (req, res) => {
 
   res.sendFile(filePath);
 });
+
 
 
 
@@ -373,10 +381,11 @@ app.delete("/file/:id", authMiddleware, async (req, res) => {
       return res.status(404).json({ message: "File not found or access denied" });
 
     // delete physical file
-    const fs = require("fs");
+
     if (fs.existsSync(file.path)) {
       fs.unlinkSync(file.path);
     }
+    
 
     // delete db record
     await File.deleteOne({ _id: file._id });

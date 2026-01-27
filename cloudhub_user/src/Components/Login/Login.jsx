@@ -55,6 +55,7 @@ const Login = () => {
         mpin: finalMpin,
       });
       localStorage.setItem("token", res.data.token);
+      console.log(res.data.token);
       navigate("/dashboard");
       showAlert(res.data.message,"success",2000);
     } catch (err) {
