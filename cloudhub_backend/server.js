@@ -406,31 +406,32 @@ app.get("/search", authMiddleware, async (req, res) => {
 
     if (!q) return res.json({ files: [], folders: [] });
 
-    // Convert "root" to null for top-level folders/files
-    const parentFilter = folderId === "root" ? null : folderId;
-
-    // Search files in current folder
-    const files = await File.find({
-      userId: req.user._id,
-      folder: parentFilter,         // ✅ use `folder` field
-      originalname: { $regex: q, $options: "i" },
-      isDeleted: false,             // optional: skip deleted files
-    });
+    // Handle root folder: in schema, root folders/files have parent/folder = null
+    const folderFilter = folderId === "root" ? null : folderId;
 
     // Search folders in current folder
     const folders = await Folder.find({
       userId: req.user._id,
-      parent: parentFilter,         // ✅ use `parent` field
+      parent: folderFilter,
       name: { $regex: q, $options: "i" },
-      isDeleted: false,             // optional: skip deleted folders
+      isDeleted: false,
     });
 
-    res.json({ files, folders });
+    // Search files in current folder
+    const files = await File.find({
+      userId: req.user._id,
+      folder: folderFilter,
+      originalname: { $regex: q, $options: "i" },
+      isDeleted: false,
+    });
+
+    console.log("Search result folders:", folders.length, "files:", files.length);
+
+    res.json({ folders, files });
   } catch (err) {
     console.error("Search error:", err);
     res.status(500).json({ message: "Search failed" });
   }
 });
-
 
 
