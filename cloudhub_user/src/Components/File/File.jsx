@@ -10,7 +10,7 @@ import { useAlert } from "../Alertbox/Alertcontext";
 
 
 
-const API = "http://localhost:5000";
+const API = "https://cloudhub-af47.onrender.com";
 
 
 export default function File() {
@@ -33,6 +33,11 @@ export default function File() {
 
   const [editingId, setEditingId] = useState(null);
   const [editValue, setEditValue] = useState("");
+  // At the top of your component
+
+  const [isSearching, setIsSearching] = useState(false);
+
+
 
 
 
@@ -40,15 +45,17 @@ export default function File() {
 
   const menuRef = useRef(null);
 
-useEffect(() => {
-  const handleClickOutside = (e) => {
-    if (menuRef.current && !menuRef.current.contains(e.target)) {
-      setMenuId(null);
-    }
-  };
-  document.addEventListener("mousedown", handleClickOutside);
-  return () => document.removeEventListener("mousedown", handleClickOutside);
-}, []);
+  useEffect(() => {
+    const handleOutside = (e) => {
+      if (menuRef.current && !menuRef.current.contains(e.target)) {
+        setMenuId(null);
+      }
+    };
+  
+    document.addEventListener("mousedown", handleOutside);
+    return () => document.removeEventListener("mousedown", handleOutside);
+  }, []);
+  
 
 
   
@@ -193,36 +200,55 @@ useEffect(() => {
   
     if (!val.trim()) {
       setSuggest({ files: [], folders: [] });
+      setIsSearching(false);
       return;
     }
+  
+    setIsSearching(true);
   
     const res = await fetch(
       `${API}/search?folder=${current}&q=${encodeURIComponent(val)}`,
       { method: "GET", credentials: "include" }
     );
   
-    if (!res.ok) return console.log("Search failed");
+    if (!res.ok) {
+      setSuggest({ files: [], folders: [] });
+      setIsSearching(false);
+      return;
+    }
   
     const data = await res.json();
-    console.log("Search suggestions:", data); // ✅ check if data returned
   
     setSuggest({
       files: data.files || [],
       folders: data.folders || [],
     });
+  
+    setIsSearching(false);
   }
   
   
   
   
   
-
+  
   function selectFromSearch(item) {
+    // Highlight clicked item for 2 seconds
     setHighlightId(item._id);
+    setTimeout(() => setHighlightId(null), 2000);
+  
+    // Close suggestion menu immediately
     setSuggest({ files: [], folders: [] });
-    if (item.parent) setCurrent(item.parent); // optionally navigate to folder
+  
+    // Clear search input
+    search("");  // ✅ reset input
+  
+    // Navigate to folder if needed
+    if (item.type === "folder" && item._id) {
+      setCurrent(item._id); // set current folder
+    }
   }
-
+  
 
 
   // File menu actions
@@ -261,9 +287,12 @@ useEffect(() => {
     window.URL.revokeObjectURL(url);
   
     setMenuId(null);
+    
   }
   
   async function openFolder(folder) {
+    setSuggest({ files: [], folders: [] }); // ✅ disables menu
+
     if (folder._id === current) return;
   
     const res = await fetch(`${API}/folderinfo/${folder._id}`, {
@@ -316,20 +345,6 @@ async function renameFolder(id, newName) {
     <div className="file-explorer">
       {/* Folder Title */}
       <div className="folder-header">
-      <div className="breadcrumbs">
-  {breadcrumbs.map((b, i) => (
-    <span key={b.ide} onClick={() => goToBreadcrumb(b.id, i)}>
-      {b.name} {i < breadcrumbs.length - 1 && " / "}
-    </span>
-  ))}
-</div>
-
-<div className="folder_name_and_back_button">
-      {current !== "root" && <img src={back} alt="back" id="back_arrow" onClick={goBack}/>}
-      <h2>{folderName}</h2>
-</div>
-      </div>
-
       <div className="new_button_and_search_bar">
       <div className="new_div" onClick={() => setShowMenu(!showMenu)}> <img src={plus_icon} alt="add"  id="plus_icon" /> New</div>
             {/* Search */}
@@ -347,24 +362,6 @@ async function renameFolder(id, newName) {
 
 
       </div>
-
-      <div className="search-suggestions">
-        {suggest.files.map(f => (
-          <div key={f._id} className="suggest-item" onClick={() => selectFromSearch(f)}>
-             <img src={files} alt="file" className="folder_logo" />{f.originalname}
-          </div>
-        ))}
-        
-        {suggest.folders
-          .filter(f => f._id !== current) // skip current folder
-          .map(f => (
-            <div key={f._id} className="suggest-item" onClick={() => openFolder(f)}>
-               <img src={folder} alt="folder" className="folder_logo" />{f.name}
-            </div>
-        ))}
-
-      </div>
-
       <div className="actions-bar">
   <div className="new-btn-wrap">
 
@@ -413,6 +410,47 @@ async function renameFolder(id, newName) {
 
 
 </div>
+      <div className="breadcrumbs">
+  {breadcrumbs.map((b, i) => (
+    <span key={b.ide} onClick={() => goToBreadcrumb(b.id, i)}>
+      {b.name} {i < breadcrumbs.length - 1 && " / "}
+    </span>
+  ))}
+</div>
+
+<div className="folder_name_and_back_button">
+      {current !== "root" && <img src={back} alt="back" id="back_arrow" onClick={goBack}/>}
+      <h2>{folderName}</h2>
+</div>
+      </div>
+
+
+
+      <div className="search-suggestions">
+        {suggest.files.map(f => (
+          <div key={f._id} className="suggest-item" onClick={() => selectFromSearch(f)}>
+             <img src={files} alt="file" className="folder_logo" />{f.originalname}
+          </div>
+        ))}
+        
+        {suggest.folders
+          .filter(f => f._id !== current) // skip current folder
+          .map(f => (
+            <div key={f._id} className="suggest-item" onClick={() => openFolder(f)}>
+               <img src={folder} alt="folder" className="folder_logo" />{f.name}
+            </div>
+        ))}
+                  {/* ✅ No result state */}
+          {isSearching === false &&
+            q &&
+            suggest.files.length === 0 &&
+            suggest.folders.length === 0 && (
+              <div className="no-results">No data found</div>
+          )}
+
+      </div>
+
+
 
 {showModal && (
   <div className="modal-bg">
@@ -439,7 +477,7 @@ async function renameFolder(id, newName) {
 
 
       {/* Folder List */}
-      <h3 className="files_and_folders" >Folders</h3>
+      <h3 className="files_and_folders" >Folders <span className="count">({data.folders?.length || 0})</span></h3>
       <div className="folder-list">
   {data.folders.map(f => (
     <div key={f._id} className="folder-row" onClick={() => openFolder(f)}>
@@ -506,26 +544,45 @@ async function renameFolder(id, newName) {
 
 
       {/* File List */}
-      <h3 className="files_and_folders">Files</h3>
-      <div className="file-list">
+      <h3 className="files_and_folders">Files <span className="count">({data.files?.length || 0})</span></h3>
+      <div className="file-list" >
         {data.files.map(f => (
           <div
-            key={f._id}
-            className={`file-row ${highlightId === f._id ? "highlight" : ""}`}
-          >
-            <span>{f.originalname}</span>
-            <div className="menu" ref={menuRef} >
-              <button onClick={() => setMenuId(menuId === f._id ? null : f._id)} className="three_dots">⋮</button>
-              {menuId === f._id && (
-                <div className="menu-box">
-                  <div onClick={() => openFile(f)}>View</div>
-                  <div onClick={() => shareFile(f)}>Share</div>
-                  <div onClick={() => downloadFile(f)}>Download</div>
-                  <div onClick={() => delFile(f._id)}>Delete</div>
-                </div>
-              )}
+              className={`file-row ${highlightId === f._id ? "highlight" : ""}`}
+              onClick={() => openFile(f)}
+            >
+              <span>{f.originalname}</span>
+
+              <div className="menu">
+                <button
+                  className="three_dots"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setMenuId(menuId === f._id ? null : f._id);
+                  }}
+                >⋮</button>
+
+                {menuId === f._id && (
+                  <div
+                    className="menu-box"
+                    ref={menuRef}
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    <div onClick={() => openFile(f)}>View</div>
+                    <div onClick={() => shareFile(f)}>Share</div>
+                    <div onClick={() => downloadFile(f)}>Download</div>
+                    <div
+                      onClick={() => {
+                        delFile(f._id);
+                        setMenuId(null);
+                      }}
+                    >Delete</div>
+                  </div>
+                )}
+              </div>
             </div>
-          </div>
+
+
         ))}
       </div>
     </div>

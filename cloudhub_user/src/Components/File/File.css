@@ -1,18 +1,26 @@
 /* General */
 .file-explorer {
   
-  padding: 20px;
-  background:transparent;
-  color: white;
+  padding-left: 15px;
+  padding-right: 15px;
   width: 100%;
+  border: 1px soild #ff9100;
+  margin-top: 20px;
+  animation: slideDown .3s ease-out forwards;
+ }
+ @keyframes slideDown{
+  from{opacity:0; transform:translateY(-15px);}
+  to{opacity:1; transform:translateY(0);}
 }
-
 /* Folder Header */
 .folder-header {
   display: flex;
   flex-direction: column;
   margin-bottom: 20px;
-  
+
+}
+.no-results{
+  padding: 5px 10px;
 }
 
 .folder-header h2 {
@@ -46,6 +54,7 @@
 .breadcrumbs {
   font-size: 14px;
   margin-bottom: 5px;
+  margin-top: -30px;
 }
 
 .breadcrumbs span {
@@ -59,7 +68,7 @@
 
 /* Search */
 .search-input {
-  padding: 10px 0px;
+  padding: 12px 0px;
   width:100%;
   outline: none;
   border: none;
@@ -89,11 +98,13 @@
   cursor: pointer;
   width: 80px;
   justify-content: center;
+  
 }
 .new_button_and_search_bar{
   display: flex;
   align-items: center;
   justify-content: space-between;
+  margin-bottom: 20px;
 }
 
 .search-img{
@@ -116,7 +127,7 @@
 
 .search-input::placeholder{
   background-color:transparent;
-  color: white;
+  color: rgba(255, 255, 255, 0.5);
   letter-spacing: 1px;
   font-weight: 300;
   font-size: 16px;
@@ -128,7 +139,8 @@
 .search-suggestions {
   position: absolute;
   background:#333333b6;
-  right: 20px;
+  right: 15px;
+  top: 47px;
   margin-top: 5px;
   backdrop-filter: blur(10px); /* blur behind the div */
   -webkit-backdrop-filter: blur(10px); /* Safari support */
@@ -155,7 +167,7 @@
   display: flex;
   align-items: center;
   gap: 10px;
-  margin: 15px 0;
+  margin: 15px -5px;
 }
 
 .actions-bar input[type="file"] {
@@ -196,7 +208,7 @@
 
 .new-tooltip {
   position: absolute;
-  top: -55px;
+  top: -80px;
   left: 100px;
   border-radius: 6px;
   box-shadow: 0 5px 15px rgba(0,0,0,.15);
@@ -339,7 +351,12 @@
   box-sizing: content-box;
 }
 
-.menu { position: relative; }
+.menu {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+ }
 
 .menu button {
   
@@ -353,7 +370,15 @@
   width: 30px;
   height: 30px;
   border-radius: 50%;
-
+  display: flex;
+  align-items: center;
+  justify-content: center;
+ padding: 0px;
+ margin: 0px;
+transition: 0.2s ease-in-out;
+}
+.menu .three_dots:hover{
+  background-color: #33333315;
 }
 
 .menu-box {
@@ -376,7 +401,10 @@
   background: #f0f0f0;
 }
 
-
+.count{
+    color: rgba(255, 255, 255, 0.5);
+  font-size: 14px;
+}
 
 .name_and_logo{
   
@@ -413,6 +441,8 @@
 
 .highlight {
   background-color:#333333b9;
+  transition: background-color .3s ease;
+
 }
 
 .files_and_folders{
@@ -465,6 +495,7 @@
 .progress-container {
   position: relative;
   width: 100%;
+
 }
 
 .progress-percent {
@@ -532,29 +563,34 @@
 
   .search-box {
     width: 100%;
+    
   }
+
 
   .search-input {
     font-size: 14px;
+    padding: 8px 1px;
   }
   .search-input::placeholder{
     font-size: 14px;
   }
 
   .search-suggestions {
-    width: 100%;
-    right: 0;
+    width: 75%;
+    right: 10px;
+    top: 55px;
   }
 
   /* Tooltip */
   .new-tooltip {
     position:relative;
-    top: 10px;
+    top: -20px;
     left: -15px;
     width: 100%; 
     flex-direction: row;
     margin: 0;
     padding: 0;
+    
     
   }
 

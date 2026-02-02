@@ -4,7 +4,12 @@ import './Note.css';
 import { useAlert } from "../Alertbox/Alertcontext";
 
 import search_icon from '../../Assests/search.png'
-
+import download from '../../Assests/cloud-download.png'
+import copy from '../../Assests/copy.png'
+import edit from '../../Assests/pencil.png'
+import bin from '../../Assests/trash.png'
+import share from '../../Assests/whatsapp.png'
+import leftarrow from "../../Assests/next.png"
 
 const API = 'https://cloudhub-af47.onrender.com/notes';
 
@@ -55,7 +60,7 @@ export default function Note() {
 
   // Delete note
   const handleDelete = async (id) => {
-    await fetch(`${API}/${id}`, { method: 'DELETE' },{credentials: "include"});
+    await fetch(`${API}/${id}`, { method: 'DELETE', credentials: 'include' });
     fetchNotes();
   };
 
@@ -118,7 +123,7 @@ export default function Note() {
 
       <div className="header_search_bar">
       <header>
-        <h1 className='component_header'>CloudHub Notes</h1>
+        <h1 className='component_header'>CloudHub Notes <span className="notes-count">({notes.length})</span></h1> 
 
       </header>
 
@@ -149,7 +154,7 @@ export default function Note() {
           onChange={(e) => setContent(e.target.value)}
           required
         />
-        <button type="submit">Add Note</button>
+        <button type="submit">Add Note <img src={leftarrow} alt="logo" className='add_note_button'/></button>
       </form>
 
       {viewNote && (
@@ -192,25 +197,30 @@ export default function Note() {
             </div>
 
             <div className="note-actions">
-            <button onClick={(e) => { e.stopPropagation(); openEditModal(note); }}>
-              Edit
-            </button>
+            <div onClick={(e) => { e.stopPropagation(); openEditModal(note); }} className='notes-buttons'>
+              <img src={edit} alt="edit"  className='notes-logo'/>
+              <p>Edit</p>
+            </div>
 
-            <button onClick={(e) => { e.stopPropagation(); handleCopy(note.content); }}>
-              Copy
-            </button>
+            <div onClick={(e) => { e.stopPropagation(); handleCopy(note.content); }}  className='notes-buttons'> 
+            <img src={copy} alt="edit"  className='notes-logo'/>
+            <p>Copy</p>
+            </div>
 
-            <button onClick={(e) => { e.stopPropagation(); handleDownload(note); }}>
-              Download
-            </button>
+            <div onClick={(e) => { e.stopPropagation(); handleDownload(note); }}  className='notes-buttons'>
+            <img src={download} alt="edit"  className='notes-logo'/>
+              <p>Downlaod</p>
+            </div>
 
-            <button onClick={(e) => { e.stopPropagation(); handleDelete(note._id); }}>
-                Delete
-            </button>
+            <div onClick={(e) => { e.stopPropagation(); handleDelete(note._id); }}  className='notes-buttons'>
+            <img src={bin} alt="edit"  className='notes-logo'/>
+                <p>Delete</p>
+            </div>
 
-            <button onClick={(e) => { e.stopPropagation(); handleShare(note); }}>
-              Share
-            </button>
+            <div onClick={(e) => { e.stopPropagation(); handleShare(note); }}  className='notes-buttons'>
+            <img src={share} alt="edit"  className='notes-logo'/>
+              <p>Share</p>
+            </div>
             </div>
           </div>
         ))}

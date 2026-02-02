@@ -1,6 +1,8 @@
 .note-app {
     width: 100%;
     margin: 0px 15px;
+    padding-bottom: 50px;
+    margin-top: 20px;
    
   }
   .component_header{
@@ -109,17 +111,17 @@
   }
 
   .note-form input:focus{
-    border: 1px solid #f39c12;
+    border: 1px solid #ff9100;
 
   }
   .note-form textarea:focus{
-    border: 1px solid #f39c12;
+    border: 1px solid #ff9100;
   }
   
   .note-form button {
     padding: 10px;
     border: none;
-    background-color: #f39c12;
+    background-color: #ff9100;
     color: black;
     border-radius: 4px;
     cursor: pointer;
@@ -127,6 +129,10 @@
     font-weight: 500;
     width: 20%;
     transition: 0.2s ease-in-out;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
   }
   
   .note-form button:hover {
@@ -136,7 +142,7 @@
   .notes-list {
     margin-top: 25px;
     display:grid;
-    grid-template-columns:repeat(2,1fr);
+    grid-template-columns:repeat(3,1fr);
     gap:15px;
   }
   
@@ -153,7 +159,7 @@
   
   
   .note-card:hover {
-   border:  1px solid #f39c12;
+   border:  1px solid #ff9100;
   }
   
   .note-header {
@@ -162,15 +168,15 @@
     align-items: center;
   }
   .note-header h2{
-    font-size: 24px;
+    font-size: 18px;
     font-weight: 500;
-    color: #f39c12;
+    color: #ff9100;
   }
 
   
   .note-time {
-    font-size: 14px;
-    color:rgba(255, 255, 255, 0.8);
+    font-size: 12px;
+    color:rgba(255, 255, 255, 0.6);
   }
   
   .note-actions {
@@ -179,17 +185,13 @@
     gap: 8px;
     flex-wrap: wrap;
     margin-bottom: 13px;
+    align-items: center;
+    justify-content: space-between;
+    padding: 5px 0px;
+    border-top:  1px solid #333333b9;   
   }
   
-  .note-actions button {
-    padding: 5px 10px;
-    border-radius: 4px;
-    border: none;
-    cursor: pointer;
-    font-size: 14px;
-    transition: transform 0.2s;
-    z-index: 900;
-  }
+ 
   
 
 
@@ -203,6 +205,7 @@
     height: 100%;
     background: rgba(0,0,0,0.5);
     display: flex; justify-content: center; align-items: center;
+    z-index: 1000;
   }
   
   .modal {
@@ -218,9 +221,10 @@
     flex-direction: column;
     gap: 10px;
     border: 1px solid #333333b9;
+    z-index:1000;
   }
   .modal h2{
-    color: #f39c12;
+    color: #ff9100;
   }
   .update_fields{
     background-color: #333333b9;
@@ -242,7 +246,7 @@
    height: 430px;
   }
   .update_fields:focus{
-    border: 1px solid #f39c12;
+    border: 1px solid#ff9100;
   }
 
   
@@ -259,8 +263,8 @@
     cursor:pointer;
   }
   
-  .modal button:first-child { background:#f39c12;color:black;font-size: 16px; font-weight: 500; }
-  .modal button:last-child { background:#f39c12;color:black;font-size: 16px; font-weight: 500; }
+  .modal button:first-child { background:#ff9100;color:black;font-size: 16px; font-weight: 500; }
+  .modal button:last-child { background:#ff9100;color:black;font-size: 16px; font-weight: 500; }
   
 
 
@@ -296,11 +300,15 @@
     border-bottom:  1px solid #333333b9;
     
   }
+  .notes-count{
+    color: rgba(255, 255, 255, 0.5);
+  font-size: 16px;
+}
   
   .view-header-notes h2{
     margin:0;
-    font-size:22px;
-    color: #f39c12;
+    font-size:20px;
+    color: #ff9100;
   }
   
   .close-button{
@@ -338,6 +346,7 @@
     position:relative;
     max-height:110px;      /* fixed visible area */
     overflow:hidden;
+    
   }
   
   /* text */
@@ -345,10 +354,11 @@
     white-space:pre-wrap;
     line-height:1.6;
     margin-top: 5px;
-    height: 85px;
+    height: 50px;
     border-top: 1px solid #333333b9;
     padding-top: 5px;
     padding-left: 3px;
+    font-size: 14px;
   }
   
   /* bottom fade shadow */
@@ -358,7 +368,7 @@
     left:0;
     right:0;
     bottom:0;
-    height:28px;
+    height:25px;
     pointer-events:none;
     background:linear-gradient(
       to bottom,
@@ -367,3 +377,176 @@
     );
   }
   
+  .notes-buttons{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap:5px;
+    border-radius: 4px;
+    padding: 5px 10px;
+    position: relative; /* needed for ::after */
+
+  }
+  .notes-buttons::after {
+    content: "";
+    position: absolute;
+    bottom: 0;              /* underline at bottom of button */
+    left: 50%;              /* start from center */
+    width: 0%;              /* initially 0 */
+    height: 2px;            /* thickness of line */
+    background-color: #89a6f5b9; /* line color */
+    transform: translateX(-50%);
+    transition: width 0.3s ease;
+  }
+  .notes-buttons:hover::after {
+    width: 100%;
+     /* expands from center to both ends */
+  }
+  .notes-logo{
+    height: 20px;
+    width: 20px;
+    
+  }
+  .notes-buttons p{
+     font-size: 12px;
+  }
+
+  .add_note_button{
+    height: 20px;
+    width: 20px;
+  }
+
+  
+
+  /* =========================
+   MOBILE ONLY (≤768px)
+========================= */
+@media (max-width: 768px) {
+
+  /* App spacing */
+  .note-app {
+    margin-top: 10px;
+    padding: 0px 15px;
+  }
+
+  /* Header & search */
+  .header_search_bar {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .component_header {
+    font-size: 16px;
+  }
+
+  .search-box-notes {
+    width: 100%;
+  }
+
+  .search-bar {
+    font-size: 14px;
+    padding: 6px 1px;
+  }
+  .search-bar::placeholder{
+    font-size: 14px;
+  }
+
+  /* Note form */
+  .note-form {
+    width: 100%;
+  }
+  .note-form input::placeholder{
+    font-size: 14px;
+  }
+
+  .note-form textarea::placeholder{
+    font-size: 14px;
+  }
+  .note-form input,
+  .note-form textarea {
+    font-size: 14px;
+    height: 35px;
+  }
+
+  .note-form textarea {
+    height: 100px;
+  }
+
+
+  .note-form button {
+    width: 30%;
+    font-size: 14px;
+    font-weight: 600 ;
+    padding: 5px 10px;
+  }
+
+  /* Notes grid */
+  .notes-list {
+    grid-template-columns: 1fr;
+    padding-bottom: 50px;
+  }
+  .note-card{
+    height: 150px;
+    margin: 0;
+    padding: 5px 8px;
+    
+  }
+
+  /* Note card */
+  .note-header h2 {
+    font-size: 16px;
+  }
+
+  .note-time {
+    font-size: 11px;
+  }
+
+  #content_notes {
+    font-size: 14px;
+    height: 50px;
+    text-align: justify;hyphens: auto;
+  }
+
+  /* Action buttons */
+  .note-actions {
+    gap: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 0px;
+    border-top: 1px solid #333333b9;
+  
+  }
+
+  .notes-buttons {
+    padding: 5px 5px;
+  }
+
+  .notes-buttons p {
+    font-size: 11px;
+  }
+
+  .notes-logo {
+    width: 16px;
+    height: 16px;
+  }
+
+  /* Modals */
+  .modal {
+    width: 95%;
+    height: 90%;
+  }
+
+  #notes_textarea {
+    height: 280px;
+  }
+
+  .view-header-notes h2 {
+    font-size: 18px;
+  }
+
+  .view-content {
+    font-size: 14px;
+  }
+}

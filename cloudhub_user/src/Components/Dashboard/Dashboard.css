@@ -150,10 +150,10 @@
   flex-direction: row;
   align-items: center;
   justify-content: center;
-  
+  width: 150px;
   cursor: pointer;
   transition: 0.2s;
-  width: 150px;
+  
 }
 .card:hover{
   background-color: #333333b9;
