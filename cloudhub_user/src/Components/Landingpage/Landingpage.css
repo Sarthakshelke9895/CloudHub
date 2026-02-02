@@ -1,0 +1,605 @@
+.childl{
+    margin-top:100px;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+    height: 500px;
+    
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+    margin-left:30px;
+    margin-right: 30px;
+   
+ 
+
+}
+
+.childl h1{
+    font-size: 4.5rem;
+    font-weight: 400;
+    letter-spacing: 2px;
+}
+.childl p{
+    font-size: 1rem;
+    font-weight: 200;
+    letter-spacing: 1px;
+    margin-top: 15px;
+}
+.childl h3{
+    font-weight: 400;
+    margin-top: 1px;
+}
+.ph-btn {
+    margin-top: 20px;
+  background:var(--buttonback);        /* signature orange */
+  color: #000;
+  font-weight: 600;
+  font-size: 16px;
+  padding: 12px 28px;
+  border: none;
+  border-radius: 6px;
+  letter-spacing: 1px;
+  cursor: pointer;
+  box-shadow: 0 4px 0 var(--buttonback);
+  transition: all 0.15s ease-in-out;
+}
+.loginbtn{
+    background-color: transparent;
+    color:white;
+    outline: none;
+    border: none;
+    font-size: 16px;
+    font-weight: 250;
+    margin-left: 2px;
+    letter-spacing: 1px;
+    cursor: pointer;
+   
+}
+
+
+.section {
+  padding: 20px 20px 20px 20px ;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);}
+
+.section h2{
+    font-size: 2rem;
+    font-weight: 400;
+    letter-spacing: 2px;
+}
+
+.nav-sections{
+  padding-left: 20px;
+  padding-right: 20px;
+}
+
+
+.section-title {
+  font-size: 32px;
+  margin-bottom: 30px;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content:left;
+  width: 100%;
+  color: var(--buttonback);
+}
+
+/* FEATURES */
+.features-grid {
+  max-width: 10000px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 24px;
+}
+
+.feature-card {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  padding: 30px;
+  border-radius: 14px;
+  text-align: center;
+  border: 1px solid rgba(255,255,255,0.1);
+  transition: transform 0.3s ease;
+}
+
+.feature-card h3{
+  font-weight: 500;
+  letter-spacing: 1px;
+}
+.feature-card:hover {
+   background: rgba(255, 255, 255, 0.08);
+  cursor: pointer;
+}
+
+.feature-logo{
+  height: 50px;
+  width: 50px;
+}
+
+/* ABOUT */
+.about-text {
+  max-width: 700px;
+  text-align: center;
+  opacity: 0.85;
+  font-size: 17px;
+}
+
+/* CONTACT */
+.contact-form {
+  width: 100%;
+  max-width: 420px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.contact-form input,
+.contact-form textarea {
+  padding: 12px;
+  border-radius: 8px;
+  border: none;
+  outline: none;
+}
+
+.contact-form button {
+  background: #ff9100;
+  border: none;
+  padding: 12px;
+  font-weight: 600;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+
+
+
+
+/* Section styling */
+.section {
+  
+  color: #fff;
+  text-align: center;
+  display: flex;
+  align-items: center;
+
+}
+
+
+/* Paragraphs */
+.section p {
+  width: 100%;
+  font-size: 17px;
+  line-height: 1.7;
+  margin: 20px 0;
+  opacity: 0.85;
+  text-align: justify;
+}
+.cards{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    
+}
+
+/* Glass-effect cards */
+.about-card {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(12px);
+  padding: 30px 24px;
+  border-radius: 16px;
+  margin: 24px 0;
+  width: 32%;
+  height: 300px;
+  text-align: left;
+  border: 1px solid rgba(255,255,255,0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+}
+
+.about-card:hover {
+  background: rgba(255, 255, 255, 0.08);
+  cursor: pointer;
+}
+
+/* Card headings */
+.about-card h3 {
+  font-size: 22px;
+  font-weight: 400;
+  letter-spacing: 1px;
+  margin-bottom: 12px;
+  color: #ff9100;
+}
+
+/* List inside cards */
+.about-card ul {
+  list-style: none;
+  padding-left: 0;
+}
+
+.about-card ul li {
+  margin: 8px 0;
+  font-size: 16px;
+  line-height: 1.5;
+  position: relative;
+  padding-left: 20px;
+}
+
+/* Add small decorative bullet */
+.about-card ul li::before {
+  content: "•";
+  position: absolute;
+  left: 0;
+  color: #ff9100;
+  font-weight: bold;
+}
+
+
+/* Two Column Layout */
+.columns{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+  border-radius: 20px;
+  box-shadow: 0 15px 40px rgba(0,0,0,0.08);
+}
+
+/* Left Column */
+.contact_col1 h3{
+  font-size: 1.8rem;
+  margin-bottom: 15px;
+  text-align: left;
+  color:var(--buttonback);
+  font-weight: 250;
+}
+
+.contact_col1 p{
+  color: #ffffff;
+  line-height: 1.7;
+  margin-bottom: 25px;
+}
+
+.contact_col1 ul{
+  list-style: none;
+  padding: 0;
+}
+
+.contact_col1 ul li{
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-align: left;
+  letter-spacing: 1px;
+  margin-bottom: 15px;
+  color: #ffffff;
+  font-size: 1rem;
+  cursor: pointer;
+}
+.contact_col1 ul li img{
+  height: 30px;
+  width: 30px;
+}
+
+/* Right Column (Form) */
+.contact_col2{
+  padding: 35px;
+  border-radius: 16px;
+  
+}
+
+.contact_col2 form{
+  display: flex;
+  flex-direction: column;
+}
+
+.contact_col2 label{
+  font-size: 1.2rem;
+  margin-bottom: 6px;
+  color:var(--buttonback);
+  text-align: left;
+  letter-spacing: 1px;
+}
+
+.contact_col2 input,
+.contact_col2 textarea{
+  padding: 12px 15px;
+  margin-bottom: 18px;
+  border-radius: 4px;
+  font-size: 1rem;
+  outline: none;
+  border: none;
+  transition: 0.3s;
+  color: white;
+  background-color: rgb(255, 255, 255, 0.12);
+  resize: none;
+}
+
+.contact_col2 input:focus,
+.contact_col2 textarea:focus{
+  border-color: var(--buttonback);
+}
+
+/* Button */
+.btn{
+  margin-top:15px;
+  background:var(--buttonback);        /* signature orange */
+  color: #000;
+  font-weight: 600;
+  font-size: 16px;
+ padding: 10px 18px;
+   border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  box-shadow: 0 4px 0 var(--buttonback);
+  transition: all 0.15s ease-in-out;
+  width: 20%;
+  letter-spacing: 1px;
+}
+
+.btn:hover{
+  background: #d8901d;
+
+}
+
+/* Result Text */
+.contact_col2 span{
+  margin-top: 10px;
+  color: #059669;
+  font-size: 0.9rem;
+}
+
+
+/* =========================
+   HERO SECTION – RESPONSIVE
+========================= */
+@media (max-width: 768px) {
+  
+  .nav-sections{
+    padding: 10px 20px;
+  }
+
+  .childl {
+    width: 100%;
+    
+    margin-top: 80px;
+    margin-left: 0;
+    margin-right: 0;
+    padding: 25px 15px;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    text-align: center;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.252) ;
+
+  }
+
+  .childl #greeting_landingpage{
+    font-size: 26px;
+    font-weight: 500;
+  
+  }
+
+  .childl h3 {
+    font-size: 0.95rem;
+    margin-top: 8px;
+    width: 80%;
+    color: rgba(255, 255, 255, 0.635);
+  }
+
+  .childl p {
+    font-size: 0.9rem;
+  }
+
+  .ph-btn {
+    width: auto;
+
+    padding: 6px 20px ;
+    border-radius: 4px;
+    font-size: 16px;
+  }
+  .childl p{
+    font-size: 14px;
+  }
+}
+
+
+/* MOBILE FIX */
+@media (max-width: 768px) {
+
+  #features {
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  .features-grid {
+    display: grid;
+    grid-template-columns: 2fr;   /* stack cards */
+    gap: 20px;
+    padding: 0;
+    
+  }
+
+  .feature-card {
+    width: 100%;
+    padding: 8px 20px;
+    border-radius: 4px;
+  }
+
+  .feature-logo {
+    height: 20px;
+    width: 20px;
+  }
+  #features .section-title{
+    font-size: 18px;
+  }
+  .logo_and_heading{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    justify-content: flex-start;
+    padding-bottom: 8px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    width: 90%;
+  }
+  .logo_and_heading h3{
+    font-size: 16px;
+  }
+  .feature-card p{
+    text-align: justify;
+    font-size: 14px;
+    letter-spacing: 1px;
+    font-weight: 300;
+    hyphens: auto;
+    color: rgba(255, 255, 255, 0.7);
+  }
+}
+@media (max-width: 768px) {
+
+  #about {
+    padding-left: 0;
+    padding-right: 0;
+  }
+  #about .section-title{
+    font-size: 18px;
+    padding: 0;
+    margin: 0;
+  }
+
+  #about p{
+    font-size: 14px;
+    margin: 0;
+    padding: 10px 0px;
+    color: rgba(255, 255, 255, 0.7);
+    font-weight: 300;
+    letter-spacing: 1px;
+    hyphens: auto;
+  }
+  .cards{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 20px;
+    padding: 10px 0px;
+  }
+
+  .about-card {
+    width: 100%;
+    max-width: 100%;
+    height: fit-content;
+    padding: 10px 15px ;
+    border-radius: 4px;
+    margin: 0;
+    
+
+  }
+
+  .cards .about-card h3 {
+    font-size: 16px;
+    margin: 0;
+    padding: 0;
+  }
+
+ 
+  .about-card ul li{
+    font-size: 14px;
+    
+    letter-spacing: 1px;
+    text-align: justify;
+    hyphens: auto;
+    color: rgba(255, 255, 255, 0.7);
+    font-weight: 300;
+
+  }
+  
+}
+
+@media (max-width: 768px) {
+
+  #contact {
+    padding-left: 0;
+    padding-right: 0;
+  
+  }
+  #contact .section-title{
+    font-size: 18px;
+    padding: 0;
+    margin: 0;
+  }
+
+  .columns {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    border-radius: 4px;
+    
+  }
+
+  .contact_icons{
+    height: 25px;
+    width: 25px;
+  }
+  .contact_col1,
+  .contact_col2 {
+    width: 100%;
+    
+  }
+
+  .columns .contact_col1 h3{
+    font-size: 16px;
+    margin: 0;
+  }
+  .columns .contact_col1 p{
+    font-size: 14px;
+    padding: 0px 0px;
+    font-weight: 300;
+  }
+.columns .contact_col1 ul li{
+  font-size: 14px;
+  font-weight: 300;
+}
+
+.columns .contact_col1 ul .contact_icons{
+  height: 20px;
+  width: 20px;
+}
+  .contact_col1 p{
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.7);
+  }
+
+  .contact_col1 h3 {
+    font-size: 1.4rem;
+  }
+
+
+  .contact_col2 {
+    padding: 15px 5px;
+  }
+
+  .contact_col2 label{
+    font-size: 14px;
+  }
+  .contact_col2 input,
+  .contact_col2 textarea {
+    width: 100%;
+    border-radius: 4px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    font-size: 13px;
+  }
+
+  .btn {
+    width: 50%;
+    margin-bottom: 0px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    font-size: 18px;
+    padding: 4px 0px;
+  }
+}
