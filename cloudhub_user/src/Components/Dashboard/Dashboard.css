@@ -1,182 +1,182 @@
 .child_dashboard{
     
-    margin-top: 10px;
-    margin-left: 20px;
+  margin-top: 10px;
+  margin-left: 20px;
 }
 
 .dashboard_navbar{
-  border-bottom: 1px solid rgba(255, 255, 255, 0.252) ;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  height: 70px;
-  padding: 0px 20px;
+border-bottom: 1px solid rgba(255, 255, 255, 0.252) ;
+display: flex;
+align-items: center;
+justify-content: space-between;
+height: 70px;
+padding: 0px 20px;
 }
- .Button {
-  padding: 5px 12px;
-  border-radius: 4px;
-  border: none;
-  font-size: 16px;
-  font-weight: 600;
-  cursor: pointer;
-  background: #f5a200;
-  color: black;
-  transition: 0.3s;
-  letter-spacing: 1px;
-  margin-right: 10px;
-  margin-left: 10px;
+.Button {
+padding: 5px 12px;
+border-radius: 4px;
+border: none;
+font-size: 16px;
+font-weight: 600;
+cursor: pointer;
+background: #f5a200;
+color: black;
+transition: 0.3s;
+letter-spacing: 1px;
+margin-right: 10px;
+margin-left: 10px;
 }
 
 .Button:hover {
-  background: #ffb733;
+background: #ffb733;
 }
 
 
 #username_profile{
-  
-   width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 25px;
-  transition: 0.2s;
-  border: 1px solid #ffffff9a;
+
+ width: 50px;
+height: 50px;
+border-radius: 50%;
+display: flex;
+align-items: center;
+justify-content: center;
+font-size: 25px;
+transition: 0.2s;
+border: 1px solid #ffffff9a;
 
 }
 #username_profile:hover{
-  cursor: pointer;
- background: #333;
-  
+cursor: pointer;
+background: #333;
+
 }
 /* ✅ IMPORTANT: Tooltip parent */
 .avatar-container {
- display: flex;
- align-items: center;
- justify-content: center;
- position: relative;
+display: flex;
+align-items: center;
+justify-content: center;
+position: relative;
 }
 
 /* Avatar circle (unchanged style, cleaned) */
 .avatar-circle {
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  background: #000;
-  color: #fff;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: 600;
-  cursor: pointer;
-  font-size: 22px;
-  border: 1px solid #ffffff9a;
+width: 50px;
+height: 50px;
+border-radius: 50%;
+background: #000;
+color: #fff;
+display: flex;
+align-items: center;
+justify-content: center;
+font-weight: 600;
+cursor: pointer;
+font-size: 22px;
+border: 1px solid #ffffff9a;
 }
 
 /* ✅ FIXED TOOLTIP */
 .avatar-tooltip {
-  position: absolute;
-  top: calc(100% + 14px);   /* below avatar */
-  left: 15%;
-  transform: translateX(-50%);
-  background: #333;
-  color: #fff;
-  padding: 10px 12px;
-  border-radius: 6px;
-  white-space: nowrap;
-  font-size: 14px;
-  z-index: 1000;
-  width: auto;
-  display: none;
+position: absolute;
+top: calc(100% + 14px);   /* below avatar */
+left: 15%;
+transform: translateX(-50%);
+background: #333;
+color: #fff;
+padding: 10px 12px;
+border-radius: 6px;
+white-space: nowrap;
+font-size: 14px;
+z-index: 1000;
+width: auto;
+display: none;
 
-  /* Hover behavior */
-  opacity: 0;
-  visibility: hidden;
-  transition: opacity 0.2s ease;
+/* Hover behavior */
+opacity: 0;
+visibility: hidden;
+transition: opacity 0.2s ease;
 }
 
 /* Show tooltip ONLY when avatar is hovered */
 .avatar-circle:hover + .avatar-tooltip {
-  opacity: 1;
-  visibility: visible;
-  display: block;
+opacity: 1;
+visibility: visible;
+display: block;
 }
 
 /* Tooltip rows */
 .tooltip_row {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  margin-bottom: 4px;
+display: flex;
+align-items: center;
+gap: 6px;
+margin-bottom: 4px;
 }
 
 .tooltip_logo {
-  height: 15px;
+height: 15px;
 }
 .child_dashboard h2{
-  font-size: 20px;
-  letter-spacing: 1px;
-  font-weight: 500;
+font-size: 20px;
+letter-spacing: 1px;
+font-weight: 500;
 }
 
 
 .components_dashboard{
-  display: flex;
-  align-items: center;
-  justify-content: space-evenly;
-  transition: 0.3s;
-  
-  margin-top: 15px;
+display: flex;
+align-items: center;
+justify-content: space-evenly;
+transition: 0.3s;
+
+margin-top: 15px;
 }
 
 
 .card_dashboard{
-  padding-left: 15px;
-  padding-right: 15px;
-  gap: 20px;
-  display: flex;
-  margin-top: 20px;
-  align-items: center;
-  justify-content: flex-start;
-  width: 100%;
-  
+padding-left: 15px;
+padding-right: 15px;
+gap: 20px;
+display: flex;
+margin-top: 20px;
+align-items: center;
+justify-content: flex-start;
+width: 100%;
+
 }
 .card{
-  border-radius: 4px;
-  border: 1px solid rgba(255, 255, 255, 0.5);
-  padding: 5px 10px;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-  width: 150px;
-  cursor: pointer;
-  transition: 0.2s;
-  
+border-radius: 4px;
+border: 1px solid rgba(255, 255, 255, 0.5);
+padding: 5px 10px;
+display: flex;
+flex-direction: row;
+align-items: center;
+justify-content: center;
+
+cursor: pointer;
+transition: 0.2s;
+width: 150px;
 }
 .card:hover{
-  background-color: #333333b9;
-  border: 1px solid #ff9100;
+background-color: #333333b9;
+border: 1px solid #ff9100;
 }
 .card.active {
-  background-color:#333333b9;
-  border: 1px solid #ff9100;
+background-color:#333333b9;
+border: 1px solid #ff9100;
 }
 .dashboard_buttons_logo{
-  height: 20px;
-  width: 20px;
-  margin-right: 5px;
+height: 20px;
+width: 20px;
+margin-right: 5px;
 }
 .card h2{
-  font-size: 16px;
-  letter-spacing: 1px;
-  font-weight: 500;
+font-size: 16px;
+letter-spacing: 1px;
+font-weight: 500;
 }
 
 #sync_logo{
-  height: 24px;
-  width: 24px;
+height: 24px;
+width: 24px;
 }
 
 
@@ -189,101 +189,99 @@
 
 @media (max-width: 480px) {
 
-  /* Dashboard wrapper */
-  .child_dashboard {
-    margin: 0;
-    padding: 10px;
-  }
+/* Dashboard wrapper */
+.child_dashboard {
+  margin: 0;
+  padding: 10px;
+}
 
-  .child_dashboard h2 {
-    font-size: 16px;
-    font-weight: 400;
-  }
+.child_dashboard h2 {
+  font-size: 16px;
+  font-weight: 400;
+}
 
-  /* Navbar */
-  .dashboard_navbar {
-    height: auto;
-    padding: 10px;
-    gap: 10px;
-  }
+/* Navbar */
+.dashboard_navbar {
+  height: auto;
+  padding: 10px;
+  gap: 10px;
+}
 
-  /* Buttons */
-  .Button {
-    font-size: 14px;
-    padding: 6px 10px;
-    margin: 0;
-  }
+/* Buttons */
+.Button {
+  font-size: 14px;
+  padding: 6px 10px;
+  margin: 0;
+}
 
-  /* Avatar */
-  .avatar-circle,
-  #username_profile {
-    width: 40px;
-    height: 40px;
-    font-size: 18px;
-  }
+/* Avatar */
+.avatar-circle,
+#username_profile {
+  width: 40px;
+  height: 40px;
+  font-size: 18px;
+}
 
-  .avatar-container {
-    gap: 8px;
-  }
+.avatar-container {
+  gap: 8px;
+}
 
-  .avatar-tooltip {
-    left: 10%;
-    transform: translateX(-50%);
-    font-size: 12px;
-    width: fit-content;
-    white-space: normal;
-  }
+.avatar-tooltip {
+  left: 10%;
+  transform: translateX(-50%);
+  font-size: 12px;
+  width: fit-content;
+  white-space: normal;
+}
 
-  /* Dashboard components */
-  .components_dashboard {
-    flex-direction: column;
-    gap: 10px;
-    margin-top: 10px;
-  }
+/* Dashboard components */
+.components_dashboard {
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 10px;
+}
 
-  /* Cards wrapper */
-  /* Card dashboard as 2x2 grid */
-  .card_dashboard {
-    display: flex;
-    justify-content: center;
-    align-content: center;
-    
-    width: 100%;
-    padding: 5px 15px;
-    
-  }
-
-  .card {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-    height: 55px;
-    width: 60px;
-    flex: 0 0 75px;
-
+/* Cards wrapper */
+/* Card dashboard as 2x2 grid */
+.card_dashboard {
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  flex-wrap: wrap;
+  width: 100%;
   
+}
 
-  }
+.card {
+  
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
 
-  .card h2 {
-    font-size: 14px;
-  }
+  height: 55px;
+  flex: 0 0 85px;
 
-  #sync_logo{
-    height: 24px;
-    width: 24px;
-  }
-  .dashboard_buttons_logo {
-    height: 18px;
-    width: 18px;
-    margin: 0 auto;
-    
-  }
+}
 
-  .dashboard_access_img {
-    height: 24px;
-  }
+.card h2 {
+  font-size: 14px;
+}
+
+#sync_logo{
+  height: 24px;
+  width: 24px;
+}
+.dashboard_buttons_logo {
+  height: 18px;
+  width: 18px;
+  margin: 0 auto;
+  
+}
+
+.dashboard_access_img {
+  height: 24px;
+}
 }
 
 
@@ -295,48 +293,48 @@
 
 
 @media (max-width: 768px) {
-  .dashboard_navbar {
-    flex-direction: row; /* stack logo + avatar */
-    align-items: center;
-    justify-content: space-between;
-    height: auto;
-    padding: 10px 15px;
-  }
-
-  .child_dashboard{
-    padding: 10px 0px;
-    margin: 0;
-    margin: 0px 15px;
-  }
-  .child_dashboard h2{
-    font-size: 18px;
-    font-weight: 400;
-  }
-
-.avatar-container{
-  display: flex;
+.dashboard_navbar {
+  flex-direction: row; /* stack logo + avatar */
   align-items: center;
-  justify-content: center;
-  gap: 10px;
+  justify-content: space-between;
+  height: auto;
+  padding: 10px 15px;
 }
 
-  .Button {
-    font-size: 14px;
-    padding: 6px 10px;
-    margin: 5px 0;
-  }
+.child_dashboard{
+  padding: 10px 0px;
+  margin: 0;
+  margin: 0px 15px;
+}
+.child_dashboard h2{
+  font-size: 18px;
+  font-weight: 400;
+}
 
-  .avatar-circle {
-    width: 40px;
-    height: 40px;
-    font-size: 18px;
-  }
+.avatar-container{
+display: flex;
+align-items: center;
+justify-content: center;
+gap: 10px;
+}
 
-  .avatar-tooltip {
-    font-size: 12px;
-    white-space: normal; /* allow wrapping on small screens */
-    min-width: 150px;
-    max-width: 80vw;
-  }
+.Button {
+  font-size: 14px;
+  padding: 6px 10px;
+  margin: 5px 0;
+}
+
+.avatar-circle {
+  width: 40px;
+  height: 40px;
+  font-size: 18px;
+}
+
+.avatar-tooltip {
+  font-size: 12px;
+  white-space: normal; /* allow wrapping on small screens */
+  min-width: 150px;
+  max-width: 80vw;
+}
 
 }

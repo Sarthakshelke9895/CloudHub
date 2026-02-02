@@ -551,7 +551,7 @@ async function renameFolder(id, newName) {
               className={`file-row ${highlightId === f._id ? "highlight" : ""}`}
               onClick={() => openFile(f)}
             >
-              <span>{f.originalname}</span>
+              <span id="file_name">{f.originalname}</span>
 
               <div className="menu">
                 <button

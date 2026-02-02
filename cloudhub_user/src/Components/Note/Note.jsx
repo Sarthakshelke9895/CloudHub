@@ -199,27 +199,22 @@ export default function Note() {
             <div className="note-actions">
             <div onClick={(e) => { e.stopPropagation(); openEditModal(note); }} className='notes-buttons'>
               <img src={edit} alt="edit"  className='notes-logo'/>
-              <p>Edit</p>
             </div>
 
             <div onClick={(e) => { e.stopPropagation(); handleCopy(note.content); }}  className='notes-buttons'> 
             <img src={copy} alt="edit"  className='notes-logo'/>
-            <p>Copy</p>
             </div>
 
             <div onClick={(e) => { e.stopPropagation(); handleDownload(note); }}  className='notes-buttons'>
             <img src={download} alt="edit"  className='notes-logo'/>
-              <p>Downlaod</p>
             </div>
 
             <div onClick={(e) => { e.stopPropagation(); handleDelete(note._id); }}  className='notes-buttons'>
             <img src={bin} alt="edit"  className='notes-logo'/>
-                <p>Delete</p>
             </div>
 
             <div onClick={(e) => { e.stopPropagation(); handleShare(note); }}  className='notes-buttons'>
             <img src={share} alt="edit"  className='notes-logo'/>
-              <p>Share</p>
             </div>
             </div>
           </div>
