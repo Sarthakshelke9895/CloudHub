@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import './Note.css';
 
+import { useAlert } from "../Alertbox/Alertcontext";
+
 import search_icon from '../../Assests/search.png'
 
 
-const API = 'http://localhost:5000/notes';
+const API = 'https://cloudhub-af47.onrender.com/notes';
 
 export default function Note() {
   const [notes, setNotes] = useState([]);
@@ -13,7 +15,10 @@ export default function Note() {
   const [editNote, setEditNote] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [search, setSearch] = useState('');
-  const [darkMode, setDarkMode] = useState(false);
+  const [viewNote, setViewNote] = useState(null);
+
+  const { showAlert } = useAlert();
+
 
   // Fetch notes on mount
   useEffect(() => {
@@ -22,7 +27,9 @@ export default function Note() {
 
   const fetchNotes = async () => {
     try {
-      const res = await fetch(API);
+      const res = await fetch(API,{
+        credentials: "include"
+      });
       const data = await res.json();
       console.log(data); 
       setNotes(data);
@@ -37,6 +44,7 @@ export default function Note() {
     if (!title || !content) return;
     await fetch(API, {
       method: 'POST',
+      credentials: "include",
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ title, content }),
     });
@@ -47,19 +55,20 @@ export default function Note() {
 
   // Delete note
   const handleDelete = async (id) => {
-    await fetch(`${API}/${id}`, { method: 'DELETE' });
+    await fetch(`${API}/${id}`, { method: 'DELETE' },{credentials: "include"});
     fetchNotes();
   };
 
   // Copy content
   const handleCopy = (text) => {
     navigator.clipboard.writeText(text);
-    alert('Copied!');
+    showAlert("Note Text Copied to Clipboard..","info",2000);
   };
 
   // Download note
   const handleDownload = (note) => {
-    const blob = new Blob([`Title: ${note.title}\nContent: ${note.content}`], { type: 'text/plain' });
+    const blob = new Blob([`Title: ${note.title}\nContent: ${note.content}`], { type: 'text/plain' },{  credentials: "include",
+  });
     const link = document.createElement('a');
     link.href = URL.createObjectURL(blob);
     link.download = `${note.title}.txt`;
@@ -82,6 +91,7 @@ export default function Note() {
   const handleUpdate = async () => {
     await fetch(`${API}/${editNote._id}`, {
       method: 'PUT',
+      credentials: "include",
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ title: editNote.title, content: editNote.content }),
     });
@@ -97,19 +107,11 @@ export default function Note() {
       n.content.toLowerCase().includes(search.toLowerCase())
   );
 
-  // Format date safely
-  const formatDate = (dateString) => {
-    if (!dateString) return '';
-    const date = new Date(dateString);
-    if (isNaN(date)) return '';
-    return date.toLocaleString('en-IN', {
-      day: '2-digit',
-      month: 'short',
-      year: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit',
-    });
-  };
+  useEffect(() => {
+    document.body.style.overflow = viewNote ? "hidden" : "auto";
+    return () => (document.body.style.overflow = "auto");
+  }, [viewNote]);
+  
 
   return (
     <div className= "note-app" >
@@ -150,9 +152,26 @@ export default function Note() {
         <button type="submit">Add Note</button>
       </form>
 
+      {viewNote && (
+        <div className="view-modal-overlay" onClick={() => setViewNote(null)}>
+          <div className="view-modal" onClick={e => e.stopPropagation()}>
+            <div className="view-header-notes">
+              <h2>{viewNote.title}</h2>
+              <button className="close-button" onClick={() => setViewNote(null)}>
+                ✕
+              </button>
+            </div>
+
+            <div className="view-content">
+              {viewNote.content}
+            </div>
+          </div>
+        </div>
+      )}
+
       <div className="notes-list">
         {filteredNotes.map((note) => (
-          <div key={note._id} className="note-card">
+          <div key={note._id} className="note-card" onClick={() => setViewNote(note)}>
             <div className="note-header">
               <h2>{note.title}</h2>
               <span className="note-time">
@@ -168,13 +187,30 @@ export default function Note() {
               </span>
 
             </div>
-            <p id='content_notes'>{note.content}</p>
+            <div className="note-content-wrapper">
+              <p id="content_notes">{note.content}</p>
+            </div>
+
             <div className="note-actions">
-              <button onClick={() => openEditModal(note)}>Edit</button>
-              <button onClick={() => handleCopy(note.content)}>Copy</button>
-              <button onClick={() => handleDownload(note)}>Download</button>
-              <button onClick={() => handleDelete(note._id)}>Delete</button>
-              <button onClick={() => handleShare(note)}>Share</button>
+            <button onClick={(e) => { e.stopPropagation(); openEditModal(note); }}>
+              Edit
+            </button>
+
+            <button onClick={(e) => { e.stopPropagation(); handleCopy(note.content); }}>
+              Copy
+            </button>
+
+            <button onClick={(e) => { e.stopPropagation(); handleDownload(note); }}>
+              Download
+            </button>
+
+            <button onClick={(e) => { e.stopPropagation(); handleDelete(note._id); }}>
+                Delete
+            </button>
+
+            <button onClick={(e) => { e.stopPropagation(); handleShare(note); }}>
+              Share
+            </button>
             </div>
           </div>
         ))}
@@ -186,10 +222,13 @@ export default function Note() {
           <div className="modal" onClick={(e) => e.stopPropagation()}>
             <h2>Edit Note</h2>
             <input
+              className='update_fields'
               value={editNote.title}
               onChange={(e) => setEditNote({ ...editNote, title: e.target.value })}
             />
             <textarea
+            id='notes_textarea'
+              className='update_fields'
               value={editNote.content}
               onChange={(e) => setEditNote({ ...editNote, content: e.target.value })}
             />

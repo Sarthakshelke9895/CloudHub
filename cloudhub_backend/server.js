@@ -442,6 +442,11 @@ const noteSchema = new mongoose.Schema(
   {
     title: String,
     content: String,
+    user: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true
+    }
   },
   { timestamps: true } // ✅ this enables createdAt and updatedAt
 );
@@ -451,76 +456,105 @@ const Note = mongoose.model('Note', noteSchema);
 
 
 // 1️⃣ Get all notes
-app.get('/notes', async (req, res) => {
+app.get("/notes", authMiddleware, async (req, res) => {
   try {
-    const notes = await Note.find().sort({ createdAt: -1 });
+    const notes = await Note.find({ user: req.user._id })
+      .sort({ createdAt: -1 });
+
     res.json(notes);
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
 });
 
+
 // 2️⃣ Get single note by ID
-app.get('/notes/:id', async (req, res) => {
+app.get("/notes/:id", authMiddleware, async (req, res) => {
   try {
-    const note = await Note.findById(req.params.id);
-    if (!note) return res.status(404).json({ message: 'Note not found' });
+    const note = await Note.findOne({
+      _id: req.params.id,
+      user: req.user._id
+    });
+
+    if (!note)
+      return res.status(404).json({ message: "Note not found" });
+
     res.json(note);
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
 });
 
-app.post('/notes', async (req, res) => {
-  const { title, content } = req.body;
-  const note = new Note({
-    title,
-    content,
-    createdAt: new Date(), // ✅ ensures proper date stored
-  });
-  await note.save();
-  res.json(note);
+
+app.post("/notes", authMiddleware, async (req, res) => {
+  try {
+    const { title, content } = req.body;
+
+    const note = new Note({
+      title,
+      content,
+      user: req.user._id
+    });
+
+    await note.save();
+    res.json(note);
+  } catch (err) {
+    res.status(400).json({ message: err.message });
+  }
 });
 
 
 
 // 4️⃣ Update note by ID
-app.put('/notes/:id', async (req, res) => {
-  const { title, content } = req.body;
+app.put("/notes/:id", authMiddleware, async (req, res) => {
   try {
-    const updatedNote = await Note.findByIdAndUpdate(
-      req.params.id,
-      { title, content },
-      { new: true } // return updated document
+    const updatedNote = await Note.findOneAndUpdate(
+      { _id: req.params.id, user: req.user._id },
+      { title: req.body.title, content: req.body.content },
+      { new: true }
     );
-    if (!updatedNote) return res.status(404).json({ message: 'Note not found' });
+
+    if (!updatedNote)
+      return res.status(404).json({ message: "Note not found" });
+
     res.json(updatedNote);
   } catch (err) {
     res.status(400).json({ message: err.message });
   }
 });
 
+
 // 5️⃣ Delete note by ID
-app.delete('/notes/:id', async (req, res) => {
+app.delete("/notes/:id", authMiddleware, async (req, res) => {
   try {
-    const deletedNote = await Note.findByIdAndDelete(req.params.id);
-    if (!deletedNote) return res.status(404).json({ message: 'Note not found' });
-    res.json({ message: 'Note deleted successfully' });
+    const deletedNote = await Note.findOneAndDelete({
+      _id: req.params.id,
+      user: req.user._id
+    });
+
+    if (!deletedNote)
+      return res.status(404).json({ message: "Note not found" });
+
+    res.json({ message: "Note deleted successfully" });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
 });
 
+
 // 6️⃣ Optional: search notes by title or content
-app.get('/notes/search/:query', async (req, res) => {
+app.get("/notes/search/:query", authMiddleware, async (req, res) => {
   const q = req.params.query;
+
   try {
     const results = await Note.find({
+      user: req.user._id,
       $or: [
-        { title: { $regex: q, $options: 'i' } },
-        { content: { $regex: q, $options: 'i' } },
-      ],
+        { title: { $regex: q, $options: "i" } },
+        { content: { $regex: q, $options: "i" } }
+      ]
     }).sort({ createdAt: -1 });
+
     res.json(results);
   } catch (err) {
     res.status(500).json({ message: err.message });
