@@ -247,20 +247,22 @@
     display: flex;
     justify-content: center;
     align-content: center;
-    flex-wrap: wrap;
+    
     width: 100%;
+    padding: 5px 15px;
     
   }
 
   .card {
-    
     display: flex;
     align-items: center;
     justify-content: center;
     flex-direction: column;
-  
     height: 55px;
-    flex: 0 0 85px;
+    width: 60px;
+    flex: 0 0 75px;
+
+  
 
   }
 

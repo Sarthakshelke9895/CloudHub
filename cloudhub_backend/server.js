@@ -222,6 +222,12 @@ app.listen(PORT, () => {
 
 
 
+
+
+
+
+
+
 const Folder = mongoose.model(
   "Folder",
   new mongoose.Schema({
@@ -327,12 +333,6 @@ app.get("/file/:id", authMiddleware, async (req, res) => {
   if (req.query.download === "true") {
     return res.download(filePath, file.originalname);
   }
-
-  res.setHeader("Content-Type", file.mimetype);
-  res.setHeader(
-    "Content-Disposition",
-    `inline; filename="${file.originalname}"`
-  );
 
   res.sendFile(filePath);
 });
