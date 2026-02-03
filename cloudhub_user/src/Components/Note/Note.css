@@ -1,0 +1,241 @@
+.note-app {
+    width: 100%;
+    margin: 0px 15px;
+   
+  }
+  .component_header{
+    font-size: 24px;
+    font-weight: 500;
+    letter-spacing: 1px;
+    color: rgba(255, 255, 255, 0.8);
+  }
+  .header_search_bar{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+
+}
+  
+  header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .dark-toggle {
+    padding: 5px 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .search-box-notes {
+    width: 32%;
+    display: flex;
+    align-items: center;
+    background-color:#333333b9 ;
+    padding: 1px 8px;
+    border-radius: 4px;
+
+
+  }
+  .search-bar{
+    background: transparent;
+    outline: none;
+    border: 1px solid #33333300;
+    width: 100%;
+    padding: 10px 0px;
+    color: white;
+    font-size: 16px;
+    margin-left: 5px;
+  }
+  .search-bar::placeholder{
+    font-size: 16px;
+    color: rgba(255, 255, 255, 0.5);
+    letter-spacing: 1px;
+  }
+  
+  .note-form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin: 0[x];
+    border-radius: 4px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+   width: 50%;
+  }
+  
+  .note-app.dark .note-form {
+    background: #1e1e1e;
+  }
+  
+  .note-form input{
+    padding: 10px;
+    border-radius: 4px;
+    border: 1px solid #333333b9;
+    background-color: #333333b9;
+    outline: none;
+    transition: 0.3s ease-in-out;
+    width: 100%;
+    resize: none;
+    color: white;
+    font-size: 16px;
+  }
+  .note-form textarea {
+    padding: 10px;
+    border-radius: 4px;
+    border: 1px solid #333333b9;
+    background-color: #333333b9;
+    outline: none;
+    transition: 0.3s ease-in-out;
+    width: 100%;
+    color: white;
+    height: 200px;
+    resize: none;
+    font-size: 16px;
+    box-sizing: border-box;
+    max-width: 100%;
+    min-width: 100%;
+  }
+
+  .note-form input::placeholder{
+    font-size: 16px;
+    color: rgba(255, 255, 255, 0.5);
+  }
+  .note-form textarea::placeholder{
+    font-size: 16px;
+    color: rgba(255, 255, 255, 0.5);
+  }
+
+  .note-form input:focus{
+    border: 1px solid #f39c12;
+
+  }
+  .note-form textarea:focus{
+    border: 1px solid #f39c12;
+  }
+  
+  .note-form button {
+    padding: 10px;
+    border: none;
+    background-color: #f39c12;
+    color: black;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size:16px;
+    font-weight: 500;
+    width: 20%;
+    transition: 0.2s ease-in-out;
+  }
+  
+  .note-form button:hover {
+    background-color: #ffb733;
+  }
+  
+  .notes-list {
+    margin-top: 25px;
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:15px;
+  }
+  
+  .note-card {
+    background: #333333b9;
+    padding-top: 4px;
+    padding-left: 10px;
+    padding-right: 10px;
+
+    border-radius: 4px;
+    border: 1px solid #333333b9;
+    transition: 0.3s ease-in-out;
+    cursor: pointer;
+  }
+  
+  
+  .note-card:hover {
+   border:  1px solid #f39c12;
+  }
+  
+  .note-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .note-header h2{
+    font-size: 24px;
+    font-weight: 500;
+    color: #f39c12;
+  }
+#content_notes{
+    font-size: 16px;
+    color:rgba(255, 255, 255, 0.8);
+  }
+  .note-time {
+    font-size: 14px;
+    color:rgba(255, 255, 255, 0.8);
+  }
+  
+  .note-actions {
+    margin-top: 10px;
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 13px;
+  }
+  
+  .note-actions button {
+    padding: 5px 10px;
+    border-radius: 4px;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+    transition: transform 0.2s;
+  }
+  
+
+
+
+  
+  /* Modal */
+  .modal-overlay {
+    position: fixed;
+    top:0; left:0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.5);
+    display: flex; justify-content: center; align-items: center;
+  }
+  
+  .modal {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    width: 400px;
+    max-width: 90%;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .note-app.dark .modal {
+    background: #2a2a2a;
+    color: #f0f0f0;
+  }
+  
+  .modal-buttons {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+  }
+  
+  .modal button {
+    padding: 8px 12px;
+    border-radius:5px;
+    border:none;
+    cursor:pointer;
+  }
+  
+  .modal button:first-child { background:#4a90e2;color:white; }
+  .modal button:last-child { background:#e74c3c;color:white; }
+  

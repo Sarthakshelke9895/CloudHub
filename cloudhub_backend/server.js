@@ -435,3 +435,94 @@ app.get("/search", authMiddleware, async (req, res) => {
 });
 
 
+//notes
+
+// Note schema with proper timestamps
+const noteSchema = new mongoose.Schema(
+  {
+    title: String,
+    content: String,
+  },
+  { timestamps: true } // ✅ this enables createdAt and updatedAt
+);
+
+const Note = mongoose.model('Note', noteSchema);
+
+
+
+// 1️⃣ Get all notes
+app.get('/notes', async (req, res) => {
+  try {
+    const notes = await Note.find().sort({ createdAt: -1 });
+    res.json(notes);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
+// 2️⃣ Get single note by ID
+app.get('/notes/:id', async (req, res) => {
+  try {
+    const note = await Note.findById(req.params.id);
+    if (!note) return res.status(404).json({ message: 'Note not found' });
+    res.json(note);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
+app.post('/notes', async (req, res) => {
+  const { title, content } = req.body;
+  const note = new Note({
+    title,
+    content,
+    createdAt: new Date(), // ✅ ensures proper date stored
+  });
+  await note.save();
+  res.json(note);
+});
+
+
+
+// 4️⃣ Update note by ID
+app.put('/notes/:id', async (req, res) => {
+  const { title, content } = req.body;
+  try {
+    const updatedNote = await Note.findByIdAndUpdate(
+      req.params.id,
+      { title, content },
+      { new: true } // return updated document
+    );
+    if (!updatedNote) return res.status(404).json({ message: 'Note not found' });
+    res.json(updatedNote);
+  } catch (err) {
+    res.status(400).json({ message: err.message });
+  }
+});
+
+// 5️⃣ Delete note by ID
+app.delete('/notes/:id', async (req, res) => {
+  try {
+    const deletedNote = await Note.findByIdAndDelete(req.params.id);
+    if (!deletedNote) return res.status(404).json({ message: 'Note not found' });
+    res.json({ message: 'Note deleted successfully' });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
+// 6️⃣ Optional: search notes by title or content
+app.get('/notes/search/:query', async (req, res) => {
+  const q = req.params.query;
+  try {
+    const results = await Note.find({
+      $or: [
+        { title: { $regex: q, $options: 'i' } },
+        { content: { $regex: q, $options: 'i' } },
+      ],
+    }).sort({ createdAt: -1 });
+    res.json(results);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
