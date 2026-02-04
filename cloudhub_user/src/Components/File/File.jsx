@@ -1,5 +1,7 @@
 import { useEffect, useState ,useRef} from "react";
 import './File.css'
+import FolderModal from './FolderModal';
+
 import back from '../../Assests/arrow_access.png'
 import folder from '../../Assests/folder_coloured.png'
 import files from '../../Assests/file.png'
@@ -453,23 +455,12 @@ async function renameFolder(id, newName) {
 
 
 {showModal && (
-  <div className="modal-bg">
-    <div className="modal_box">
-      <h3>Create Folder</h3>
-      <input
-      autoFocus
-        value={name}
-        onChange={e => setName(e.target.value)}
-        placeholder="Folder name"
-      />
-      <div className="modal-actions">
-        <button onClick={() => { createFolder(); setShowModal(false); }}>
-          Create
-        </button>
-        <button onClick={() => setShowModal(false)}>Cancel</button>
-      </div>
-    </div>
-  </div>
+  <FolderModal
+    name={name}
+    setName={setName}
+    createFolder={createFolder}
+    onClose={() => setShowModal(false)}
+  />
 )}
 
 
