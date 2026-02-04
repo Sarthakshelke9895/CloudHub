@@ -12,7 +12,7 @@ import { useAlert } from "../Alertbox/Alertcontext";
 
 
 
-const API = "http://localhost:5000";
+const API = "https://cloudhub-af47.onrender.com";
 
 
 export default function File() {

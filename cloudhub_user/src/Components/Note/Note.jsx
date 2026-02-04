@@ -15,7 +15,7 @@ import bin from '../../Assests/trash.png'
 import share from '../../Assests/whatsapp.png'
 import leftarrow from "../../Assests/next.png"
 
-const API = 'http://localhost:5000/notes';
+const API = 'https://cloudhub-af47.onrender.com/notes';
 
 export default function Note() {
   const [notes, setNotes] = useState([]);
