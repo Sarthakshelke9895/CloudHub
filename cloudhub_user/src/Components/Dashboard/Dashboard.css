@@ -247,7 +247,6 @@ width: 24px;
   display: flex;
   justify-content: center;
   align-content: center;
-  flex-wrap: wrap;
   width: 100%;
   
 }
@@ -258,14 +257,17 @@ width: 24px;
   align-items: center;
   justify-content: center;
   flex-direction: column;
-
+  background-color: transparent;
+  gap: 2px;
   height: 55px;
-  flex: 0 0 85px;
+  transition: 0.3s ease-in-out;
+  width: 90px;
 
 }
 
+
 .card h2 {
-  font-size: 14px;
+  font-size: 12px;
 }
 
 #sync_logo{
@@ -280,7 +282,7 @@ width: 24px;
 }
 
 .dashboard_access_img {
-  height: 24px;
+  height: 20px;
 }
 }
 

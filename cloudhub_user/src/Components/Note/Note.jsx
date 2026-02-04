@@ -2,6 +2,10 @@ import React, { useState, useEffect } from 'react';
 import './Note.css';
 
 import { useAlert } from "../Alertbox/Alertcontext";
+import ViewModal from "./ViewModal";
+import EditModal from './EditModal';
+
+
 
 import search_icon from '../../Assests/search.png'
 import download from '../../Assests/cloud-download.png'
@@ -11,7 +15,7 @@ import bin from '../../Assests/trash.png'
 import share from '../../Assests/whatsapp.png'
 import leftarrow from "../../Assests/next.png"
 
-const API = 'https://cloudhub-af47.onrender.com/notes';
+const API = 'http://localhost:5000/notes';
 
 export default function Note() {
   const [notes, setNotes] = useState([]);
@@ -157,22 +161,7 @@ export default function Note() {
         <button type="submit">Add Note <img src={leftarrow} alt="logo" className='add_note_button'/></button>
       </form>
 
-      {viewNote && (
-        <div className="view-modal-overlay" onClick={() => setViewNote(null)}>
-          <div className="view-modal" onClick={e => e.stopPropagation()}>
-            <div className="view-header-notes">
-              <h2>{viewNote.title}</h2>
-              <button className="close-button" onClick={() => setViewNote(null)}>
-                ✕
-              </button>
-            </div>
 
-            <div className="view-content">
-              {viewNote.content}
-            </div>
-          </div>
-        </div>
-      )}
 
       <div className="notes-list">
         {filteredNotes.map((note) => (
@@ -197,24 +186,33 @@ export default function Note() {
             </div>
 
             <div className="note-actions">
-            <div onClick={(e) => { e.stopPropagation(); openEditModal(note); }} className='notes-buttons'>
+            <div onClick={(e) => { e.stopPropagation(); openEditModal(note); }} className='notes-buttons tooltip-btn'>
               <img src={edit} alt="edit"  className='notes-logo'/>
+              <span className="tooltip-text">Edit</span>
             </div>
 
-            <div onClick={(e) => { e.stopPropagation(); handleCopy(note.content); }}  className='notes-buttons'> 
+            <div onClick={(e) => { e.stopPropagation(); handleCopy(note.content); }}  className='notes-buttons tooltip-btn'> 
             <img src={copy} alt="edit"  className='notes-logo'/>
+            <span className="tooltip-text">Copy</span>
+
             </div>
 
-            <div onClick={(e) => { e.stopPropagation(); handleDownload(note); }}  className='notes-buttons'>
+            <div onClick={(e) => { e.stopPropagation(); handleDownload(note); }}  className='notes-buttons tooltip-btn' >
             <img src={download} alt="edit"  className='notes-logo'/>
+            <span className="tooltip-text">Download</span>
+
             </div>
 
-            <div onClick={(e) => { e.stopPropagation(); handleDelete(note._id); }}  className='notes-buttons'>
+            <div onClick={(e) => { e.stopPropagation(); handleDelete(note._id); }}  className='notes-buttons tooltip-btn'>
             <img src={bin} alt="edit"  className='notes-logo'/>
+            <span className="tooltip-text">Delete</span>
+
             </div>
 
-            <div onClick={(e) => { e.stopPropagation(); handleShare(note); }}  className='notes-buttons'>
+            <div onClick={(e) => { e.stopPropagation(); handleShare(note); }}  className='notes-buttons tooltip-btn'>
             <img src={share} alt="edit"  className='notes-logo'/>
+            <span className="tooltip-text">Share</span>
+
             </div>
             </div>
           </div>
@@ -223,27 +221,37 @@ export default function Note() {
 
       {/* Edit Modal */}
       {showModal && (
-        <div className="modal-overlay" onClick={() => setShowModal(false)}>
-          <div className="modal" onClick={(e) => e.stopPropagation()}>
-            <h2>Edit Note</h2>
-            <input
-              className='update_fields'
-              value={editNote.title}
-              onChange={(e) => setEditNote({ ...editNote, title: e.target.value })}
-            />
-            <textarea
-            id='notes_textarea'
-              className='update_fields'
-              value={editNote.content}
-              onChange={(e) => setEditNote({ ...editNote, content: e.target.value })}
-            />
-            <div className="modal-buttons">
-              <button onClick={handleUpdate}>Update</button>
-              <button onClick={() => setShowModal(false)}>Cancel</button>
-            </div>
-          </div>
-        </div>
-      )}
+  <EditModal onClose={() => setShowModal(false)}>
+
+    <h2 id='edit_note_text'> Edit Note</h2>
+
+    <input
+      className="update_fields"
+      value={editNote.title}
+      onChange={(e) =>
+        setEditNote({ ...editNote, title: e.target.value })
+      }
+    />
+
+    <textarea
+      id="notes_textarea"
+      className="update_fields"
+      value={editNote.content}
+      onChange={(e) =>
+        setEditNote({ ...editNote, content: e.target.value })
+      }
+    />
+
+    <div className="modal-buttons">
+      <button onClick={handleUpdate}>Update</button>
+      <button onClick={() => setShowModal(false)}>Cancel</button>
+    </div>
+
+  </EditModal>
+)}
+
+<ViewModal note={viewNote} onClose={() => setViewNote(null)} />
+
     </div>
   );
 }

@@ -193,9 +193,14 @@
     justify-content:flex-end;
     padding: 5px 0px;
     border-top:  1px solid #333333b9;   
+    margin-bottom: 1px;
   }
   
  
+  .notes-count{
+    color: rgba(255, 255, 255, 0.5);
+  font-size: 16px;
+}
   
 
 
@@ -204,13 +209,16 @@
   /* Modal */
   .modal-overlay {
     position: fixed;
-    top:0; left:0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0,0,0,0.5);
-    display: flex; justify-content: center; align-items: center;
-    z-index: 1000;
+    inset: 0;
+    background: rgba(0,0,0,0.6);
+  
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  
+    z-index: 999999;
   }
+  
   
   .modal {
     background: rgba(0, 0, 0, 0.5);
@@ -275,6 +283,8 @@
   .view-modal-overlay{
     position:fixed;
     inset:0;
+    top: 0;
+    left: 0;
     background:rgba(0,0,0,0.6);
     display:flex;
     justify-content:center;
@@ -304,11 +314,7 @@
     border-bottom:  1px solid #333333b9;
     
   }
-  .notes-count{
-    color: rgba(255, 255, 255, 0.5);
-  font-size: 16px;
-}
-  
+
   .view-header-notes h2{
     margin:0;
     font-size:20px;
@@ -387,28 +393,19 @@
     justify-content: center;
     gap:5px;
     border-radius: 4px;
-    padding: 4px 2px;
+    padding:10px;
     position: relative; /* needed for ::after */
 
   }
-  .notes-buttons::after {
-    content: "";
-    position: absolute;
-    bottom: 0;              /* underline at bottom of button */
-    left: 50%;              /* start from center */
-    width: 0%;              /* initially 0 */
-    height: 2px;            /* thickness of line */
-    background-color: #89a6f5b9; /* line color */
-    transform: translateX(-50%);
-    transition: width 0.3s ease;
-  }
-  .notes-buttons:hover::after {
-    width: 100%;
-     /* expands from center to both ends */
-  }
+  
+.notes-buttons:hover{
+  background-color: #333333b9;
+  border-radius: 50%;
+}
+
   .notes-logo{
-    height: 20px;
-    width: 20px;
+    height: 18px;
+    width: 18px;
     
   }
   .notes-buttons p{
@@ -419,6 +416,68 @@
     height: 20px;
     width: 20px;
   }
+
+  .tooltip-btn {
+    position: relative;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 6px;
+  }
+  
+  /* Tooltip hidden by default */
+  .tooltip-text {
+    position: absolute;
+    bottom: -140%;
+    left: 50%;
+    transform: translateX(-50%);
+  
+    background-color: #ff9100;
+    color: rgb(0, 0, 0);
+  
+    font-size: 11px;
+    padding: 5px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 1px;
+  
+    white-space: nowrap;
+  
+    opacity: 0;
+    visibility: hidden;
+  
+    transition: all 0.2s ease;
+  }
+  
+  /* Show tooltip on hover */
+  .tooltip-btn:hover .tooltip-text {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(-50%) translateY(-4px);
+  }
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   
 
@@ -491,43 +550,61 @@
     padding-bottom: 50px;
   }
   .note-card{
-    height: 150px;
-    margin: 0;
-    padding: 5px 8px;
+    height: fit-content;
+    margin: 0px ;
+  padding-top: 6px;
+
     
+  }
+  .note-header{
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    justify-content: space-between;
   }
 
   /* Note card */
   .note-header h2 {
-    font-size: 16px;
-  }
+    font-size: 14px;
+    word-break: break-word;
+    width: 60%;
+
+    line-height: 1.2;  }
 
   .note-time {
-    font-size: 11px;
+    font-size: 10px;
+
   }
 
   #content_notes {
     font-size: 14px;
     height: 50px;
     text-align: justify;hyphens: auto;
+    margin-top: 10px;
   }
 
   /* Action buttons */
   .note-actions {
     gap: 15px;
     display: flex;
-    align-items: center;
+    align-items:flex-end;
     justify-content: flex-end;
-    padding: 8px 0px;
-
     border-top: 1px solid #333333b9;
+
+
+  
   
   }
 
   .notes-buttons {
-    padding: 4px 2px;
-    
+    padding: 4px 2px;    
   }
+
+  .notes-buttons:hover{
+    background-color: transparent;
+
+  }
+
 
   .notes-buttons p {
     font-size: 11px;
@@ -545,9 +622,15 @@
   }
 
   #notes_textarea {
-    height: 280px;
+    height: 580px;
+  }
+  .update_fields{
+    font-size: 14px;
   }
 
+  #edit_note_text{
+    font-size: 18px;
+  }
   .view-header-notes h2 {
     font-size: 18px;
   }
@@ -555,4 +638,16 @@
   .view-content {
     font-size: 14px;
   }
+
 }
+/* Mobile devices (disable tooltip completely) */
+@media (hover: none), (pointer: coarse) {
+  .tooltip-text,
+  .tooltip-text::after {
+    opacity: 0 !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+  }
+}
+/* Mobile / touch devices: remove hover effect */
+
