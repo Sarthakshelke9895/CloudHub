@@ -1,0 +1,365 @@
+/* ====================== General Container ====================== */
+.contacts-container {
+    width: 100%;
+    padding: 0px 15px;
+    margin-top: 20px;
+    animation: slideDown .3s ease-out forwards;
+  }   
+
+  
+  /* ====================== Animation ====================== */
+  @keyframes slideDown {
+    from { opacity: 0; transform: translateY(-15px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  
+  /* ====================== Title ====================== */
+  .contacts-title {
+    font-size: 22px;
+    font-weight: 500;
+    color:  rgba(255, 255, 255, 0.8);
+    margin-bottom: 15px;
+    letter-spacing: 1px;
+  }
+  
+  .name-search-bar{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+  }
+  /* ====================== Search Bar ====================== */
+  .contacts-search-wrapper {
+    width: 32%;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    background: #333333b9;
+    padding: 6px 10px;
+    border-radius: 4px;
+  }
+  
+  .contacts-search-bar {
+    width: 33%;
+    padding: 8px;
+    background: transparent;
+    border: 1px solid #333333b9;
+    border-radius: 4px;
+    outline: none;
+    color: #fff;
+    font-size: 16px;
+    letter-spacing: 1px;
+  }
+  
+  .contacts-search-bar::placeholder {
+    color: rgba(255,255,255,0.5);
+    font-weight: 300;
+  }
+  
+  /* ====================== Add Contact Button ====================== */
+  .contacts-add-btn {
+    background-color: #ff9100;
+    color: black;
+    padding: 6px 12px;
+    border: none;
+    border-radius: 4px;
+    font-weight: 500;
+    cursor: pointer;
+    margin-left: 10px;
+    transition: 0.3s;
+  }
+  
+  .contacts-add-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+  
+  .contacts-add-btn:hover:not(:disabled) {
+    background-color: #e68300;
+  }
+  
+  /* ====================== Contact Form ====================== */
+  .contacts-form {
+    display: flex;
+    gap: 12px;
+    flex-direction: column;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+  }
+  
+  .contacts-form input {
+    flex: 1;
+    width: 40%;
+    padding: 10px;
+    border-radius: 4px;
+    border: 1px solid #333333b9;
+    background-color: #333333b9;
+    color: white;
+    outline: none;
+    letter-spacing: 1px;
+    transition: 0.3s;
+  }
+  .contacts-form input::placeholder{
+    font-size: 16px;
+    color: rgba(255, 255, 255, 0.5);
+  }
+  
+  .contacts-form input:focus {
+    border: 1px solid #ff9100;
+  }
+  
+  .contacts-form button {
+    background-color: #ff9100;
+    color: black;
+    padding: 10px;
+    border: none;
+    border-radius: 4px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: 0.3s;
+    width: 10%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    font-weight: 550;
+  }
+  
+  .contacts-form button:hover {
+    background-color: #e68300;
+  }
+  
+  /* ====================== Contact Cards ====================== */
+  .contacts-list {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+  }
+
+  .contacts-card .contact-time{
+    font-size: 12px;
+  }
+  .name-and-date{
+    display: flex;
+    justify-content: space-between;
+    align-items: first baseline;
+  }
+  .contacts-card-logo{
+    height: 15px;
+    width: 15px;
+  }
+  .name-phone-email{
+    display: flex;
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .name-phone-email p{
+    display: flex;
+    align-items: center;
+    gap:7px;
+  }
+  .name-phone-email  h3{
+    padding-bottom: 5px;
+  }
+  .contacts-card {
+    padding: 5px 10px;
+    border-radius: 6px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    transition: 0.3s;
+    border:  1px solid #333333b9; 
+    
+  }
+  
+  .contacts-card:hover {
+    border: 1px solid #ff9100;
+  }
+  
+  /* ====================== Contact Info ====================== */
+  .contacts-card h3 {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 500;
+    color: #ff9100;
+  }
+  
+  .contacts-card p {
+    margin: 0;
+    font-size: 14px;
+    color: rgba(255,255,255,0.7);
+    letter-spacing: 0.5px;
+  }
+  
+  /* ====================== Buttons on Card ====================== */
+  .contacts-btn-group {
+    display: flex;
+    justify-content: flex-end;
+    gap: 15px;
+    padding-top: 5px;
+    border-top:  1px solid #333333b9;
+  }
+  .contacts-parent-actions{
+    padding: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+  }
+  .contacts-parent-actions:hover{
+    cursor: pointer;
+    background-color: #333333b9;
+  }
+  
+.contact-actions{
+    height: 18px;
+    width: 18px;
+}
+  
+
+  /* ================================
+   CONTACT MODAL (Industry Standard)
+================================ */
+
+/* Overlay background */
+.contacts-modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.65);
+  
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  
+    z-index: 9999;
+    animation: contactsFadeIn 0.2s ease;
+  }
+  
+  /* Modal box */
+  .contacts-modal-box {
+    background: rgba(0, 0, 0, 0.55);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  
+    width: 420px;
+    max-width: 90%;
+  
+    padding: 20px;
+    border-radius: 6px;
+  
+    border: 1px solid #333333b9;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
+  
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  
+  /* Title */
+  .contacts-modal-title {
+    font-size: 20px;
+    font-weight: 500;
+    letter-spacing: 1px;
+    color: #ff9100;
+    margin-bottom: 5px;
+  }
+  
+  /* Inputs */
+  .contacts-modal-input {
+    width: 100%;
+    padding: 10px;
+  
+    border-radius: 4px;
+    border: 1px solid #333333b9;
+  
+    background-color: #333333b9;
+    color: white;
+  
+    font-size: 15px;
+    outline: none;
+    transition: 0.25s ease;
+  }
+  
+  .contacts-modal-input::placeholder {
+    color: rgba(255, 255, 255, 0.5);
+  }
+  
+  .contacts-modal-input:focus {
+    border: 1px solid #ff9100;
+  }
+  
+  /* Buttons row */
+  .contacts-modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 10px;
+  }
+  
+  /* Main button */
+  .contacts-modal-btn {
+    padding: 8px 14px;
+    border: none;
+    border-radius: 4px;
+  
+    background-color: #ff9100;
+    color: black;
+  
+    font-size: 15px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: 0.2s;
+  }
+  
+  .contacts-modal-btn:hover {
+    background-color: #ffb733;
+  }
+  
+  /* Cancel button */
+  .contacts-modal-cancel {
+    padding: 8px 14px;
+    border: 1px solid #333333b9;
+    border-radius: 4px;
+  
+    background: transparent;
+    color: white;
+  
+    cursor: pointer;
+    transition: 0.2s;
+  }
+  
+  .contacts-modal-cancel:hover {
+    border: 1px solid #ff9100;
+    color: #ff9100;
+  }
+  
+  /* Fade animation */
+  @keyframes contactsFadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+  
+  /* Mobile Responsive */
+  @media (max-width: 768px) {
+    .contacts-modal-box {
+      width: 95%;
+      padding: 15px;
+    }
+  
+    .contacts-modal-title {
+      font-size: 18px;
+    }
+  
+    .contacts-modal-input {
+      font-size: 14px;
+    }
+  }
+  
+
+
+  

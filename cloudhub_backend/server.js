@@ -609,3 +609,80 @@ app.get("/notes/search/:query", authMiddleware, async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 });
+
+
+
+//contacts
+// ✅ Contact Schema
+const contactSchema = new mongoose.Schema({
+  name: { type: String, required: true },
+  phone: { type: String, required: true },
+  email: String,
+  userId: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true }
+}, { timestamps: true });
+
+const Contact = mongoose.model("Contact", contactSchema);
+
+// ✅ Get all contacts for logged-in user
+app.get("/contacts", authMiddleware, async (req, res) => {
+  try {
+    const contacts = await Contact.find({ userId: req.user._id }).sort({ createdAt: -1 });
+    res.json(contacts);
+  } catch (err) {
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+// ✅ Add new contact
+app.post("/contacts", authMiddleware, async (req, res) => {
+  try {
+    const { name, phone, email } = req.body;
+    const contact = new Contact({ name, phone, email, userId: req.user._id });
+    await contact.save();
+    res.json(contact);
+  } catch (err) {
+    res.status(400).json({ message: "Failed to add contact" });
+  }
+});
+
+// ✅ Update contact by ID
+app.put("/contacts/:id", authMiddleware, async (req, res) => {
+  try {
+    const { name, phone, email } = req.body;
+    const contact = await Contact.findOneAndUpdate(
+      { _id: req.params.id, userId: req.user._id },
+      { name, phone, email },
+      { new: true }
+    );
+    if (!contact) return res.status(404).json({ message: "Contact not found" });
+    res.json(contact);
+  } catch (err) {
+    res.status(400).json({ message: "Failed to update contact" });
+  }
+});
+
+// ✅ Delete contact by ID
+app.delete("/contacts/:id", authMiddleware, async (req, res) => {
+  try {
+    const contact = await Contact.findOneAndDelete({ _id: req.params.id, userId: req.user._id });
+    if (!contact) return res.status(404).json({ message: "Contact not found" });
+    res.json({ message: "Contact deleted successfully" });
+  } catch (err) {
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+// ✅ Search contacts (by name)
+app.get("/contacts/search/:query", authMiddleware, async (req, res) => {
+  try {
+    const q = req.params.query;
+    const results = await Contact.find({
+      userId: req.user._id,
+      name: { $regex: q, $options: "i" }
+    }).sort({ createdAt: -1 });
+    res.json(results);
+  } catch (err) {
+    res.status(500).json({ message: "Server error" });
+  }
+});
+

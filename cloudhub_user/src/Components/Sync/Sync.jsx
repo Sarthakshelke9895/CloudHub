@@ -2,7 +2,7 @@ import React from 'react'
 
 const Sync = () => {
   return (
-    <div>Sync</div>
+    <div>This Feature will be implemented soon...</div>
   )
 }
 
