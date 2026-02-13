@@ -8,6 +8,8 @@ import dotenv from "dotenv";
 import multer from "multer";
 import fs from "fs";
 import path from "path";
+import { GridFSBucket } from "mongodb";
+import stream from "stream";
 
 
 
@@ -223,6 +225,16 @@ app.listen(PORT, () => {
 
 
 
+// ✅ ADDED GridFS bucket
+let bucket;
+
+
+
+mongoose.connection.once("open", () => {
+  bucket = new GridFSBucket(mongoose.connection.db, {
+    bucketName: "uploads",
+  });
+});
 
 
 
@@ -256,13 +268,10 @@ const File = mongoose.model(
   })
 );
 
-if (!fs.existsSync("uploads")) fs.mkdirSync("uploads");
-
-const storage = multer.diskStorage({
-  destination: (_, __, cb) => cb(null, "uploads"),
-  filename: (_, file, cb) => cb(null, Date.now() + "-" + file.originalname),
-});
+// ✅ ADDED memory storage (Render safe)
+const storage = multer.memoryStorage();
 const upload = multer({ storage });
+
 
 app.post("/folder", authMiddleware,async (req, res) => {
   const { name, parent } = req.body;
@@ -286,19 +295,48 @@ app.get("/folder/:id", authMiddleware, async (req, res) => {
 });
 
 
-app.post("/upload/:folderId",  authMiddleware,upload.single("file"), async (req, res) => {
-  const folder = req.params.folderId === "root" ? null : req.params.folderId;
-  const f = await File.create({
-    filename: req.file.filename,
-    originalname: req.file.originalname,
-    mimetype: req.file.mimetype,
-    size: req.file.size,
-    path: req.file.path,
-    folder,
-    userId: req.user._id
-  });
-  res.json(f);
-});
+app.post(
+  "/upload/:folderId",
+  authMiddleware,
+  upload.single("file"),
+  async (req, res) => {
+    if (!bucket) {
+      return res.status(500).json({ message: "GridFS bucket not ready" });
+    }
+    const folder =
+      req.params.folderId === "root" ? null : req.params.folderId;
+
+
+    // ✅ Upload into MongoDB GridFS
+    const uploadStream = bucket.openUploadStream(req.file.originalname, {
+      contentType: req.file.mimetype,
+    });
+
+    // Buffer → Stream
+    const bufferStream = new stream.PassThrough();
+    bufferStream.end(req.file.buffer);
+
+    bufferStream.pipe(uploadStream);
+
+    uploadStream.on("finish", async () => {
+      const f = await File.create({
+        filename: uploadStream.id.toString(), // ✅ GridFS ID stored
+        originalname: req.file.originalname,
+        mimetype: req.file.mimetype,
+        size: req.file.size,
+
+        // ❌ path removed
+        // path: req.file.path,
+
+        folder,
+        userId: req.user._id,
+      });
+
+      res.json(f);
+    });
+  }
+);
+
 
 
 app.get("/folderinfo/:id", authMiddleware, async (req, res) => {
@@ -314,28 +352,39 @@ app.get("/folderinfo/:id", authMiddleware, async (req, res) => {
 
 
 app.get("/file/:id", authMiddleware, async (req, res) => {
+
+    // ✅ ADD HERE
+    if (!bucket) {
+      return res.status(500).json({ message: "GridFS bucket not ready" });
+    }
   const file = await File.findOne({
     _id: req.params.id,
-    userId: req.user._id
+    userId: req.user._id,
   });
 
   if (!file) {
     return res.status(404).json({ message: "File not found in DB" });
   }
 
-  const filePath = path.resolve(file.path);
+  try {
+    const fileId = new mongoose.Types.ObjectId(file.filename);
 
-  if (!fs.existsSync(filePath)) {
-    console.log("Missing file:", filePath);
-    return res.status(404).json({ message: "File missing on server" });
+    res.set("Content-Type", file.mimetype);
+
+    if (req.query.download === "true") {
+      res.set(
+        "Content-Disposition",
+        `attachment; filename="${file.originalname}"`
+      );
+    }
+
+    // ✅ Stream file from MongoDB
+    bucket.openDownloadStream(fileId).pipe(res);
+  } catch (err) {
+    return res.status(404).json({ message: "File missing in GridFS" });
   }
-
-  if (req.query.download === "true") {
-    return res.download(filePath, file.originalname);
-  }
-
-  res.sendFile(filePath);
 });
+
 
 
 
@@ -373,31 +422,31 @@ app.put("/folder/:id/rename", authMiddleware, async (req, res) => {
 });
 
 app.delete("/file/:id", authMiddleware, async (req, res) => {
+    // ✅ ADD HERE
+    if (!bucket) {
+      return res.status(500).json({ message: "GridFS bucket not ready" });
+    }
   try {
     const file = await File.findOne({
       _id: req.params.id,
-      userId: req.user._id
+      userId: req.user._id,
     });
 
     if (!file)
       return res.status(404).json({ message: "File not found or access denied" });
 
-    // delete physical file
+    // ✅ Delete from GridFS
+    await bucket.delete(new mongoose.Types.ObjectId(file.filename));
 
-    if (fs.existsSync(file.path)) {
-      fs.unlinkSync(file.path);
-    }
-    
-
-    // delete db record
+    // Delete metadata
     await File.deleteOne({ _id: file._id });
 
     res.json({ success: true });
   } catch (err) {
-    console.error(err);
     res.status(500).json({ message: "Server error" });
   }
 });
+
 
 app.get("/search", authMiddleware, async (req, res) => {
   try {
