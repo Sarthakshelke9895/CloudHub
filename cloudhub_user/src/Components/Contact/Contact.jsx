@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
+
 import "./Contact.css";
 import search_icon from '../../Assests/search.png'
 import leftarrow from "../../Assests/next.png"
@@ -8,28 +9,29 @@ import edit from '../../Assests/pencil.png'
 import bin from '../../Assests/trash.png'
 
 
-const Contact = ({ backendUrl = "http://localhost:5000" }) => {
+const Contact = ({ backendUrl = "https://cloudhub-af47.onrender.com" }) => {
   const [contacts, setContacts] = useState([]);
   const [form, setForm] = useState({ name: "", phone: "", email: "" });
   const [editingContact, setEditingContact] = useState(null);
   const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const fetchContacts = async () => {
-    try {
-      const res = await fetch(`${backendUrl}/contacts`, {
-        credentials: "include",
-      });
-      const data = await res.json();
-      setContacts(Array.isArray(data) ? data : []);
-    } catch (err) {
-      console.error(err);
-    }
-  };
+  const fetchContacts = useCallback(async () => {
+  try {
+    const res = await fetch(`${backendUrl}/contacts`, {
+      credentials: "include",
+    });
+    const data = await res.json();
+    setContacts(Array.isArray(data) ? data : []);
+  } catch (err) {
+    console.error(err);
+  }
+}, [backendUrl]);
+
 
   useEffect(() => {
-    fetchContacts();
-  }, []);
+  fetchContacts();
+}, [fetchContacts]);
 
   const validateForm = () => {
     if (!form.name.trim()) return false;
