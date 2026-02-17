@@ -10,7 +10,7 @@ import mail from "../../Assests/email.png";
 import edit from "../../Assests/pencil.png";
 import bin from "../../Assests/trash.png";
 
-const Contact = ({ backendUrl = "http://localhost:5000" }) => {
+const Contact = ({ backendUrl = "https://cloudhub-af47.onrender.com" }) => {
   const [contacts, setContacts] = useState([]);
 
   // ✅ Add Contact Form State
