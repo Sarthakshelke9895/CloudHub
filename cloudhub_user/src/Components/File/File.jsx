@@ -574,7 +574,7 @@ function splitFileName(filename) {
                 setFolderMenuId(null); // close the menu
               }}
             >
-              Rename
+              Rename_
             </div>
 
             <div

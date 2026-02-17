@@ -1,7 +1,14 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import "./Contact.css";
 import ContactEditModal from "./ContactEditModal";
 
+
+import search_icon from "../../Assests/search.png";
+import leftarrow from "../../Assests/next.png";
+import phone from "../../Assests/telephone.png";
+import mail from "../../Assests/email.png";
+import edit from "../../Assests/pencil.png";
+import bin from "../../Assests/trash.png";
 
 const Contact = ({ backendUrl = "http://localhost:5000" }) => {
   const [contacts, setContacts] = useState([]);
@@ -18,23 +25,26 @@ const Contact = ({ backendUrl = "http://localhost:5000" }) => {
 
   const [editingContact, setEditingContact] = useState(null);
   const [search, setSearch] = useState("");
-  const [loading, setLoading] = useState(false);
-
-  const fetchContacts = async () => {
+  const [addLoading, setAddLoading] = useState(false);
+  const [editLoading, setEditLoading] = useState(false);
+  
+  // ✅ Fetch Contacts
+  const fetchContacts = useCallback(async () => {
     try {
       const res = await fetch(`${backendUrl}/contacts`, {
         credentials: "include",
       });
+
       const data = await res.json();
       setContacts(Array.isArray(data) ? data : []);
     } catch (err) {
       console.error(err);
     }
-  };
+  }, [backendUrl]);
 
   useEffect(() => {
     fetchContacts();
-  }, []);
+  }, [fetchContacts]);
 
   // ✅ Validation (Add Form Only)
   const validateForm = () => {
