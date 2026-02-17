@@ -227,7 +227,7 @@
     padding: 20px;
     border-radius: 4px;
     width: 500px;
-    height: 600px;
+    height: fit-content;
     max-width: 90%;
     display: flex;
     flex-direction: column;
@@ -237,6 +237,7 @@
   }
   .modal h2{
     color: #ff9100;
+    font-size: 20px;
   }
   .update_fields{
     background-color: #333333b9;
@@ -250,12 +251,13 @@
     resize: none;
     border-radius: 4px;
     padding: 10px 5px;
-    font-size: 16px;
+    font-size: 14px;
+  
 
   }
 
   #notes_textarea{
-   height: 430px;
+   height: 330px;
   }
   .update_fields:focus{
     border: 1px solid#ff9100;
@@ -275,8 +277,7 @@
     cursor:pointer;
   }
   
-  .modal button:first-child { background:#ff9100;color:black;font-size: 16px; font-weight: 500; }
-  .modal button:last-child { background:#ff9100;color:black;font-size: 16px; font-weight: 500; }
+  .modal button:first-child { background:#ff9100;color:black;font-size: 14px; font-weight: 500; }
   
 
 

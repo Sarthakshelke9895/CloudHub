@@ -12,7 +12,7 @@ import { useAlert } from "../Alertbox/Alertcontext";
 
 
 
-const API = "https://cloudhub-af47.onrender.com";
+const API = "http://localhost:5000";
 
 
 export default function File() {
@@ -38,6 +38,21 @@ export default function File() {
   // At the top of your component
 
   const [isSearching, setIsSearching] = useState(false);
+
+  //file Rename
+  // ✅ File Rename States
+  const [editingFileId, setEditingFileId] = useState(null);
+  const [editFileValue, setEditFileValue] = useState("");
+
+  // ✅ Ref for rename input
+const renameInputRef = useRef(null);
+useEffect(() => {
+  if (editingFileId && renameInputRef.current) {
+    renameInputRef.current.select(); // ✅ Auto select filename
+  }
+}, [editingFileId]);
+
+
 
 
 
@@ -340,6 +355,44 @@ async function renameFolder(id, newName) {
   if (!res.ok) return console.log("Rename failed");
   loadFolder(current);
 }
+async function renameFile(id, newName) {
+  const res = await fetch(`${API}/file/${id}/rename`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    credentials: "include",
+    body: JSON.stringify({ name: newName }),
+  });
+
+  if (!res.ok) return console.log("File rename failed");
+
+  loadFolder(current);
+}
+function formatDate(dateString) {
+  if (!dateString) return "No date";
+
+  return new Date(dateString).toLocaleString("en-IN", {
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+}
+// ✅ Split filename and extension
+function splitFileName(filename) {
+  const lastDot = filename.lastIndexOf(".");
+
+  if (lastDot === -1) {
+    return { name: filename, ext: "" };
+  }
+
+  return {
+    name: filename.slice(0, lastDot),
+    ext: filename.slice(lastDot), // includes dot
+  };
+}
+
+
 
   
 
@@ -473,12 +526,13 @@ async function renameFolder(id, newName) {
   {data.folders.map(f => (
     <div key={f._id} className="folder-row" onClick={() => openFolder(f)}>
       
+      <div className="date-and_folder-logo-name">
       <div className="name_and_logo">
         <img src={folder} alt="folder" className="folder_logo" />
         {editingId === f._id ? (
                 <input
                   autoFocus
-                  className="rename_input"
+                  className="rename_input_folder"
                   style={{ width: `${editValue.length + 2}ch` }} // width based on text
                   value={editValue}
                   onChange={e => setEditValue(e.target.value)}
@@ -489,9 +543,15 @@ async function renameFolder(id, newName) {
                   }}
                 />
               ) : (
-                <span>{f.name}</span>
+                <span className="folder_name" >{f.name}</span>
               )}
+
       </div>
+      <small className="file-date">
+              {formatDate(f.createdAt)}
+            </small>
+      </div>
+      
 
       <div className="menu" >
         <button
@@ -542,7 +602,47 @@ async function renameFolder(id, newName) {
               className={`file-row ${highlightId === f._id ? "highlight" : ""}`}
               onClick={() => openFile(f)}
             >
+              <div className="name-and-date">
+
+              {editingFileId === f._id ? (
+              <input
+                ref={renameInputRef}   // ✅ attach ref
+                autoFocus
+                className="rename_input"
+                value={editFileValue}
+                onChange={(e) => setEditFileValue(e.target.value)}
+
+                onBlur={() => {
+                  if (editFileValue.trim()) {
+                    const { ext } = splitFileName(f.originalname);
+                    renameFile(f._id, editFileValue.trim() + ext);
+                  }
+                  setEditingFileId(null);
+                }}
+
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    const { ext } = splitFileName(f.originalname);
+                    renameFile(f._id, editFileValue.trim() + ext);
+                    setEditingFileId(null);
+                  }
+
+                  if (e.key === "Escape") {
+                    setEditingFileId(null);
+                  }
+                }}
+              />
+            ) : (
               <span id="file_name">{f.originalname}</span>
+            )}
+
+            <small className="file-date">
+              {formatDate(f.createdAt)}
+            </small>
+
+              </div>
+
+
 
               <div className="menu">
                 <button
@@ -553,6 +653,8 @@ async function renameFolder(id, newName) {
                   }}
                 >⋮</button>
 
+
+
                 {menuId === f._id && (
                   <div
                     className="menu-box"
@@ -560,6 +662,19 @@ async function renameFolder(id, newName) {
                     onClick={(e) => e.stopPropagation()}
                   >
                     <div onClick={() => openFile(f)}>View</div>
+                    <div
+                    onClick={() => {
+                      const { name } = splitFileName(f.originalname);
+
+                      setEditingFileId(f._id);
+                      setEditFileValue(name); // ✅ Only filename shown
+                      setMenuId(null);
+                    }}
+                  >
+                    Rename
+                  </div>
+
+
                     <div onClick={() => shareFile(f)}>Share</div>
                     <div onClick={() => downloadFile(f)}>Download</div>
                     <div
@@ -568,9 +683,13 @@ async function renameFolder(id, newName) {
                         setMenuId(null);
                       }}
                     >Delete</div>
+                    
                   </div>
+                  
                 )}
+                
               </div>
+
             </div>
 
 

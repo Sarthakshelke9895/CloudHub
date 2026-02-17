@@ -420,6 +420,30 @@ app.put("/folder/:id/rename", authMiddleware, async (req, res) => {
 
   res.json(folder);
 });
+app.put("/file/:id/rename", async (req, res) => {
+  try {
+    const { name } = req.body;
+
+    if (!name || !name.trim()) {
+      return res.status(400).json({ message: "File name is required" });
+    }
+
+    const file = await File.findById(req.params.id);
+
+    if (!file) {
+      return res.status(404).json({ message: "File not found" });
+    }
+
+    // ✅ Rename file
+    file.originalname = name.trim();
+    await file.save();
+
+    res.json({ message: "File renamed successfully", file });
+  } catch (err) {
+    console.error("Rename File Error:", err);
+    res.status(500).json({ message: "Server error" });
+  }
+});
 
 app.delete("/file/:id", authMiddleware, async (req, res) => {
     // ✅ ADD HERE

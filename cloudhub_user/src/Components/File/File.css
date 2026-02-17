@@ -339,21 +339,34 @@
     grid-template-columns: repeat(3, 1fr); /* 3 columns */
     gap: 16px;
   }
-  .rename_input{
+
+
+  .name-and-date .rename_input{
     background-color: #33333300;
     outline: none;
     border: none;
-    border-radius: 4px;
-  
+    border-radius: 0px;
+    width: 100%;
     font-size: 16px;
     font-weight: 300;
     color: white;
-    width: auto;        /* allow auto width */
-    min-width: 20px;    /* avoid collapsing too small */
-    max-width: 300px;   /* optional max */
     box-sizing: content-box;
+    
   }
 
+  .rename_input_folder{
+    background-color: #33333300;
+    outline: none;
+    border: none;
+    border-radius: 0px;
+    width: 100%;
+    font-size: 16px;
+    font-weight: 300;
+    color: white;
+    box-sizing: content-box;
+    margin: 0px;
+    padding: 0px;
+  }
   .menu {
     display: flex;
     align-items: center;
@@ -412,28 +425,42 @@
   .name_and_logo{
     
     display:flex;
-    align-items: flex-end;
-    justify-content: center;
-    
+    align-items:flex-start;
+
+  
 
   }
+  .file-date{
+    font-size: 12px;
+    color: rgb(174, 167, 167);
+    font-weight: 300;
+
+  }
+  
   .folder-row, .file-row {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 8px 12px;
+    padding: 6px 12px;
     margin-bottom: 5px;
     border-radius: 5px;
     background: rgba(255, 255, 255, 0);
     cursor: pointer;
     transition: 0.3s;
     border: 1px solid #3333335b;
-    
   }
+  .name-and-date{
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    width: 100%;
+  }
+
 
   .folder-row:hover, .file-row:hover {
     border: 1px solid #ff9100;
   }
+
 
   .delete-btn {
     background: none;
@@ -471,8 +498,8 @@
 
   .menu-box {
     position: absolute;
-    right: -15px;
-    top: 40px;
+    right: -13px;
+    top: 47px;
     background-color:#333333b9;
     outline: none;
     border-radius: 4px;
@@ -687,21 +714,25 @@
     .folder-row,
     .file-row {
       flex-direction: row;
-      align-items: flex-start;
-      gap: 6px;
-      padding: 10px;
+      align-items: center;
+      gap: 1px;
+      padding: 2px 5px;
       
     }
 
     .name_and_logo {
-      justify-content: flex-start;
-      gap: 6px;
+       display: flex;  
+       align-items:center;
+       justify-content:start;
+
     }
+ 
+
 
     /* Menu */
     .menu-box {
-      right: -10px;
-      top: 45px;
+      right: -6px;
+      top: 43px;
       min-width: 100px;
     }
 

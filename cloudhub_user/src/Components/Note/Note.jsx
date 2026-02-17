@@ -4,6 +4,8 @@ import './Note.css';
 import { useAlert } from "../Alertbox/Alertcontext";
 import ViewModal from "./ViewModal";
 import EditModal from './EditModal';
+import cancel from '../../Assests/cancel.png'
+
 
 
 
@@ -15,7 +17,7 @@ import bin from '../../Assests/trash.png'
 import share from '../../Assests/whatsapp.png'
 import leftarrow from "../../Assests/next.png"
 
-const API = 'https://cloudhub-af47.onrender.com/notes';
+const API = 'http://localhost:5000/notes';
 
 export default function Note() {
   const [notes, setNotes] = useState([]);
@@ -223,7 +225,10 @@ export default function Note() {
       {showModal && (
   <EditModal onClose={() => setShowModal(false)}>
 
-    <h2 id='edit_note_text'> Edit Note</h2>
+        <div className="edit-modal-cancel-button">
+          <h2 id='edit_note_text'> Edit Note</h2>
+          <img src={cancel} alt="cancel-logo"onClick={() => setShowModal(false)}className="cancel-logo"/>
+        </div>
 
     <input
       className="update_fields"
@@ -243,8 +248,8 @@ export default function Note() {
     />
 
     <div className="modal-buttons">
-      <button onClick={handleUpdate}>Update</button>
-      <button onClick={() => setShowModal(false)}>Cancel</button>
+      <button onClick={handleUpdate}>Update Note</button>
+ 
     </div>
 
   </EditModal>
